@@ -18,7 +18,7 @@ from setuptools import setup, find_packages
 """
 The name of the package.
 """
-package_name = "comfyui"
+package_name = "sdbx"
 
 """
 The current version.
@@ -126,7 +126,7 @@ def dependencies(for_pypi=False, force_nightly: bool = False) -> List[str]:
     existing_torch: Optional[str]
     try:
         import torch
-        print(f"comfyui setup.py: torch version was {torch.__version__} and built without build isolation, using this torch instead of upgrading", file=sys.stderr)
+        print(f"sdbx setup.py: torch version was {torch.__version__} and built without build isolation, using this torch instead of upgrading", file=sys.stderr)
         existing_torch = torch.__version__
     except Exception:
         existing_torch = None
@@ -198,8 +198,8 @@ if not is_editable:
 dev_dependencies = open(os.path.join(os.path.dirname(__file__), "requirements-dev.txt")).readlines()
 setup(
     name=package_name,
-    description="An installable version of ComfyUI",
-    author="Contributors_of_ComfyUI",
+    description="A powerful and modular stable diffusion GUI with a graph/nodes interface.",
+    author="darkshapes",
     version=version,
     python_requires=">=3.10,<3.13",
     packages=find_packages(exclude=["tests"] + [] if is_editable else ['custom_nodes']),
@@ -208,8 +208,7 @@ setup(
     setup_requires=["pip", "wheel"],
     entry_points={
         'console_scripts': [
-            'comfyui = comfy.cmd.main:entrypoint',
-            'comfyui-worker = comfy.cmd.worker:entrypoint'
+            'sdbx = comfy.cmd.main:entrypoint',
         ],
     },
     package_data={

@@ -1,24 +1,35 @@
-ComfyUI LTS
-=======
 
-A vanilla, up-to-date fork of [ComfyUI](https://github.com/comfyanonymous/comfyui) intended for long term support (LTS) from [AppMana](https://appmana.com) and [Hidden Switch](https://hiddenswitch.com).
 
-### New Features
+# [SDBX](https://github.com/darkshapes/sdbx) / Powerful ML / Long-Term Support / Extensive Functions
 
-- To run, just type `comfyui` in your command line and press enter.
-- [Installable](#installing) via `pip`: `pip install git+https://github.com/hiddenswitch/ComfyUI.git`.
-- [Large Language Models]() with multi-modal support included.
-- [Automatic model downloading](#model-downloading) to save you disk space and time.
-- [Distributed](#distributed-multi-process-and-multi-gpu-comfy) with support for multiple GPUs, multiple backends and frontends, including in containers, using RabbitMQ.
-- [Installable custom nodes](#custom-nodes) via `pip`, including LTS support for forked nodes from the community.
-- [New configuration options](#command-line-arguments) for directories, models and metrics.
-- [API](#using-comfyui-as-an-api--programmatically) support, using the vanilla ComfyUI API and new API endpoints.
-- [Embed](#embedded) ComfyUI as a library inside your Python application. No server or frontend needed.
-- [Containers](#containers) for running on Linux, Windows and Kubernetes with CUDA acceleration.
-- Automated tests for new features.
-- Automatic model downloading for well-known models.
+<div align="center"> 
+  
+ ### [ [AppMana](https://github.com/appmana/) | [Hidden Switch](https://github.com/hiddenswitch/) | [Darkshapes](https://github.com/darkshapes) ]
 
-### Upstream Features
+<hr>
+
+### Go to [Singularity](https://github.com/darkshapes/singularity) for detailed SDBX-specific install instructions
+
+</div>
+
+## Technical notes from Hiddenswitch -
+
+### Exclusive Features :
+
+- [x] [Distributed Workflows](#distributed-multi-process-and-multi-gpu-comfy) - Run Multiple GPU/UI/Backends including in containers with RabbitMQ with support for multiple GPUs, multiple backends and frontends, including in containers, using RabbitMQ.
+- [x] [Improved API](#using-comfyui-as-an-api--programmatically) - With ComfyUI API and new API endpoints.
+- [x] [Easier Installation](#installing) - Installs with `pip install git+https://github.com/hiddenswitch/ComfyUI.git`
+- [x] [Deployable](#containers) - Containers ready for Linux, Windows and Kubernetes with CUDA acceleration.
+- [x] [Model downloading](#model-downloading) - Built-in option to fetch new models
+- [x] [Embeddable](#embedded) - Use ComfyUI as a library inside your Python application. No server or frontend needed.
+- [x] [Custom nodes with pip](#custom-nodes) - Broader and safer support for a wide range of nodes and forks from the community.
+- [x] [New CLI tools](#command-line-arguments) - Control directories, models, metrics, and more.
+- [x] Automated tests for new features.
+- [x] Automatic model downloading for well-known models.
+- [x] Large Language Model & Diffusion Model support
+- [x] Just one command, `comfyui` to run
+
+### Upstream Features 
 
 - Nodes/graph/flowchart interface to experiment and create complex Stable Diffusion workflows without needing to code anything.
 - Fully supports SD1.x, SD2.x, [SDXL](https://comfyanonymous.github.io/ComfyUI_examples/sdxl/), [Stable Video Diffusion](https://comfyanonymous.github.io/ComfyUI_examples/video/), [Stable Cascade](https://comfyanonymous.github.io/ComfyUI_examples/stable_cascade/), [SD3](https://comfyanonymous.github.io/ComfyUI_examples/sd3/) and [Stable Audio](https://comfyanonymous.github.io/ComfyUI_examples/audio/)

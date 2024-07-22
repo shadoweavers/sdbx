@@ -5,7 +5,7 @@ _windows_dll = ctypes.WinDLL('Secur32.dll')
 
 _windows_get_user_name_ex_w_func = _windows_dll.GetUserNameExW
 _windows_get_user_name_ex_w_func.argtypes = [ctypes.c_int, POINTER(wintypes.WCHAR), POINTER(wintypes.ULONG)]
-_windows_get_user_name_ex_w_func.restype = wintypes.BOOL
+_windows_get_user_name_ex_w_func.restype = wintypes.BOOLEAN
 
 _windows_extended_name_format = {
     "NameUnknown": 0,

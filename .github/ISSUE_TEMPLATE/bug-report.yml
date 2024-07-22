@@ -1,45 +1,74 @@
-name: Bug Report
-description: "Something is broken inside of ComfyUI. (Do not use this if you're just having issues and need help, or if the issue relates to a custom node)"
-labels: [ "Potential Bug" ]
+name: Bug
+description: "You receive an error or difficulty that no one - not even the creators - have ever seen while using our software."
+labels: [ "Bug" ]
 body:
     - type: markdown
       attributes:
         value: |
-                Before submitting a **Bug Report**, please ensure the following:
 
-                **1:** You are running the latest version of ComfyUI.
-                **2:** You have looked at the existing bug reports and made sure this isn't already reported.
-                **3:** This is an actual bug in ComfyUI, not just a support question and not caused by an custom node. A bug is when you can specify exact steps to replicate what went wrong and others will be able to repeat your steps and see the same issue happen.
+          <detail><summary>
+          请确保：
+          </summary>
 
-                If unsure, ask on the [ComfyUI Matrix Space](https://app.element.io/#/room/%23comfyui_space%3Amatrix.org) or the [Comfy Org Discord](https://discord.gg/comfyorg) first.
+          1。 > 您正在运行最新版本的软件。
+          
+          2。 > 从工作流程中删除自定义节点
+          
+          3。 > 您搜索了网络。
+
+          4。 > 您搜索了现有问题。
+
+          如果您有任何疑问，请访问*[矩阵上的影框室]（https://matrix.to/#/%23sdbx:matrix.org）。
+
+          <detail><summary>
+          يرجى التأكد من:
+          </summary>
+
+          1. > أنت تقوم بتشغيل أحدث إصدار من البرنامج.
+          2。 > تتم إزالة العقد المخصصة من سير العمل
+          3. > لقد بحثت في الويب.
+
+          4. > لقد بحثت في المشكلات الحالية.
+
+          إذا كانت لديك أسئلة، تفضل بزيارتنا في *[غرفة الظل على ماتريكس] (https://matrix.to/#/%23sdbx:matrix.org).
+
+          <detail><summary>
+          Please Ensure:
+          </summary>
+
+          1. > You are running the latest version of the software.
+          3. > You searched the web.
+          4. > You searched the existing issues.
+
+              If you have questions, visit us in the *[Shadowbox room on Matrix](https://matrix.to/#/%23sdbx:matrix.org).
     - type: textarea
       attributes:
-            label: Expected Behavior
-            description: "What you expected to happen."
+            label: 预期行为السلوك المتوقعОжидаемое поведение Expected Behavior
+            description: ""
       validations:
             required: true
     - type: textarea
       attributes:
-                label: Actual Behavior
-                description: "What actually happened. Please include a screenshot of the issue if possible."
+                label: 后果 نتيجة Результат, следствие Result 
+                description: "如果可能，请附上屏幕截图。قم بتضمين لقطات شاشة إن أمكن. Include screenshots if possible. "
       validations:
                 required: true
     - type: textarea
       attributes:
-                label: Steps to Reproduce
-                description: "Describe how to reproduce the issue. Please be sure to attach a workflow JSON or PNG, ideally one that doesn't require custom nodes to test. If the bug open happens when certain custom nodes are used, most likely that custom node is what has the bug rather than ComfyUI, in which case it should be reported to the node's author."
+                label: 重新创建的步骤 خطوات إعادة الإنشاءSteps to Recreate
+                description: "描述如何再次触发问题。 如果可能，请附上工作流程。صف كيفية تشغيل المشكلة مرة أخرى. أرفق سير عمل إن أمكن. Describe how to trigger the issue again. Attach a workflow if possible."
       validations:
                 required: true
     - type: textarea
       attributes:
-                label: Debug Logs
-                description: "Please copy the output from your terminal logs here."
+                label: Logs
+                description: "请在这里粘贴控制台中的文本。يرجى لصق النص من وحدة التحكم الخاصة بك هنا. Please paste text from your console here."
                 render: powershell
       validations:
                 required: true
     - type: textarea
       attributes:
                 label: Other
-                description: "Any other additional information you think might be helpful."
+                description: "任何其他有用或相关信息。أي معلومات أخرى مفيدة أو ذات صلة.Any other helpful or related information."
       validations:
                 required: false

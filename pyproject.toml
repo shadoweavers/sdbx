@@ -1,3 +1,122 @@
 [build-system]
-requires = ["setuptools", "wheel", "pip"]
+requires = ["setuptools", "setuptools-scm", "wheel", "pip"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "sdbx"
+dynamic = ["version", "dependencies"]
+description = "A powerful and modular stable diffusion GUI with a graph/nodes interface."
+authors = [
+    { name = "darkshapes" },
+    { name = "AppMana" },
+    { name = "HiddenSwitch" },
+]
+requires-python = ">= 3.10"
+
+[project.optional-dependencies]
+core = [
+    # PyTorch Extensions
+    # (torch, torchvision, and torchaudio version are determined by system in setup.py)
+    "pytorch-lightning>=2.0.0",
+    "torchdiffeq>=0.2.3",
+    "torchsde>=0.2.6",
+    "einops>=0.6.0",
+    "clip @ git+https://github.com/openai/CLIP.git@main#egg=clip",
+    "open-clip-torch>=2.24.0",
+    "transformers>=4.29.1",
+    "peft",
+    "torchinfo",
+    "bitsandbytes",
+    "accelerate>=0.25.0",
+    "kornia>=0.7.1",
+    "huggingface_hub",
+    "huggingface_extra_chat_templates @ git+https://github.com/AppMana/appmana-comfyui-chat-templates.git",
+
+    # Mathematical Libraries
+    "numpy>=1.26.3,<2.0.0",
+    "scipy",
+    "mpmath>=1.0,!=1.4.0a0",
+    
+    # Image Processing
+    "Pillow",
+    "scikit-image>=0.20.0",
+    "opencv-python-headless>=4.9.0.80",
+    "albumentations>=1.3.0",
+    "resize-right>=0.0.2",
+    "clean-fid>=0.1.35",
+    "OpenEXR",
+    
+    # I/O, File Handling, and System Management
+    "aiohttp>=3.8.4",
+    "aiofiles>=23.1.0",
+    "fsspec",
+    "watchdog",
+    "soundfile",
+    "psutil",
+    
+    # Serialization and Data Formats
+    "protobuf",
+    "safetensors>=0.4.2",
+    "jsonmerge>=1.9.0",
+    "pyyaml>=6.0",
+    
+    # Import Helpers
+    "importlib_resources",
+    
+    # Security
+    "certifi",
+    "pyjwt[crypto]",
+    
+    # Optimization and Performance
+    "frozendict>=2.3.6",
+    "lazy-object-proxy",
+    "wrapt>=1.16.0",
+    "spandrel",
+    
+    # Telemetry
+    "opentelemetry-distro",
+    "opentelemetry-exporter-otlp",
+    "opentelemetry-propagator-jaeger",
+    "opentelemetry-instrumentation",
+    "opentelemetry-util-http",
+    "opentelemetry-instrumentation-aio-pika",
+    "opentelemetry-instrumentation-requests",
+    "opentelemetry-semantic-conventions",
+    
+    # Message Queue
+    "aio-pika",
+    
+    # Quality of Life
+    "ConfigArgParse",
+    "tqdm",
+    "natsort",
+    "can_ada",
+    "python-dateutil>=2.8.2",
+]
+dev = [
+    # Testing frameworks and tools
+    "pytest",
+    "pytest-asyncio",
+    "testcontainers",
+    "testcontainers-rabbitmq",
+    "freezegun",
+    "coverage",
+
+    # Linting and type checking
+    "pylint",
+    "mypy>=1.6.0",
+
+    # WebSocket client
+    "websocket-client==1.6.1",
+
+    # Build tools
+    "pyoxidizer",
+]
+
+[project.scripts]
+sdbx = "sdbx.cmd.main:entrypoint"
+
+[tool.setuptools]
+packages = ["sdbx"]
+
+[tool.setuptools_scm]

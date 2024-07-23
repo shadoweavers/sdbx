@@ -4,6 +4,7 @@ import os.path
 import platform
 import subprocess
 import sys
+from textwrap import dedent
 from typing import List, Optional
 
 from pip._internal.index.collector import LinkCollector
@@ -12,18 +13,15 @@ from pip._internal.models.search_scope import SearchScope
 from pip._internal.models.selection_prefs import SelectionPreferences
 from pip._internal.network.session import PipSession
 from pip._internal.req import InstallRequirement
+from pip._vendor import tomli as tomllib # replace with tomllib once pyoxidizer supports 3.11
 from pip._vendor.packaging.requirements import Requirement
 from setuptools import setup, find_packages
 
 """
-The name of the package.
+The project config.
 """
-package_name = "sdbx"
-
-"""
-The current version.
-"""
-version = '0.0.1'
+with open("pyproject.toml", "rb") as f:
+    project = tomllib.load(f)["project"]
 
 """
 The package index to the torch built with AMD ROCm.
@@ -44,8 +42,8 @@ cpu_torch_index = ("https://download.pytorch.org/whl/cpu", "https://download.pyt
 """
 Indicates if this is installing an editable (develop) mode package
 """
-is_editable = '--editable' in sys.argv or '-e' in sys.argv or (
-        'python' in sys.argv and 'setup.py' in sys.argv and 'develop' in sys.argv)
+is_editable = "--editable" in sys.argv or "-e" in sys.argv
+force_cpu = "--force-cpu" in sys.argv
 
 
 def _is_nvidia() -> bool:
@@ -91,20 +89,20 @@ def _is_amd() -> bool:
         elif "Device" in output:
             return True
         elif "Permission Denied" in output:
-            msg = f"""
-{output}
+            msg = dedent(f"""
+                    {output}
 
-To resolve this issue on AMD:
+                    To resolve this issue on AMD:
 
-sudo -i
-usermod -a -G video $LOGNAME
-usermod -a -G render $LOGNAME
+                    sudo -i
+                    usermod -a -G video $LOGNAME
+                    usermod -a -G render $LOGNAME
 
-You will need to reboot. Save your work, then:
+                    You will need to reboot. Save your work, then:
 
-reboot
+                    reboot
 
-"""
+                """)
             print(msg, file=sys.stderr)
             raise RuntimeError(msg)
     return False
@@ -117,44 +115,36 @@ def _is_linux_arm64():
     return os_name == 'Linux' and architecture == 'aarch64'
 
 
-def dependencies(for_pypi=False, force_nightly: bool = False) -> List[str]:
-    _dependencies = open(os.path.join(os.path.dirname(__file__), "requirements.txt")).readlines()
-    if for_pypi:
-        return [dep for dep in _dependencies if dep not in {"torch", "torchvision", "torchaudio"} and "@" not in dep]
-    # If we're installing with no build isolation, we can check if torch is already installed in the environment, and if
-    # so, go ahead and use the version that is already installed.
-    existing_torch: Optional[str]
+def dependencies(force_nightly: bool = False) -> List[str]:
+    deps = ["torch", "torchvision", "torchaudio"]
+
+    # Check for an existing torch installation.
     try:
         import torch
         print(f"sdbx setup.py: torch version was {torch.__version__} and built without build isolation, using this torch instead of upgrading", file=sys.stderr)
-        existing_torch = torch.__version__
-    except Exception:
-        existing_torch = None
+        deps = [f"torch=={torch.__version__}"] + deps[1:]
+        return deps
+    except ImportError:
+        pass
 
-    if existing_torch is not None:
-        for i, dep in enumerate(_dependencies):
-            stripped = dep.strip()
-            if stripped == "torch":
-                _dependencies[i] = f"{stripped}=={existing_torch}"
-                break
-        return _dependencies
     # some torch packages redirect to https://download.pytorch.org/whl/
     _alternative_indices = [amd_torch_index, nvidia_torch_index, ("https://download.pytorch.org/whl/", "https://download.pytorch.org/whl/")]
     session = PipSession()
 
     # (stable, nightly) tuple
     index_urls = [('https://pypi.org/simple', 'https://pypi.org/simple')]
+
     # prefer nvidia over AMD because AM5/iGPU systems will have a valid ROCm device
-    if _is_nvidia():
+    if _is_nvidia() and not force_cpu:
         index_urls = [nvidia_torch_index] + index_urls
-    elif _is_amd():
+    elif _is_amd() and not force_cpu:
         index_urls = [amd_torch_index] + index_urls
-        _dependencies += ["pytorch-triton-rocm"]
+        deps += ["pytorch-triton-rocm"]
     else:
         index_urls += [cpu_torch_index]
 
-    if len(index_urls) == 1:
-        return _dependencies
+    # if len(index_urls) == 1:
+    #     return deps
 
     if sys.version_info >= (3, 13) or force_nightly:
         # use the nightlies for python 3.13
@@ -174,48 +164,19 @@ def dependencies(for_pypi=False, force_nightly: bool = False) -> List[str]:
             # pip 22
             finder = PackageFinder.create(LinkCollector(session, SearchScope([], index_urls_selected)),  # type: ignore
                                           SelectionPreferences(allow_yanked=False, prefer_binary=False,
-                                                               allow_all_prereleases=True)
-                                          , use_deprecated_html5lib=False)
+                                                               allow_all_prereleases=True), 
+                                          use_deprecated_html5lib=False)
         except:
             raise Exception("upgrade pip with\npython -m pip install -U pip")
-    for i, package in enumerate(_dependencies[:]):
-        requirement = InstallRequirement(Requirement(package), comes_from=f"{package_name}=={version}")
+    for i, package in enumerate(deps[:]):
+        print(f"Checking {package} for a better version", file=sys.stderr)
+        requirement = InstallRequirement(Requirement(package), comes_from=project["name"])
         candidate = finder.find_best_candidate(requirement.name, requirement.specifier)
         if candidate.best_candidate is not None:
             if any([url in candidate.best_candidate.link.url for url in _alternative_indices_selected]):
-                _dependencies[i] = f"{requirement.name} @ {candidate.best_candidate.link.url}"
-    return _dependencies
+                deps[i] = f"{requirement.name} @ {candidate.best_candidate.link.url}"
+    return deps
 
-
-package_data = [
-    'sd1_tokenizer/*',
-    't5_tokenizer/*',
-    '**/*.json',
-    '**/*.yaml',
-]
-if not is_editable:
-    package_data.append('comfy/web/**/*')
-dev_dependencies = open(os.path.join(os.path.dirname(__file__), "requirements-dev.txt")).readlines()
 setup(
-    name=package_name,
-    description="A powerful and modular stable diffusion GUI with a graph/nodes interface.",
-    author="darkshapes",
-    version=version,
-    python_requires=">=3.10,<3.13",
-    packages=find_packages(exclude=["tests"] + [] if is_editable else ['custom_nodes']),
-    include_package_data=True,
-    install_requires=dependencies(for_pypi=False),
-    setup_requires=["pip", "wheel"],
-    entry_points={
-        'console_scripts': [
-            'sdbx = comfy.cmd.main:entrypoint',
-        ],
-    },
-    package_data={
-        'comfy': package_data
-    },
-    tests_require=dev_dependencies,
-    extras_require={
-        'dev': dev_dependencies
-    },
+    install_requires=dependencies() + project["optional-dependencies"]["core"]
 )

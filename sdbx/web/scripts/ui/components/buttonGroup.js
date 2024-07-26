@@ -5,7 +5,7 @@ import { ComfyButton } from "./button.js";
 import { prop } from "../../utils.js";
 
 export class ComfyButtonGroup {
-	element = $el("div.comfyui-button-group");
+	element = $el("div.sdbxui-button-group");
 
 	/** @param {Array<ComfyButton | HTMLElement>} buttons */
 	constructor(...buttons) {

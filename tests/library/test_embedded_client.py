@@ -3,9 +3,9 @@ import asyncio
 import pytest
 import torch
 
-from comfy.cli_args_types import Configuration
-from comfy.client.embedded_comfy_client import EmbeddedComfyClient
-from comfy.client.sdxl_with_refiner_workflow import sdxl_workflow_with_refiner
+from sdbx.cli_args_types import Configuration
+from sdbx.client.embedded_sdbx_client import EmbeddedComfyClient
+from sdbx.client.sdxl_with_refiner_workflow import sdxl_workflow_with_refiner
 
 
 @pytest.mark.asyncio
@@ -28,7 +28,7 @@ async def test_cuda_memory_usage():
 
 
 @pytest.mark.asyncio
-async def test_embedded_comfy():
+async def test_embedded_sdbx():
     async with EmbeddedComfyClient() as client:
         prompt = sdxl_workflow_with_refiner("test")
         outputs = await client.queue_prompt(prompt)
@@ -43,7 +43,7 @@ async def test_configuration_options():
         assert outputs["13"]["images"][0]["abs_path"] is not None
 
 @pytest.mark.asyncio
-async def test_multithreaded_comfy():
+async def test_multithreaded_sdbx():
     async with EmbeddedComfyClient(max_workers=2) as client:
         prompt = sdxl_workflow_with_refiner("test")
         outputs_iter = await asyncio.gather(*[client.queue_prompt(prompt) for _ in range(4)])

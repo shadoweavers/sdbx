@@ -1016,7 +1016,7 @@ def unload_all_models():
 
 
 def resolve_lowvram_weight(weight, model, key):  # TODO: remove
-    warnings.warn("The comfy.model_management.resolve_lowvram_weight function will be removed soon, please stop using it.", category=DeprecationWarning)
+    warnings.warn("The sdbx.model_management.resolve_lowvram_weight function will be removed soon, please stop using it.", category=DeprecationWarning)
     return weight
 
 

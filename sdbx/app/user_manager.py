@@ -32,8 +32,8 @@ class UserManager():
 
     def get_request_user_id(self, request):
         user = "default"
-        if args.multi_user and "comfy-user" in request.headers:
-            user = request.headers["comfy-user"]
+        if args.multi_user and "sdbx-user" in request.headers:
+            user = request.headers["sdbx-user"]
 
         if user not in self.users:
             raise KeyError("Unknown user: " + user)

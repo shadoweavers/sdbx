@@ -27,7 +27,7 @@ def main():
         print("java must be installed to generate openapi clients automatically", file=sys.stderr)
         raise FileNotFoundError("java")
 
-    cache_dir = user_cache_dir(appname="comfyui")
+    cache_dir = user_cache_dir(appname="sdbxui")
     jar = join(cache_dir, _openapi_jar_basename)
 
     if not exists(jar):
@@ -35,8 +35,8 @@ def main():
         print(f"downloading {_openapi_jar_basename} to {jar}", file=sys.stderr)
         urllib.request.urlretrieve(_openapi_jar_url, jar)
 
-    with as_file(files('comfy.api').joinpath('openapi.yaml')) as openapi_schema:
-        with as_file(files('comfy.api').joinpath('openapi_python_config.yaml')) as python_config:
+    with as_file(files('sdbx.api').joinpath('openapi.yaml')) as openapi_schema:
+        with as_file(files('sdbx.api').joinpath('openapi_python_config.yaml')) as python_config:
             cmds = [
                 "java",
                 "--add-opens", "java.base/java.io=ALL-UNNAMED",

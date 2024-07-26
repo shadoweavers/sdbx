@@ -28,9 +28,9 @@ from joblib import Parallel, delayed
 from natsort import natsorted
 from torch import Tensor
 
-from comfy.cmd import folder_paths
-from comfy.digest import digest
-from comfy.nodes.package_typing import CustomNode, InputTypes, FunctionReturnsUIVariables, SaveNodeResult, \
+from sdbx.cmd import folder_paths
+from sdbx.digest import digest
+from sdbx.nodes.package_typing import CustomNode, InputTypes, FunctionReturnsUIVariables, SaveNodeResult, \
     InputTypeSpec, ValidatedNodeResult
 
 _open_api_common_schema: Dict[str, InputTypeSpec] = {
@@ -235,7 +235,7 @@ class LegacyOutputURIs(CustomNode):
         return {
             "required": {
                 "images": ("IMAGE",),
-                "prefix": ("STRING", {"default": "ComfyUI_"}),
+                "prefix": ("STRING", {"default": "sdbx_"}),
                 "suffix": ("STRING", {"default": "_.png"}),
             }
         }
@@ -244,7 +244,7 @@ class LegacyOutputURIs(CustomNode):
     FUNCTION = "execute"
     CATEGORY = "api/openapi"
 
-    def execute(self, images: Sequence[Tensor], prefix: str = "ComfyUI_", suffix: str = "_.png") -> ValidatedNodeResult:
+    def execute(self, images: Sequence[Tensor], prefix: str = "sdbx_", suffix: str = "_.png") -> ValidatedNodeResult:
         output_directory = folder_paths.get_output_directory()
         pattern = rf'^{prefix}([\d]+){suffix}$'
         compiled_pattern = re.compile(pattern)
@@ -529,7 +529,7 @@ class SaveImagesResponse(CustomNode):
                 metadata_uris: Optional[Sequence[str | None]] = None,
                 local_uris: Optional[Sequence[Optional[str]]] = None,
                 pil_save_format="png",
-                # from comfyui
+                # from sdbxui
                 prompt: Optional[dict] = None,
                 extra_pnginfo=None,
                 *args,

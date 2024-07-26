@@ -1,4 +1,4 @@
-require("../../comfy/web/scripts/api");
+require("../../sdbx/web/scripts/api");
 
 const fs = require("fs");
 const path = require("path");
@@ -14,7 +14,7 @@ function* walkSync(dir) {
 }
 
 /**
- * @typedef { import("../../comfy/web/types/comfy").ComfyObjectInfo } ComfyObjectInfo
+ * @typedef { import("../../sdbx/web/types/sdbx").ComfyObjectInfo } ComfyObjectInfo
  */
 
 /**
@@ -34,9 +34,9 @@ export function mockApi(config = {}) {
 		...config,
 	};
 	if (!mockExtensions) {
-		mockExtensions = Array.from(walkSync(path.resolve("../comfy/web/extensions/core")))
+		mockExtensions = Array.from(walkSync(path.resolve("../sdbx/web/extensions/core")))
 			.filter((x) => x.endsWith(".js"))
-			.map((x) => path.relative(path.resolve("../comfy/web"), x));
+			.map((x) => path.relative(path.resolve("../sdbx/web"), x));
 	}
 	if (!mockNodeDefs) {
 		mockNodeDefs = JSON.parse(fs.readFileSync(path.resolve("./data/object_info.json")));
@@ -74,7 +74,7 @@ export function mockApi(config = {}) {
 		}),
 		listUserData: jest.fn(() => [])
 	};
-	jest.mock("../../comfy/web/scripts/api", () => ({
+	jest.mock("../../sdbx/web/scripts/api", () => ({
 		get api() {
 			return mockApi;
 		},

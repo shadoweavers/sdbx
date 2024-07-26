@@ -18,10 +18,10 @@ app.registerExtension({
 			}
 
 			const modifierKeyIdMap = {
-				s: "#comfy-save-button",
-				o: "#comfy-file-input",
-				Backspace: "#comfy-clear-button",
-				d: "#comfy-load-default-button",
+				s: "#sdbx-save-button",
+				o: "#sdbx-file-input",
+				Backspace: "#sdbx-clear-button",
+				d: "#sdbx-load-default-button",
 			};
 
 			const modifierKeybindId = modifierKeyIdMap[event.key];
@@ -40,7 +40,7 @@ app.registerExtension({
 
 			// Close out of modals using escape
 			if (event.key === "Escape") {
-				const modals = document.querySelectorAll(".comfy-modal");
+				const modals = document.querySelectorAll(".sdbx-modal");
 				const modal = Array.from(modals).find(modal => window.getComputedStyle(modal).getPropertyValue("display") !== "none");
 				if (modal) {
 					modal.style.display = "none";
@@ -52,9 +52,9 @@ app.registerExtension({
 			}
 
 			const keyIdMap = {
-				q: "#comfy-view-queue-button",
-				h: "#comfy-view-history-button",
-				r: "#comfy-refresh-button",
+				q: "#sdbx-view-queue-button",
+				h: "#sdbx-view-history-button",
+				r: "#sdbx-refresh-button",
 			};
 
 			const buttonId = keyIdMap[event.key];

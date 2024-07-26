@@ -14,13 +14,13 @@ from transformers import AutoTokenizer, PreTrainedModel, LogitsProcessor, TextSt
     LlavaNextForConditionalGeneration, LlavaNextProcessor, AutoModel
 from typing_extensions import TypedDict
 
-from comfy.language.chat_templates import KNOWN_CHAT_TEMPLATES
-from comfy.language.language_types import ProcessorResult
-from comfy.language.transformers_model_management import TransformersManagedModel
-from comfy.model_downloader import get_huggingface_repo_list, get_or_download_huggingface_repo
-from comfy.model_management import get_torch_device_name, load_model_gpu, unet_dtype, unet_offload_device
-from comfy.nodes.package_typing import CustomNode, InputTypes, ValidatedNodeResult
-from comfy.utils import comfy_tqdm, seed_for_block, comfy_progress, ProgressBar
+from sdbx.language.chat_templates import KNOWN_CHAT_TEMPLATES
+from sdbx.language.language_types import ProcessorResult
+from sdbx.language.transformers_model_management import TransformersManagedModel
+from sdbx.model_downloader import get_huggingface_repo_list, get_or_download_huggingface_repo
+from sdbx.model_management import get_torch_device_name, load_model_gpu, unet_dtype, unet_offload_device
+from sdbx.nodes.package_typing import CustomNode, InputTypes, ValidatedNodeResult
+from sdbx.utils import sdbx_tqdm, seed_for_block, sdbx_progress, ProgressBar
 
 _AUTO_CHAT_TEMPLATE = "default"
 
@@ -30,7 +30,7 @@ try:
 
     logging.info("Additional LLaVA models are now supported")
 except ImportError as exc:
-    logging.info(f"Install LLavA with `pip install git+https://github.com/AppMana/appmana-comfyui-llava` for additional LLaVA support")
+    logging.info(f"Install LLavA with `pip install git+https://github.com/AppMana/appmana-sdbxui-llava` for additional LLaVA support")
 
 # aka kwargs type
 _GENERATION_KWARGS_TYPE = Dict[str, Any]
@@ -237,7 +237,7 @@ class TransformersLoader(CustomNode):
             hub_kwargs["subfolder"] = subfolder
 
         ckpt_name = get_or_download_huggingface_repo(ckpt_name)
-        with comfy_tqdm():
+        with sdbx_tqdm():
             from_pretrained_kwargs = {
                 "pretrained_model_name_or_path": ckpt_name,
                 "torch_dtype": unet_dtype(),
@@ -365,7 +365,7 @@ class TransformersGenerate(CustomNode):
         inputs = tokens
         progress_logits_processor = _ProgressLogitsProcessor(model)
         progress_bar: ProgressBar
-        with comfy_progress(total=max_new_tokens) as progress_bar:
+        with sdbx_progress(total=max_new_tokens) as progress_bar:
             # todo: deal with batches correctly, don't assume batch size 1
             token_count = 0
 

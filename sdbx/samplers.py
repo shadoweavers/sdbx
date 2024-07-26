@@ -250,7 +250,7 @@ def calc_cond_batch(model, conds, x_in, timestep, model_options):
     return out_conds
 
 def calc_cond_uncond_batch(model, cond, uncond, x_in, timestep, model_options): #TODO: remove
-    logging.warning("WARNING: The comfy.samplers.calc_cond_uncond_batch function is deprecated please use the calc_cond_batch one instead.")
+    logging.warning("WARNING: The sdbx.samplers.calc_cond_uncond_batch function is deprecated please use the calc_cond_batch one instead.")
     return tuple(calc_cond_batch(model, [cond, uncond], x_in, timestep, model_options))
 
 def cfg_function(model, cond_pred, uncond_pred, cond_scale, x, timestep, model_options={}, cond=None, uncond=None):
@@ -405,7 +405,7 @@ def resolve_areas_and_cond_masks_multidim(conditions, dims, device):
             conditions[i] = modified
 
 def resolve_areas_and_cond_masks(conditions, h, w, device):
-    logging.warning("WARNING: The comfy.samplers.resolve_areas_and_cond_masks function is deprecated please use the resolve_areas_and_cond_masks_multidim one instead.")
+    logging.warning("WARNING: The sdbx.samplers.resolve_areas_and_cond_masks function is deprecated please use the resolve_areas_and_cond_masks_multidim one instead.")
     return resolve_areas_and_cond_masks_multidim(conditions, [h, w], device)
 
 def create_cond_with_same_area_if_none(conds, c): #TODO: handle dim != 2

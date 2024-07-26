@@ -44,7 +44,7 @@ export class ManageGroupDialog extends ComfyDialog {
 	constructor(app) {
 		super();
 		this.app = app;
-		this.element = $el("dialog.comfy-group-manage", {
+		this.element = $el("dialog.sdbx-group-manage", {
 			parent: document.body,
 		});
 	}
@@ -253,10 +253,10 @@ export class ManageGroupDialog extends ComfyDialog {
 	show(type) {
 		const groupNodes = Object.keys(app.graph.extra?.groupNodes ?? {}).sort((a, b) => a.localeCompare(b));
 
-		this.innerNodesList = $el("ul.comfy-group-manage-list-items");
-		this.widgetsPage = $el("section.comfy-group-manage-node-page");
-		this.inputsPage = $el("section.comfy-group-manage-node-page");
-		this.outputsPage = $el("section.comfy-group-manage-node-page");
+		this.innerNodesList = $el("ul.sdbx-group-manage-list-items");
+		this.widgetsPage = $el("section.sdbx-group-manage-node-page");
+		this.inputsPage = $el("section.sdbx-group-manage-node-page");
+		this.outputsPage = $el("section.sdbx-group-manage-node-page");
 		const pages = $el("div", [this.widgetsPage, this.inputsPage, this.outputsPage]);
 
 		this.tabs = [
@@ -276,7 +276,7 @@ export class ManageGroupDialog extends ComfyDialog {
 			return p;
 		}, {});
 
-		const outer = $el("div.comfy-group-manage-outer", [
+		const outer = $el("div.sdbx-group-manage-outer", [
 			$el("header", [
 				$el("h2", "Group Nodes"),
 				$el(
@@ -296,8 +296,8 @@ export class ManageGroupDialog extends ComfyDialog {
 				),
 			]),
 			$el("main", [
-				$el("section.comfy-group-manage-list", this.innerNodesList),
-				$el("section.comfy-group-manage-node", [
+				$el("section.sdbx-group-manage-list", this.innerNodesList),
+				$el("section.sdbx-group-manage-node", [
 					$el(
 						"header",
 						Object.values(this.tabs).map((t) => t.tab)
@@ -307,7 +307,7 @@ export class ManageGroupDialog extends ComfyDialog {
 			]),
 			$el("footer", [
 				$el(
-					"button.comfy-btn",
+					"button.sdbx-btn",
 					{
 						onclick: (e) => {
 							const node = app.graph._nodes.find((n) => n.type === "workflow/" + this.selectedGroup);
@@ -325,7 +325,7 @@ export class ManageGroupDialog extends ComfyDialog {
 					"Delete Group Node"
 				),
 				$el(
-					"button.comfy-btn",
+					"button.sdbx-btn",
 					{
 						onclick: async () => {
 							let nodesByType;
@@ -407,7 +407,7 @@ export class ManageGroupDialog extends ComfyDialog {
 					},
 					"Save"
 				),
-				$el("button.comfy-btn", { onclick: () => this.element.close() }, "Close"),
+				$el("button.sdbx-btn", { onclick: () => this.element.close() }, "Close"),
 			]),
 		]);
 

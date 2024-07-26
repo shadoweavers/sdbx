@@ -138,7 +138,7 @@ def _vanilla_load_custom_nodes_2(node_paths: Iterable[str]) -> ExportedNodes:
             if module_path.endswith(".disabled"): continue
             time_before = time.perf_counter()
             possible_exported_nodes = _vanilla_load_custom_nodes_1(module_path, base_node_names)
-            # comfyui-manager mitigation
+            # sdbxui-manager mitigation
             import_succeeded = len(possible_exported_nodes.NODE_CLASS_MAPPINGS) > 0 or "ComfyUI-Manager" in module_path
             node_import_times.append(
                 (time.perf_counter() - time_before, module_path, import_succeeded))
@@ -176,16 +176,16 @@ def mitigated_import_of_vanilla_custom_nodes() -> ExportedNodes:
     from .. import model_patcher
     sys.modules['model_patcher'] = model_patcher
 
-    comfy_extras_mitigation: Dict[str, types.ModuleType] = {}
+    sdbx_extras_mitigation: Dict[str, types.ModuleType] = {}
 
-    import comfy_extras
+    import sdbx_extras
     for module_name, module in sys.modules.items():
-        if not module_name.startswith("comfy_extras.nodes"):
+        if not module_name.startswith("sdbx_extras.nodes"):
             continue
         module_short_name = module_name.split(".")[-1]
-        setattr(comfy_extras, module_short_name, module)
-        comfy_extras_mitigation[f'comfy_extras.{module_short_name}'] = module
-    sys.modules.update(comfy_extras_mitigation)
+        setattr(sdbx_extras, module_short_name, module)
+        sdbx_extras_mitigation[f'sdbx_extras.{module_short_name}'] = module
+    sys.modules.update(sdbx_extras_mitigation)
     node_paths = folder_paths.get_folder_paths("custom_nodes")
 
     potential_git_dir_parent = join(dirname(__file__), "..", "..")

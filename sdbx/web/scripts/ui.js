@@ -175,7 +175,7 @@ function dragElement(dragEl, settings) {
 		e = e || window.event;
 		e.preventDefault();
 
-		dragEl.classList.add("comfy-menu-manual-pos");
+		dragEl.classList.add("sdbx-menu-manual-pos");
 
 		// calculate the new cursor position:
 		posDiffX = e.clientX - posStartX;
@@ -211,7 +211,7 @@ class ComfyList {
 		this.#text = text;
 		this.#type = type || text.toLowerCase();
 		this.#reverse = reverse || false;
-		this.element = $el("div.comfy-list");
+		this.element = $el("div.sdbx-list");
 		this.element.style.display = "none";
 	}
 
@@ -226,7 +226,7 @@ class ComfyList {
 				$el("h4", {
 					textContent: section,
 				}),
-				$el("div.comfy-list-items", [
+				$el("div.sdbx-list-items", [
 					...(this.#reverse ? items[section].reverse() : items[section]).map((item) => {
 						// Allow items to specify a custom remove action (e.g. for interrupt current prompt)
 						const removeAction = item.remove || {
@@ -254,7 +254,7 @@ class ComfyList {
 					}),
 				]),
 			]),
-			$el("div.comfy-list-actions", [
+			$el("div.sdbx-list-actions", [
 				$el("button", {
 					textContent: "Clear " + this.#text,
 					onclick: async () => {
@@ -371,7 +371,7 @@ export class ComfyUI {
 		});
 
 		const fileInput = $el("input", {
-			id: "comfy-file-input",
+			id: "sdbx-file-input",
 			type: "file",
 			accept: ".json,image/png,.latent,.safetensors,image/webp,audio/flac",
 			style: {display: "none"},
@@ -409,7 +409,7 @@ export class ComfyUI {
 		});
 
 		this.menuHamburger = $el(
-			"div.comfy-menu-hamburger",
+			"div.sdbx-menu-hamburger",
 			{
 				parent: document.body,
 				onclick: () => {
@@ -420,8 +420,8 @@ export class ComfyUI {
 			[$el("div"), $el("div"), $el("div")]
 		);
 
-		this.menuContainer = $el("div.comfy-menu", { parent: document.body }, [
-			$el("div.drag-handle.comfy-menu-header", {
+		this.menuContainer = $el("div.sdbx-menu", { parent: document.body }, [
+			$el("div.drag-handle.sdbx-menu-header", {
 				style: {
 					overflow: "hidden",
 					position: "relative",
@@ -430,13 +430,13 @@ export class ComfyUI {
 				}
 			}, 	[
 				$el("span.drag-handle"),
-				$el("span.comfy-menu-queue-size", { $: (q) => (this.queueSize = q) }),
-				$el("div.comfy-menu-actions", [
-					$el("button.comfy-settings-btn", {
+				$el("span.sdbx-menu-queue-size", { $: (q) => (this.queueSize = q) }),
+				$el("div.sdbx-menu-actions", [
+					$el("button.sdbx-settings-btn", {
 						textContent: "⚙️",
 						onclick: () => this.settings.show(),
 					}),
-					$el("button.comfy-close-menu-btn", {
+					$el("button.sdbx-close-menu-btn", {
 						textContent: "\u00d7",
 						onclick: () => {
 							this.menuContainer.style.display = "none";
@@ -445,7 +445,7 @@ export class ComfyUI {
 					}),
 				]),
 			]),
-			$el("button.comfy-queue-btn", {
+			$el("button.sdbx-queue-btn", {
 				id: "queue-button",
 				textContent: "Queue Prompt",
 				onclick: () => app.queuePrompt(0, this.batchCount),
@@ -508,7 +508,7 @@ export class ComfyUI {
 					autoQueueModeEl
 				])
 			]),
-			$el("div.comfy-menu-btns", [
+			$el("div.sdbx-menu-btns", [
 				$el("button", {
 					id: "queue-front-button",
 					textContent: "Queue Front",
@@ -516,7 +516,7 @@ export class ComfyUI {
 				}),
 				$el("button", {
 					$: (b) => (this.queue.button = b),
-					id: "comfy-view-queue-button",
+					id: "sdbx-view-queue-button",
 					textContent: "View Queue",
 					onclick: () => {
 						this.history.hide();
@@ -525,7 +525,7 @@ export class ComfyUI {
 				}),
 				$el("button", {
 					$: (b) => (this.history.button = b),
-					id: "comfy-view-history-button",
+					id: "sdbx-view-history-button",
 					textContent: "View History",
 					onclick: () => {
 						this.queue.hide();
@@ -536,7 +536,7 @@ export class ComfyUI {
 			this.queue.element,
 			this.history.element,
 			$el("button", {
-				id: "comfy-save-button",
+				id: "sdbx-save-button",
 				textContent: "Save",
 				onclick: () => {
 					let filename = "workflow.json";
@@ -566,7 +566,7 @@ export class ComfyUI {
 				},
 			}),
 			$el("button", {
-				id: "comfy-dev-save-api-button",
+				id: "sdbx-dev-save-api-button",
 				textContent: "Save (API Format)",
 				style: {width: "100%", display: "none"},
 				onclick: () => {
@@ -596,15 +596,15 @@ export class ComfyUI {
 					});
 				},
 			}),
-			$el("button", {id: "comfy-load-button", textContent: "Load", onclick: () => fileInput.click()}),
+			$el("button", {id: "sdbx-load-button", textContent: "Load", onclick: () => fileInput.click()}),
 			$el("button", {
-				id: "comfy-refresh-button",
+				id: "sdbx-refresh-button",
 				textContent: "Refresh",
 				onclick: () => app.refreshComboInNodes()
 			}),
-			$el("button", {id: "comfy-clipspace-button", textContent: "Clipspace", onclick: () => app.openClipspace()}),
+			$el("button", {id: "sdbx-clipspace-button", textContent: "Clipspace", onclick: () => app.openClipspace()}),
 			$el("button", {
-				id: "comfy-clear-button", textContent: "Clear", onclick: () => {
+				id: "sdbx-clear-button", textContent: "Clear", onclick: () => {
 					if (!confirmClear.value || confirm("Clear workflow?")) {
 						app.clean();
 						app.graph.clear();
@@ -613,7 +613,7 @@ export class ComfyUI {
 				}
 			}),
 			$el("button", {
-				id: "comfy-load-default-button", textContent: "Load Default", onclick: async () => {
+				id: "sdbx-load-default-button", textContent: "Load Default", onclick: async () => {
 					if (!confirmClear.value || confirm("Load default workflow?")) {
 						app.resetView();
 						await app.loadGraphData()
@@ -621,7 +621,7 @@ export class ComfyUI {
 				}
 			}),
 			$el("button", {
-				id: "comfy-reset-view-button", textContent: "Reset View", onclick: async () => {
+				id: "sdbx-reset-view-button", textContent: "Reset View", onclick: async () => {
 					app.resetView();
 				}
 			}),
@@ -632,7 +632,7 @@ export class ComfyUI {
 			name: "Enable Dev mode Options",
 			type: "boolean",
 			defaultValue: false,
-			onChange: function(value) { document.getElementById("comfy-dev-save-api-button").style.display = value ? "flex" : "none"},
+			onChange: function(value) { document.getElementById("sdbx-dev-save-api-button").style.display = value ? "flex" : "none"},
 		});
 
 		this.restoreMenuPosition = dragElement(this.menuContainer, this.settings);

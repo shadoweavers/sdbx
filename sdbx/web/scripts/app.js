@@ -9,7 +9,7 @@ import { createImageHost, calculateImageGrid } from "./ui/imagePreview.js";
 import { ComfyAppMenu } from "./ui/menu/index.js";
 import { getStorageValue, setStorageValue } from "./utils.js";
 import { ComfyWorkflowManager } from "./workflows.js";
-export const ANIM_PREVIEW_WIDGET = "$$comfy_animation_preview";
+export const ANIM_PREVIEW_WIDGET = "$$sdbx_animation_preview";
 
 function sanitizeNodeName(string) {
 	let entityMap = {
@@ -27,7 +27,7 @@ function sanitizeNodeName(string) {
 }
 
 /**
- * @typedef {import("types/comfy").ComfyExtension} ComfyExtension
+ * @typedef {import("types/sdbx").ComfyExtension} ComfyExtension
  */
 
 export class ComfyApp {
@@ -55,10 +55,10 @@ export class ComfyApp {
 		this.ui = new ComfyUI(this);
 		this.logging = new ComfyLogging(this);
 		this.workflowManager = new ComfyWorkflowManager(this);
-		this.bodyTop = $el("div.comfyui-body-top", { parent: document.body });
-		this.bodyLeft = $el("div.comfyui-body-left", { parent: document.body });
-		this.bodyRight = $el("div.comfyui-body-right", { parent: document.body });
-		this.bodyBottom = $el("div.comfyui-body-bottom", { parent: document.body });		  
+		this.bodyTop = $el("div.sdbxui-body-top", { parent: document.body });
+		this.bodyLeft = $el("div.sdbxui-body-left", { parent: document.body });
+		this.bodyRight = $el("div.sdbxui-body-right", { parent: document.body });
+		this.bodyBottom = $el("div.sdbxui-body-bottom", { parent: document.body });		  
 		this.menu = new ComfyAppMenu(this);
 
 		/**
@@ -1636,7 +1636,7 @@ export class ComfyApp {
 	}
 
 	resizeCanvas() {
-		// Limit minimal scale to 1, see https://github.com/comfyanonymous/ComfyUI/pull/845
+		// Limit minimal scale to 1, see https://github.com/sdbxanonymous/ComfyUI/pull/845
 		const scale = Math.max(window.devicePixelRatio, 1);
 		
 		// Clear fixed width and height while calculating rect so it uses 100% instead
@@ -1728,11 +1728,11 @@ export class ComfyApp {
 			},
 			{
 				title: nodeData.display_name || nodeData.name,
-				comfyClass: nodeData.name,
+				sdbxClass: nodeData.name,
 				nodeData
 			}
 		);
-		node.prototype.comfyClass = nodeData.name;
+		node.prototype.sdbxClass = nodeData.name;
 
 		this.#addNodeContextMenuHandler(node);
 		this.#addDrawBackgroundHandler(node, app);
@@ -1800,7 +1800,7 @@ export class ComfyApp {
 		let seenTypes = new Set();
 
 		this.ui.dialog.show(
-			$el("div.comfy-missing-nodes", [
+			$el("div.sdbx-missing-nodes", [
 				$el("span", { textContent: "When loading the graph, the following node types were not found: " }),
 				$el(
 					"ul",
@@ -2112,7 +2112,7 @@ export class ComfyApp {
 
 				let node_data = {
 					inputs,
-					class_type: node.comfyClass,
+					class_type: node.sdbxClass,
 				};
 
 				if (this.ui.settings.getSettingValue("Comfy.DevMode")) {

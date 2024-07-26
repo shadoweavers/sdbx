@@ -6,12 +6,12 @@ export class ComfyAsyncDialog extends ComfyDialog {
 
 	constructor(actions) {
 		super(
-			"dialog.comfy-dialog.comfyui-dialog",
+			"dialog.sdbx-dialog.sdbxui-dialog",
 			actions?.map((opt) => {
 				if (typeof opt === "string") {
 					opt = { text: opt };
 				}
-				return $el("button.comfyui-button", {
+				return $el("button.sdbxui-button", {
 					type: "button",
 					textContent: opt.text,
 					onclick: () => this.close(opt.value ?? opt.text),

@@ -39,7 +39,7 @@ export class ComfyButton {
 		content,
 		tooltip,
 		action,
-		classList = "comfyui-button",
+		classList = "sdbxui-button",
 		visibilitySetting,
 		app,
 		enabled = true,

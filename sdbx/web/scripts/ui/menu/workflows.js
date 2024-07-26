@@ -11,7 +11,7 @@ import { ComfyAsyncDialog } from "../components/asyncDialog.js";
 
 export class ComfyWorkflowsMenu {
 	#first = true;
-	element = $el("div.comfyui-workflows");
+	element = $el("div.sdbxui-workflows");
 
 	get open() {
 		return this.popup.open;
@@ -29,22 +29,22 @@ export class ComfyWorkflowsMenu {
 		this.#bindEvents();
 
 		const classList = {
-			"comfyui-workflows-button": true,
-			"comfyui-button": true,
+			"sdbxui-workflows-button": true,
+			"sdbxui-button": true,
 			unsaved: getStorageValue("Comfy.PreviousWorkflowUnsaved") === "true",
 			running: false,
 		};
-		this.buttonProgress = $el("div.comfyui-workflows-button-progress");
-		this.workflowLabel = $el("span.comfyui-workflows-label", "");
+		this.buttonProgress = $el("div.sdbxui-workflows-button-progress");
+		this.workflowLabel = $el("span.sdbxui-workflows-label", "");
 		this.button = new ComfyButton({
-			content: $el("div.comfyui-workflows-button-inner", [$el("i.mdi.mdi-graph"), this.workflowLabel, this.buttonProgress]),
+			content: $el("div.sdbxui-workflows-button-inner", [$el("i.mdi.mdi-graph"), this.workflowLabel, this.buttonProgress]),
 			icon: "chevron-down",
 			classList,
 		});
 
 		this.element.append(this.button.element);
 
-		this.popup = new ComfyPopup({ target: this.element, classList: "comfyui-workflows-popup" });
+		this.popup = new ComfyPopup({ target: this.element, classList: "sdbxui-workflows-popup" });
 		this.content = new ComfyWorkflowsContent(app, this.popup);
 		this.popup.children = [this.content.element];
 		this.popup.addEventListener("change", () => {
@@ -259,7 +259,7 @@ export class ComfyWorkflowsMenu {
 }
 
 export class ComfyWorkflowsContent {
-	element = $el("div.comfyui-workflows-panel");
+	element = $el("div.sdbxui-workflows-panel");
 	treeState = {};
 	treeFiles = {};
 	/** @type { Map<ComfyWorkflow, WorkflowElement> } */
@@ -274,12 +274,12 @@ export class ComfyWorkflowsContent {
 	constructor(app, popup) {
 		this.app = app;
 		this.popup = popup;
-		this.actions = $el("div.comfyui-workflows-actions", [
+		this.actions = $el("div.sdbxui-workflows-actions", [
 			new ComfyButton({
 				content: "Default",
 				icon: "file-code",
 				iconSize: 18,
-				classList: "comfyui-button primary",
+				classList: "sdbxui-button primary",
 				tooltip: "Load default workflow",
 				action: () => {
 					popup.open = false;
@@ -347,7 +347,7 @@ export class ComfyWorkflowsContent {
 		const current = this.openElement;
 		this.openFiles.clear();
 
-		this.openElement = $el("div.comfyui-workflows-open", [
+		this.openElement = $el("div.sdbxui-workflows-open", [
 			$el("h3", "Open"),
 			...this.app.workflowManager.openWorkflows.map((w) => {
 				const wrapper = new WorkflowElement(this, w, {
@@ -357,7 +357,7 @@ export class ComfyWorkflowsContent {
 						new ComfyButton({
 							icon: "close",
 							iconSize: 18,
-							classList: "comfyui-button comfyui-workflows-file-action",
+							classList: "sdbxui-button sdbxui-workflows-file-action",
 							tooltip: "Close workflow",
 							action: (e) => {
 								e.stopImmediatePropagation();
@@ -386,7 +386,7 @@ export class ComfyWorkflowsContent {
 		const current = this.favoritesElement;
 		const favorites = [...this.app.workflowManager.workflows.filter((w) => w.isFavorite)];
 
-		this.favoritesElement = $el("div.comfyui-workflows-favorites", [
+		this.favoritesElement = $el("div.sdbxui-workflows-favorites", [
 			$el("h3", "Favorites"),
 			...favorites
 				.map((w) => {
@@ -438,7 +438,7 @@ export class ComfyWorkflowsContent {
 
 	hideTreeParents(element) {
 		// Hide all parents if no children are visible
-		if (element.parentElement?.classList.contains("comfyui-workflows-tree") === false) {
+		if (element.parentElement?.classList.contains("sdbxui-workflows-tree") === false) {
 			for (let i = 1; i < element.parentElement.children.length; i++) {
 				const c = element.parentElement.children[i];
 				if (c.style.display !== "none") {
@@ -451,7 +451,7 @@ export class ComfyWorkflowsContent {
 	}
 
 	showTreeParents(element) {
-		if (element.parentElement?.classList.contains("comfyui-workflows-tree") === false) {
+		if (element.parentElement?.classList.contains("sdbxui-workflows-tree") === false) {
 			element.parentElement.style.removeProperty("display");
 			this.showTreeParents(element.parentElement);
 		}
@@ -463,11 +463,11 @@ export class ComfyWorkflowsContent {
 		let typingTimeout;
 
 		this.treeFiles = {};
-		this.treeRoot = $el("ul.comfyui-workflows-tree");
+		this.treeRoot = $el("ul.sdbxui-workflows-tree");
 		this.treeElement = $el("section", [
 			$el("header", [
 				$el("h3", "Browse"),
-				$el("div.comfy-ui-workflows-search", [
+				$el("div.sdbx-ui-workflows-search", [
 					$el("i.mdi.mdi-18px.mdi-magnify"),
 					$el("input", {
 						placeholder: "Search",
@@ -569,7 +569,7 @@ export class ComfyWorkflowsContent {
 			icon: this.#getFavoriteIcon(workflow),
 			overIcon: this.#getFavoriteOverIcon(workflow),
 			iconSize: 18,
-			classList: "comfyui-button comfyui-workflows-file-action-favorite" + (primary ? " comfyui-workflows-file-action-primary" : ""),
+			classList: "sdbxui-button sdbxui-workflows-file-action-favorite" + (primary ? " sdbxui-workflows-file-action-primary" : ""),
 			tooltip: this.#getFavoriteTooltip(workflow),
 			action: (e) => {
 				e.stopImmediatePropagation();
@@ -583,7 +583,7 @@ export class ComfyWorkflowsContent {
 		const deleteButton = new ComfyButton({
 			icon: "delete",
 			tooltip: "Delete this workflow",
-			classList: "comfyui-button comfyui-workflows-file-action",
+			classList: "sdbxui-button sdbxui-workflows-file-action",
 			iconSize: 18,
 			action: async (e, btn) => {
 				e.stopImmediatePropagation();
@@ -611,7 +611,7 @@ export class ComfyWorkflowsContent {
 			icon: "file-move-outline",
 			iconSize: 18,
 			tooltip: "Insert this workflow into the current workflow",
-			classList: "comfyui-button comfyui-workflows-file-action",
+			classList: "sdbxui-button sdbxui-workflows-file-action",
 			action: (e) => {
 				if (!this.app.shiftDown) {
 					this.popup.open = false;
@@ -630,7 +630,7 @@ export class ComfyWorkflowsContent {
 		return new ComfyButton({
 			icon: "pencil",
 			tooltip: workflow.path ? "Rename this workflow" : "This workflow can't be renamed as it hasn't been saved.",
-			classList: "comfyui-button comfyui-workflows-file-action",
+			classList: "sdbxui-button sdbxui-workflows-file-action",
 			iconSize: 18,
 			enabled: !!workflow.path,
 			action: async (e) => {
@@ -696,7 +696,7 @@ class WorkflowElement {
 		this.buttons = buttons;
 
 		this.element = $el(
-			tagName + ".comfyui-workflows-tree-file",
+			tagName + ".sdbxui-workflows-tree-file",
 			{
 				onclick: () => {
 					workflow.load();
@@ -721,7 +721,7 @@ class WidgetSelectionDialog extends ComfyAsyncDialog {
 	}
 
 	show(app) {
-		this.element.classList.add("comfy-widget-selection-dialog");
+		this.element.classList.add("sdbx-widget-selection-dialog");
 		return super.show(
 			$el("div", [
 				$el("h2", "Select image target"),
@@ -732,10 +732,10 @@ class WidgetSelectionDialog extends ComfyAsyncDialog {
 				$el(
 					"section",
 					this.#options.map((opt) => {
-						return $el("div.comfy-widget-selection-item", [
+						return $el("div.sdbx-widget-selection-item", [
 							$el("span", { dataset: { id: opt.node.id } }, `${opt.node.title ?? opt.node.type} ${opt.widget.name}`),
 							$el(
-								"button.comfyui-button",
+								"button.sdbxui-button",
 								{
 									onclick: () => {
 										app.canvas.ds.offset[0] = -opt.node.pos[0] + 50;
@@ -747,7 +747,7 @@ class WidgetSelectionDialog extends ComfyAsyncDialog {
 								"Show"
 							),
 							$el(
-								"button.comfyui-button.primary",
+								"button.sdbxui-button.primary",
 								{
 									onclick: () => {
 										this.close(opt);

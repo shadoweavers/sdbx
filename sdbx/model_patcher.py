@@ -326,7 +326,7 @@ class ModelPatcher(ModelManageable):
         patch_counter = 0
         for n, m in self.model.named_modules():
             lowvram_weight = False
-            if hasattr(m, "comfy_cast_weights"):
+            if hasattr(m, "sdbx_cast_weights"):
                 module_mem = model_management.module_size(m)
                 if mem_counter + module_mem >= lowvram_model_memory:
                     lowvram_weight = True
@@ -348,8 +348,8 @@ class ModelPatcher(ModelManageable):
                         m.bias_function = LowVramPatch(bias_key, self)
                         patch_counter += 1
 
-                m.prev_comfy_cast_weights = m.comfy_cast_weights
-                m.comfy_cast_weights = True
+                m.prev_sdbx_cast_weights = m.sdbx_cast_weights
+                m.sdbx_cast_weights = True
             else:
                 if hasattr(m, "weight"):
                     self.patch_weight_to_device(weight_key, device_to)
@@ -536,9 +536,9 @@ class ModelPatcher(ModelManageable):
         if unpatch_weights:
             if self.model_lowvram:
                 for m in self.model.modules():
-                    if hasattr(m, "prev_comfy_cast_weights"):
-                        m.comfy_cast_weights = m.prev_comfy_cast_weights
-                        del m.prev_comfy_cast_weights
+                    if hasattr(m, "prev_sdbx_cast_weights"):
+                        m.sdbx_cast_weights = m.prev_sdbx_cast_weights
+                        del m.prev_sdbx_cast_weights
                     m.weight_function = None
                     m.bias_function = None
 

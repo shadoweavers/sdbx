@@ -28,7 +28,7 @@ from ..component_model.queue_types import Flags, HistoryEntry, QueueTuple, Queue
 
 class DistributedPromptQueue(AbstractPromptQueue, AsyncAbstractPromptQueue):
     """
-    A distributed prompt queue for the ComfyUI web client and single-threaded worker.
+    A distributed prompt queue for the sdbx web client and single-threaded worker.
     """
 
     def size(self) -> int:
@@ -134,7 +134,7 @@ class DistributedPromptQueue(AbstractPromptQueue, AsyncAbstractPromptQueue):
             worker_event_loop = asyncio.get_event_loop()
         except RuntimeError:
             worker_event_loop = None
-        assert self._loop != worker_event_loop, "get only makes sense in the context of the legacy comfyui prompt worker"
+        assert self._loop != worker_event_loop, "get only makes sense in the context of the legacy sdbxui prompt worker"
         # spin wait
         timeout = timeout or 30.0
         item = None
@@ -169,7 +169,7 @@ class DistributedPromptQueue(AbstractPromptQueue, AsyncAbstractPromptQueue):
         assert pending is not None
         assert pending.completed is not None
         assert not pending.completed.done()
-        # finish the task. status will transmit the errors in comfy's domain-specific way
+        # finish the task. status will transmit the errors in sdbx's domain-specific way
         pending.completed.set_result(TaskInvocation(item_id=item_id, outputs=outputs, status=status))
         # todo: the caller is responsible for sending a websocket message right now that the UI expects for updates
 
@@ -232,7 +232,7 @@ class DistributedPromptQueue(AbstractPromptQueue, AsyncAbstractPromptQueue):
 
     def __init__(self,
                  caller_server: Optional[ExecutorToClientProgress | PromptServer] = None,
-                 queue_name: str = "comfyui",
+                 queue_name: str = "sdbxui",
                  connection_uri="amqp://localhost/",
                  is_caller=True,
                  is_callee=True,

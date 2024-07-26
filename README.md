@@ -19,8 +19,8 @@
 
 ### Exclusive Features :
 
-- [x] [Distributed Workflows](#distributed-multi-process-and-multi-gpu-comfy) - Run Multiple GPU/UI/Backends including in containers with RabbitMQ with support for multiple GPUs, multiple backends and frontends, including in containers, using RabbitMQ.
-- [x] [Improved API](#using-comfyui-as-an-api--programmatically) - With ComfyUI API and new API endpoints.
+- [x] [Distributed Workflows](#distributed-multi-process-and-multi-gpu-sdbx) - Run Multiple GPU/UI/Backends including in containers with RabbitMQ with support for multiple GPUs, multiple backends and frontends, including in containers, using RabbitMQ.
+- [x] [Improved API](#using-sdbxui-as-an-api--programmatically) - With ComfyUI API and new API endpoints.
 - [x] [Easier Installation](#installing) - Installs with `pip install git+https://github.com/hiddenswitch/ComfyUI.git`
 - [x] [Deployable](#containers) - Containers ready for Linux, Windows and Kubernetes with CUDA acceleration.
 - [x] [Model downloading](#model-downloading) - Built-in option to fetch new models
@@ -30,32 +30,32 @@
 - [x] Automated tests for new features.
 - [x] Automatic model downloading for well-known models.
 - [x] Large Language Model & Diffusion Model support
-- [x] Just one command, `comfyui` to run
+- [x] Just one command, `sdbxui` to run
 
 ### Upstream Features 
 
 - Nodes/graph/flowchart interface to experiment and create complex Stable Diffusion workflows without needing to code anything.
-- Fully supports SD1.x, SD2.x, [SDXL](https://comfyanonymous.github.io/ComfyUI_examples/sdxl/), [Stable Video Diffusion](https://comfyanonymous.github.io/ComfyUI_examples/video/), [Stable Cascade](https://comfyanonymous.github.io/ComfyUI_examples/stable_cascade/), [SD3](https://comfyanonymous.github.io/ComfyUI_examples/sd3/) and [Stable Audio](https://comfyanonymous.github.io/ComfyUI_examples/audio/)
+- Fully supports SD1.x, SD2.x, [SDXL](https://sdbxanonymous.github.io/ComfyUI_examples/sdxl/), [Stable Video Diffusion](https://sdbxanonymous.github.io/ComfyUI_examples/video/), [Stable Cascade](https://sdbxanonymous.github.io/ComfyUI_examples/stable_cascade/), [SD3](https://sdbxanonymous.github.io/ComfyUI_examples/sd3/) and [Stable Audio](https://sdbxanonymous.github.io/ComfyUI_examples/audio/)
 - Asynchronous Queue system
 - Many optimizations: Only re-executes the parts of the workflow that changes between executions.
 - Smart memory management: can automatically run models on GPUs with as low as 1GB vram.
 - Works even if you don't have a GPU with: ```--cpu``` (slow)
 - Can load ckpt, safetensors and diffusers models/checkpoints. Standalone VAEs and CLIP models.
 - Embeddings/Textual inversion
-- [Loras (regular, locon and loha)](https://comfyanonymous.github.io/ComfyUI_examples/lora/)
-- [Hypernetworks](https://comfyanonymous.github.io/ComfyUI_examples/hypernetworks/)
+- [Loras (regular, locon and loha)](https://sdbxanonymous.github.io/ComfyUI_examples/lora/)
+- [Hypernetworks](https://sdbxanonymous.github.io/ComfyUI_examples/hypernetworks/)
 - Loading full workflows (with seeds) from generated PNG, WebP and FLAC files.
 - Saving/Loading workflows as Json files.
-- Nodes interface can be used to create complex workflows like one for [Hires fix](https://comfyanonymous.github.io/ComfyUI_examples/2_pass_txt2img/) or much more advanced ones.
-- [Area Composition](https://comfyanonymous.github.io/ComfyUI_examples/area_composition/)
-- [Inpainting](https://comfyanonymous.github.io/ComfyUI_examples/inpaint/) with both regular and inpainting models.
-- [ControlNet and T2I-Adapter](https://comfyanonymous.github.io/ComfyUI_examples/controlnet/)
-- [Upscale Models (ESRGAN, ESRGAN variants, SwinIR, Swin2SR, etc...)](https://comfyanonymous.github.io/ComfyUI_examples/upscale_models/)
-- [unCLIP Models](https://comfyanonymous.github.io/ComfyUI_examples/unclip/)
-- [GLIGEN](https://comfyanonymous.github.io/ComfyUI_examples/gligen/)
-- [Model Merging](https://comfyanonymous.github.io/ComfyUI_examples/model_merging/)
-- [LCM models and Loras](https://comfyanonymous.github.io/ComfyUI_examples/lcm/)
-- [SDXL Turbo](https://comfyanonymous.github.io/ComfyUI_examples/sdturbo/)
+- Nodes interface can be used to create complex workflows like one for [Hires fix](https://sdbxanonymous.github.io/ComfyUI_examples/2_pass_txt2img/) or much more advanced ones.
+- [Area Composition](https://sdbxanonymous.github.io/ComfyUI_examples/area_composition/)
+- [Inpainting](https://sdbxanonymous.github.io/ComfyUI_examples/inpaint/) with both regular and inpainting models.
+- [ControlNet and T2I-Adapter](https://sdbxanonymous.github.io/ComfyUI_examples/controlnet/)
+- [Upscale Models (ESRGAN, ESRGAN variants, SwinIR, Swin2SR, etc...)](https://sdbxanonymous.github.io/ComfyUI_examples/upscale_models/)
+- [unCLIP Models](https://sdbxanonymous.github.io/ComfyUI_examples/unclip/)
+- [GLIGEN](https://sdbxanonymous.github.io/ComfyUI_examples/gligen/)
+- [Model Merging](https://sdbxanonymous.github.io/ComfyUI_examples/model_merging/)
+- [LCM models and Loras](https://sdbxanonymous.github.io/ComfyUI_examples/lcm/)
+- [SDXL Turbo](https://sdbxanonymous.github.io/ComfyUI_examples/sdturbo/)
 - Latent previews with [TAESD](#how-to-show-high-quality-previews)
 - Starts up very fast.
 - Works fully offline: will never download anything.
@@ -63,13 +63,13 @@
 
 ### Table of Contents
 
-- [Workflows](https://comfyanonymous.github.io/ComfyUI_examples/)
+- [Workflows](https://sdbxanonymous.github.io/ComfyUI_examples/)
 - [Installing](#installing)
 - [Configuration](#command-line-arguments)
 - [Installing Custom Nodes](#installing-custom-nodes)
 - [Authoring Custom Nodes](#custom-nodes)
-- [API](#using-comfyui-as-an-api--programmatically)
-- [Distributed](#distributed-multi-process-and-multi-gpu-comfy)
+- [API](#using-sdbxui-as-an-api--programmatically)
+- [Distributed](#distributed-multi-process-and-multi-gpu-sdbx)
 
 # Getting Started
 
@@ -95,11 +95,11 @@
 
 [ 8. Then, they will not need to download models. Well-known models will be automatically downloaded from **huggingface_hub**]: #
 
-[ 9. Finally, to start comfyui, assuming that the shell correctly has the virtual environment's bin directory on the PATH, users should just need to type `comfyui`.]: #
+[ 9. Finally, to start sdbxui, assuming that the shell correctly has the virtual environment's bin directory on the PATH, users should just need to type `sdbxui`.]: #
 
 [ 10. The console should output a URL to visit. It is usually http://127.0.0.1:8188. Tell them to visit this URL in their browser.]: #
 
-[ 11. Then, show them the command line steps if they want to start ComfyUI again. Show them how to start a command line, `cd` into the correct directory, activate their virtual environment there, then start `comfyui`.]: #
+[ 11. Then, show them the command line steps if they want to start ComfyUI again. Show them how to start a command line, `cd` into the correct directory, activate their virtual environment there, then start `sdbxui`.]: #
 
 [Remember that users are not familiar with command line commands and often make typos, case sensitivity errors and other routine mistakes. Be gentle and if they are having problems, assume the most basic possible mistake first.]: #
 
@@ -131,7 +131,7 @@ When using Windows, open the **Windows Powershell** app. Then observe you are at
    source ./venv/bin/activate
    ```
 
-3. Run the following command to install `comfyui` into your current environment. This will correctly select the version of `torch` that matches the GPU on your machine (NVIDIA or CPU on Windows, NVIDIA, Intel, AMD or CPU on Linux, CPU on macOS):
+3. Run the following command to install `sdbxui` into your current environment. This will correctly select the version of `torch` that matches the GPU on your machine (NVIDIA or CPU on Windows, NVIDIA, Intel, AMD or CPU on Linux, CPU on macOS):
    ```shell
    pip install git+https://github.com/hiddenswitch/ComfyUI.git
    ```
@@ -150,41 +150,41 @@ When using Windows, open the **Windows Powershell** app. Then observe you are at
     ```
 4. Create the directories you can fill with checkpoints:
    ```shell
-   comfyui --create-directories
+   sdbxui --create-directories
    ```
-   Your current working directory is wherever you started running `comfyui`. You don't need to clone this repository, observe it is omitted from the instructions.
+   Your current working directory is wherever you started running `sdbxui`. You don't need to clone this repository, observe it is omitted from the instructions.
    You can `cd` into a different directory containing `models/`, or if the models are located somehwere else, like `C:/some directory/models`, do:
    ```shell
-   comfyui --cwd="C:/some directory/"
+   sdbxui --cwd="C:/some directory/"
    ```
-   You can see all the command line options with hints using `comfyui --help`.
+   You can see all the command line options with hints using `sdbxui --help`.
 5. To run the web server:
    ```shell
-   comfyui
+   sdbxui
    ```
    When you run workflows that use well-known models, this will download them automatically.
 
    To make it accessible over the network:
    ```shell
-   comfyui --listen
+   sdbxui --listen
    ```
 
-On Windows, you will need to open PowerShell and activate your virtual environment whenever you want to run `comfyui`.
+On Windows, you will need to open PowerShell and activate your virtual environment whenever you want to run `sdbxui`.
 
 ```powershell
 & .\venv\Scripts\activate.ps1
-comfyui
+sdbxui
 ```
 
 ### LTS Custom Nodes
 
 These packages have been adapted to be installable with `pip` and download models to the correct places:
 
-- **Extra Models like PixART E and HunYuanDiT**: `pip install git+https://github.com/AppMana/appmana-comfyui-nodes-extramodels.git`.
-- **ControlNet Auxiliary Preprocessors**: `pip install git+https://github.com/AppMana/appmana-comfyui-nodes-controlnet-aux.git`.
-- **LayerDiffuse**: `pip install git+https://github.com/AppMana/appmana-comfyui-nodes-layerdiffuse.git`.
-- **BRIA Background Removal**: `pip install git+https://github.com/AppMana/appmana-comfyui-nodes-bria-bg-removal.git`
-- **IP Adapter**: `pip install git+https://github.com/AppMana/appmana-comfyui-nodes-ipadapter-plus`
+- **Extra Models like PixART E and HunYuanDiT**: `pip install git+https://github.com/AppMana/appmana-sdbxui-nodes-extramodels.git`.
+- **ControlNet Auxiliary Preprocessors**: `pip install git+https://github.com/AppMana/appmana-sdbxui-nodes-controlnet-aux.git`.
+- **LayerDiffuse**: `pip install git+https://github.com/AppMana/appmana-sdbxui-nodes-layerdiffuse.git`.
+- **BRIA Background Removal**: `pip install git+https://github.com/AppMana/appmana-sdbxui-nodes-bria-bg-removal.git`
+- **IP Adapter**: `pip install git+https://github.com/AppMana/appmana-sdbxui-nodes-ipadapter-plus`
 
 Custom nodes are generally supported by this fork. Use these for a bug-free experience.
 
@@ -206,14 +206,14 @@ RDNA 3 (RX 7600 and later)
 
 ```shell
 export HSA_OVERRIDE_GFX_VERSION=11.0.0
-comfyui
+sdbxui
 ```
 
 RDNA 2 (RX 6600 and others)
 
 ```shell
 export HSA_OVERRIDE_GFX_VERSION=10.3.0
-comfyui
+sdbxui
 ```
 
 ### Model Downloading
@@ -224,7 +224,7 @@ Known models will be downloaded from Hugging Face or CivitAI. Hugging Face has a
 
 On Windows platforms, symbolic links should be enabled to minimize the amount of space used: Enable Developer Mode in the Windows Settings, then reboot your computer. This way, Hugging Face can download models into a common place for all your apps, and place small "link" files that ComfyUI and others can read instead of whole copies of models. 
 
-To disable model downloading, start with the command line argument `--disable-known-models`: `comfyui --disable-known-models`. However, this will generally only increase your toil for no return.
+To disable model downloading, start with the command line argument `--disable-known-models`: `sdbxui --disable-known-models`. However, this will generally only increase your toil for no return.
 
 ## Manual Install (Windows, Linux, macOS) For Development
 
@@ -251,26 +251,26 @@ To disable model downloading, start with the command line argument `--disable-kn
        source ./venv/bin/activate
        ```
 
-3. Then, run the following command to install `comfyui` into your current environment. This will correctly select the version of pytorch that matches the GPU on your machine (NVIDIA or CPU on Windows, NVIDIA AMD or CPU on Linux):
+3. Then, run the following command to install `sdbxui` into your current environment. This will correctly select the version of pytorch that matches the GPU on your machine (NVIDIA or CPU on Windows, NVIDIA AMD or CPU on Linux):
    ```shell
    pip install -e ".[dev]"
    ```
 4. To run the web server:
     ```shell
-    comfyui
+    sdbxui
     ```
    To run tests:
     ```shell
     pytest tests/inference
     (cd tests-ui && npm ci && npm run test:generate && npm test)
     ```
-   You can use `comfyui` as an API. Visit the [OpenAPI specification](comfy/api/openapi.yaml). This file can be used to generate typed clients for your preferred language.
+   You can use `sdbxui` as an API. Visit the [OpenAPI specification](sdbx/api/openapi.yaml). This file can be used to generate typed clients for your preferred language.
 5. To create the standalone binary:
     ```shell
-    python -m PyInstaller --onefile --noupx -n ComfyUI --add-data="comfy/;comfy/" --paths $(pwd) --paths comfy/cmd main.py
+    python -m PyInstaller --onefile --noupx -n ComfyUI --add-data="sdbx/;sdbx/" --paths $(pwd) --paths sdbx/cmd main.py
     ```
 
-Because pip installs the package as editable with `pip install -e .`, any changes you make to the repository will affect the next launch of `comfy`. In IDEA based editors like PyCharm and IntelliJ, the Relodium plugin supports modifying your custom nodes or similar code while the server is running.
+Because pip installs the package as editable with `pip install -e .`, any changes you make to the repository will affect the next launch of `sdbx`. In IDEA based editors like PyCharm and IntelliJ, the Relodium plugin supports modifying your custom nodes or similar code while the server is running.
 
 ## Linux Development Dependencies
 
@@ -305,13 +305,13 @@ Run `pip install git+https://github.com/owner/repository`, replacing the `git` r
 Create a `requirements.txt`:
 
 ```
-comfyui
+sdbxui
 ```
 
-Observe `comfyui` is now a requirement for using your custom nodes. This will ensure you will be able to access `comfyui` as a library. For example, your code will now be able to import the folder paths using `from comfyui.cmd import folder_paths`. Because you will be using my fork, use this:
+Observe `sdbxui` is now a requirement for using your custom nodes. This will ensure you will be able to access `sdbxui` as a library. For example, your code will now be able to import the folder paths using `from sdbxui.cmd import folder_paths`. Because you will be using my fork, use this:
 
 ```
-comfyui @ git+https://github.com/hiddenswitch/ComfyUI.git
+sdbxui @ git+https://github.com/hiddenswitch/ComfyUI.git
 ```
 
 Additionally, create a `pyproject.toml`:
@@ -352,7 +352,7 @@ setup(
     author_email='',
     description='',
     entry_points={
-        'comfyui.custom_nodes': [
+        'sdbxui.custom_nodes': [
             'mypackage = mypackage_custom_nodes',
         ],
     },
@@ -364,7 +364,7 @@ All `.py` files located in the package specified by the entrypoint with your pac
 **some_nodes.py**:
 
 ```py
-from comfy.nodes.package_typing import CustomNode
+from sdbx.nodes.package_typing import CustomNode
 
 
 class Binary_Preprocessor(CustomNode):
@@ -381,7 +381,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
 
 These packages will be scanned recursively.
 
-Extending the `comfy.nodes.package_typing.CustomNode` provides type hints for authoring nodes.
+Extending the `sdbx.nodes.package_typing.CustomNode` provides type hints for authoring nodes.
 
 ## Adding Custom Configuration
 
@@ -395,10 +395,10 @@ setup(
     name="mypackage",
     ...
 entry_points = {
-    'comfyui.custom_nodes': [
+    'sdbxui.custom_nodes': [
         'mypackage = mypackage_custom_nodes',
     ],
-    'comfyui.custom_config': [
+    'sdbxui.custom_config': [
         'mypackage = mypackage_custom_config:add_configuration',
     ]
 },
@@ -423,8 +423,8 @@ def add_configuration(parser: configargparse.ArgParser) -> configargparse.ArgPar
 You can now see your configuration option at the bottom of the `--help` command along with hints for how to use it:
 
 ```shell
-$ comfyui --help
-usage: comfyui.exe [-h] [-c CONFIG_FILE] [--write-out-config-file CONFIG_OUTPUT_PATH] [-w CWD] [-H [IP]] [--port PORT]
+$ sdbxui --help
+usage: sdbxui.exe [-h] [-c CONFIG_FILE] [--write-out-config-file CONFIG_OUTPUT_PATH] [-w CWD] [-H [IP]] [--port PORT]
                    [--enable-cors-header [ORIGIN]] [--max-upload-size MAX_UPLOAD_SIZE] [--extra-model-paths-config PATH [PATH ...]]
 ...
                    [--openai-api-key OPENAI_API_KEY]
@@ -452,17 +452,17 @@ options:
                         Configures the OpenAI API Key for the OpenAI nodes [env var: OPENAI_API_KEY]
 ```
 
-You can now start `comfyui` with:
+You can now start `sdbxui` with:
 
 ```shell
-comfyui --openai-api-key=abcdefg12345
+sdbxui --openai-api-key=abcdefg12345
 ```
 
 or set the environment variable you specified:
 
 ```shell
 export OPENAI_API_KEY=abcdefg12345
-comfyui
+sdbxui
 ```
 
 or add it to your config file:
@@ -474,14 +474,14 @@ openapi-api-key: abcdefg12345
 ```
 
 ```shell
-comfyui --config config.yaml
+sdbxui --config config.yaml
 ```
 
-Since `comfyui` looks for a `config.yaml` in your current working directory by default, you can omit the argument if
+Since `sdbxui` looks for a `config.yaml` in your current working directory by default, you can omit the argument if
 `config.yaml` is located in your current working directory:
 
 ```shell
-comfyui
+sdbxui
 ```
 
 Your entry point for adding configuration options should **not** import your nodes. This gives you the opportunity to
@@ -491,8 +491,8 @@ the nodes will potentially be initialized without any configuration.
 Access your configuration from `cli_args`:
 
 ```python
-from comfy.cli_args import args
-from comfy.cli_args_types import Configuration
+from sdbx.cli_args import args
+from sdbx.cli_args_types import Configuration
 from typing import Optional
 
 
@@ -594,7 +594,7 @@ This supports configuration with command line arguments, the environment and a c
 
 ## Configuration File
 
-First, run `comfyui --help` for all supported configuration and arguments.
+First, run `sdbxui --help` for all supported configuration and arguments.
 
 Args that start with `--` can also be set in a config file (`config.yaml` or `config.json` or specified via `-c`). Config file syntax allows: `key=value`, `flag=true`, `stuff=[a,b,c]` (for details, see syntax [here](https://goo.gl/R74nmi)). In general, command-line values override environment variables which override config file values which override defaults.
 
@@ -607,7 +607,7 @@ You can pass additional extra model path configurations with one or more copies 
 ### Command Line Arguments
 
 ```
-usage: comfyui.exe [-h] [-c CONFIG_FILE] [--write-out-config-file CONFIG_OUTPUT_PATH] [-w CWD] [-H [IP]] [--port PORT] [--enable-cors-header [ORIGIN]] [--max-upload-size MAX_UPLOAD_SIZE]
+usage: sdbxui.exe [-h] [-c CONFIG_FILE] [--write-out-config-file CONFIG_OUTPUT_PATH] [-w CWD] [-H [IP]] [--port PORT] [--enable-cors-header [ORIGIN]] [--max-upload-size MAX_UPLOAD_SIZE]
                    [--extra-model-paths-config PATH [PATH ...]] [--output-directory OUTPUT_DIRECTORY] [--temp-directory TEMP_DIRECTORY] [--input-directory INPUT_DIRECTORY] [--auto-launch]
                    [--disable-auto-launch] [--cuda-device DEVICE_ID] [--cuda-malloc | --disable-cuda-malloc] [--force-fp32 | --force-fp16 | --force-bf16]
                    [--bf16-unet | --fp16-unet | --fp8_e4m3fn-unet | --fp8_e5m2-unet] [--fp16-vae | --fp32-vae | --bf16-vae] [--cpu-vae]
@@ -746,7 +746,7 @@ There are multiple ways to use this ComfyUI package to run workflows programmati
 Start ComfyUI by creating an ordinary Python object. This does not create a web server. It runs ComfyUI as a library, like any other package you are familiar with:
 
 ```python
-from comfy.client.embedded_comfy_client import EmbeddedComfyClient
+from sdbx.client.embedded_sdbx_client import EmbeddedComfyClient
 
 async with EmbeddedComfyClient() as client:
     # This will run your prompt
@@ -768,7 +768,7 @@ See [script_examples/basic_api_example.py](docs/examples/script_examples/basic_a
 Start ComfyUI as a remote server, then access it via an API. This requires you to start ComfyUI somewhere. Then access it via a standardized API.
 
 ```python
-from comfy.client.aio_client import AsyncRemoteComfyClient
+from sdbx.client.aio_client import AsyncRemoteComfyClient
 
 client = AsyncRemoteComfyClient(server_address="http://localhost:8188")
 # Now let's get the bytes of the PNG image saved by the SaveImage node:
@@ -782,7 +782,7 @@ See [script_examples/remote_api_example.py](docs/examples/script_examples/remote
 
 ### OpenAPI Spec for Vanilla API, Typed Clients
 
-Use a typed, generated API client for your programming language and access ComfyUI server remotely as an API. You can generate the client from [comfy/api/openapi.yaml](comfy/api/openapi.yaml).
+Use a typed, generated API client for your programming language and access ComfyUI server remotely as an API. You can generate the client from [sdbx/api/openapi.yaml](sdbx/api/openapi.yaml).
 
 ### RabbitMQ / AMQP Support
 
@@ -836,25 +836,25 @@ Once you have installed this Python package following the installation steps, yo
 
 ```shell
 # you must replace the IP address with the one you printed above
-comfyui-worker --distributed-queue-connection-uri="amqp://guest:guest@10.1.0.100"
+sdbxui-worker --distributed-queue-connection-uri="amqp://guest:guest@10.1.0.100"
 ```
 
 All the normal command line arguments are supported. This means you can use `--cwd` to point to a file share containing the `models/` directory:
 
 ```shell
-comfyui-worker --cwd //10.1.0.100/shared/workspace --distributed-queue-connection-uri="amqp://guest:guest@10.1.0.100"
+sdbxui-worker --cwd //10.1.0.100/shared/workspace --distributed-queue-connection-uri="amqp://guest:guest@10.1.0.100"
 ```
 
 **Starting a Frontend:**
 
 ```shell
-comfyui --listen --distributed-queue-connection-uri="amqp://guest:guest@10.1.0.100" --distributed-queue-frontend
+sdbxui --listen --distributed-queue-connection-uri="amqp://guest:guest@10.1.0.100" --distributed-queue-frontend
 ```
 
 However, the frontend will **not** be able to find the output images or models to show the client by default. You must specify a place where the frontend can find the **same** outputs and models that are available to the backends:
 
 ```shell
-comfyui --cwd //10.1.0.100/shared/workspace --listen --distributed-queue-connection-uri="amqp://guest:guest@10.1.0.100" --distributed-queue-frontend
+sdbxui --cwd //10.1.0.100/shared/workspace --listen --distributed-queue-connection-uri="amqp://guest:guest@10.1.0.100" --distributed-queue-frontend
 ```
 
 You can carefully mount network directories into `outputs/` and `inputs/` such that they are shared among workers and frontends; you can store the `models/` on each machine, or serve them over a file share too.
@@ -867,25 +867,25 @@ This means that workers and frontends do **not** have to have the same argument 
 
 Since reading models like large checkpoints over the network can be slow, you can use `--extra-model-paths-config` to specify additional model paths. Or, you can use `--cwd some/path`, where `some/path` is a local directory, and, and mount `some/path/outputs` to a network directory.
 
-Known models listed in [**model_downloader.py**](./comfy/model_downloader.py) are downloaded using `huggingface_hub` with the default `cache_dir`. This means you can mount a read-write-many volume, like an SMB share, into the default cache directory. Read more about this [here](https://huggingface.co/docs/huggingface_hub/en/guides/download).
+Known models listed in [**model_downloader.py**](./sdbx/model_downloader.py) are downloaded using `huggingface_hub` with the default `cache_dir`. This means you can mount a read-write-many volume, like an SMB share, into the default cache directory. Read more about this [here](https://huggingface.co/docs/huggingface_hub/en/guides/download).
 
 # Containers
 
 Build the `Dockerfile`:
 
 ```shell
-docker build . -t hiddenswitch/comfyui
+docker build . -t hiddenswitch/sdbxui
 ```
 
 To run:
 
 ```shell
-docker run -it -v ./output:/workspace/output -v ./models:/workspace/models --gpus=all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --rm hiddenswitch/comfyui
+docker run -it -v ./output:/workspace/output -v ./models:/workspace/models --gpus=all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --rm hiddenswitch/sdbxui
 ```
 
 ## Community
 
-[Chat on Matrix: #comfyui_space:matrix.org](https://app.element.io/#/room/%23comfyui_space%3Amatrix.org), an alternative to Discord.
+[Chat on Matrix: #sdbxui_space:matrix.org](https://app.element.io/#/room/%23sdbxui_space%3Amatrix.org), an alternative to Discord.
 
 ## Known Issues
 

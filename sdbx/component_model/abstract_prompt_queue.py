@@ -8,7 +8,7 @@ from .queue_types import QueueTuple, HistoryEntry, QueueItem, Flags, ExecutionSt
 
 class AbstractPromptQueue(metaclass=ABCMeta):
     """
-    The interface of a queue inside ComfyUI.
+    The interface of a queue inside sdbx.
 
     put is intended to be used by a prompt creator.
 

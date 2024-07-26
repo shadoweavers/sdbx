@@ -3,21 +3,21 @@ import { api } from "./api.js";
 
 $el("style", {
 	textContent: `
-        .comfy-logging-logs {
+        .sdbx-logging-logs {
             display: grid;
             color: var(--fg-color);
             white-space: pre-wrap;
         }
-        .comfy-logging-log {
+        .sdbx-logging-log {
             display: contents;
         }
-        .comfy-logging-title {
+        .sdbx-logging-title {
             background: var(--tr-even-bg-color);
             font-weight: bold;
             margin-bottom: 5px;
             text-align: center;
         }
-        .comfy-logging-log div {
+        .sdbx-logging-log div {
             background: var(--row-bg);
             padding: 5px;
         }
@@ -100,7 +100,7 @@ class ComfyLoggingDialog extends ComfyDialog {
 		const url = URL.createObjectURL(blob);
 		const a = $el("a", {
 			href: url,
-			download: `comfyui-logs-${Date.now()}.json`,
+			download: `sdbxui-logs-${Date.now()}.json`,
 			style: { display: "none" },
 			parent: document.body,
 		});
@@ -175,13 +175,13 @@ class ComfyLoggingDialog extends ComfyDialog {
 		};
 		const keys = Object.keys(cols);
 		const headers = Object.values(cols).map((title) =>
-			$el("div.comfy-logging-title", {
+			$el("div.sdbx-logging-title", {
 				textContent: title,
 			})
 		);
 		const rows = entries.map((entry, i) => {
 			return $el(
-				"div.comfy-logging-log",
+				"div.sdbx-logging-log",
 				{
 					$: (el) => el.style.setProperty("--row-bg", `var(--tr-${i % 2 ? "even" : "odd"}-bg-color)`),
 				},
@@ -209,7 +209,7 @@ class ComfyLoggingDialog extends ComfyDialog {
 		});
 
 		const grid = $el(
-			"div.comfy-logging-logs",
+			"div.sdbx-logging-logs",
 			{
 				style: {
 					gridTemplateColumns: `repeat(${headers.length}, 1fr)`,

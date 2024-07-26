@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: comfyui
+  title: sdbxui
   version: 0.0.1
 servers:
   - description: localhost
@@ -373,7 +373,7 @@ paths:
                 type: string
             Content-Disposition:
               description: The filename when exactly one SaveImage node is specified.
-              example: filename=ComfyUI_00001.png
+              example: filename=sdbx_00001.png
               schema:
                 type: string
                 pattern: '^filename=.+'
@@ -458,7 +458,7 @@ paths:
                     $ref: "#/components/schemas/Outputs"
               example:
                 outputs: { }
-                urls: [ "http://127.0.0.1:8188/view?filename=ComfyUI_00001_.png&type=output", "https://comfyui.example.com/view?filename=ComfyUI_00001_.png&type=output" ]
+                urls: [ "http://127.0.0.1:8188/view?filename=sdbx_00001_.png&type=output", "https://sdbxui.example.com/view?filename=sdbx_00001_.png&type=output" ]
             multipart/mixed:
               encoding:
                 "^\\d+$":
@@ -485,7 +485,7 @@ paths:
             The prompt is invalid.
           content:
             application/json:
-              description: A validation error dictionary from the ComfyUI frontend.
+              description: A validation error dictionary from the sdbx frontend.
               schema:
                 $ref: "#/components/schemas/ValidationErrorDict"
         429:
@@ -507,7 +507,7 @@ paths:
           description: |
             The server is too busy to process this request right now.
             
-            This should only be returned by a load balancer. Standalone comfyui does not return this.
+            This should only be returned by a load balancer. Standalone sdbxui does not return this.
       parameters:
         - in: header
           name: Accept

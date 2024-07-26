@@ -116,7 +116,7 @@ class PromptServer(ExecutorToClientProgress):
         self.sockets = dict()
         web_root_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../web")
         if not os.path.exists(web_root_path):
-            web_root_path = get_package_as_path('comfy', 'web/')
+            web_root_path = get_package_as_path('sdbx', 'web/')
         self.web_root = web_root_path
         routes = web.RouteTableDef()
         self.routes: web.RouteTableDef = routes

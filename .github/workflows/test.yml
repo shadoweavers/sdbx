@@ -34,8 +34,8 @@ jobs:
     - name: Lint for errors
       run: |
         source venv/bin/activate
-        pylint comfy/
-        pylint comfy_extras/
+        pylint sdbx/
+        pylint sdbx_extras/
   build_and_execute_linux:
     name: Installation, Unit and Workflow Tests for Linux
     runs-on: ${{ matrix.runner.labels }}
@@ -77,5 +77,5 @@ jobs:
           pytest -v tests/inference
       - name: Lint for errors
         run: |
-          pylint comfy/
-          pylint comfy_extras/
+          pylint sdbx/
+          pylint sdbx_extras/

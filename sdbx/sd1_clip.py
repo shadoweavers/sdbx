@@ -379,7 +379,7 @@ class SDTokenizer:
             tokenizer_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "sd1_tokenizer")
         if not os.path.exists(os.path.join(tokenizer_path, "tokenizer_config.json")):
             # package based
-            tokenizer_path = get_package_as_path('comfy.sd1_tokenizer')
+            tokenizer_path = get_package_as_path('sdbx.sd1_tokenizer')
         self.tokenizer_class = tokenizer_class
         self.tokenizer_path = tokenizer_path
         self.tokenizer: PreTrainedTokenizerBase = tokenizer_class.from_pretrained(tokenizer_path)

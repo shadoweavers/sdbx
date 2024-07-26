@@ -51,7 +51,7 @@ app.registerExtension({
 			if (!(lowerType in LiteGraph.registered_slot_in_types)) {
 				LiteGraph.registered_slot_in_types[lowerType] = { nodes: [] };
 			}
-			LiteGraph.registered_slot_in_types[lowerType].nodes.push(nodeType.comfyClass);
+			LiteGraph.registered_slot_in_types[lowerType].nodes.push(nodeType.sdbxClass);
 		} 
 
 		var outputs = nodeData["output"];
@@ -67,7 +67,7 @@ app.registerExtension({
 			if (!(type in LiteGraph.registered_slot_out_types)) {
 				LiteGraph.registered_slot_out_types[type] = { nodes: [] };
 			}
-			LiteGraph.registered_slot_out_types[type].nodes.push(nodeType.comfyClass);
+			LiteGraph.registered_slot_out_types[type].nodes.push(nodeType.sdbxClass);
 
 			if(!LiteGraph.slot_types_out.includes(type)) {
 				LiteGraph.slot_types_out.push(type);

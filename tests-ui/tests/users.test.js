@@ -14,15 +14,15 @@ describe("users", () => {
 
 	function expectNoUserScreen() {
 		// Ensure login isnt visible
-		const selection = document.querySelectorAll("#comfy-user-selection")?.[0];
+		const selection = document.querySelectorAll("#sdbx-user-selection")?.[0];
 		expect(selection["style"].display).toBe("none");
-		const menu = document.querySelectorAll(".comfy-menu")?.[0];
+		const menu = document.querySelectorAll(".sdbx-menu")?.[0];
 		expect(window.getComputedStyle(menu)?.display).not.toBe("none");
 	}
 
 	describe("multi-user", () => {
 		function mockAddStylesheet() {
-			const utils = require("../../comfy/web/scripts/utils");
+			const utils = require("../../sdbx/web/scripts/utils");
 			utils.addStylesheet = jest.fn().mockReturnValue(Promise.resolve());
 		}
 
@@ -30,7 +30,7 @@ describe("users", () => {
 			mockAddStylesheet();
 
 			// Wait for "show" to be called
-			const { UserSelectionScreen } = require("../../comfy/web/scripts/ui/userSelection");
+			const { UserSelectionScreen } = require("../../sdbx/web/scripts/ui/userSelection");
 			let resolve, reject;
 			const fn = UserSelectionScreen.prototype.show;
 			const p = new Promise((res, rej) => {
@@ -64,13 +64,13 @@ describe("users", () => {
 
 			await waitForUserScreenShow();
 
-			const selection = document.querySelectorAll("#comfy-user-selection")?.[0];
+			const selection = document.querySelectorAll("#sdbx-user-selection")?.[0];
 			expect(selection).toBeTruthy();
 
 			// Ensure login is visible
 			expect(window.getComputedStyle(selection)?.display).not.toBe("none");
 			// Ensure menu is hidden
-			const menu = document.querySelectorAll(".comfy-menu")?.[0];
+			const menu = document.querySelectorAll(".sdbx-menu")?.[0];
 			expect(window.getComputedStyle(menu)?.display).toBe("none");
 
 			const isCreate = await onShown(selection);
@@ -83,16 +83,16 @@ describe("users", () => {
 			const s = await starting;
 
 			// Ensure login is removed
-			expect(document.querySelectorAll("#comfy-user-selection")).toHaveLength(0);
+			expect(document.querySelectorAll("#sdbx-user-selection")).toHaveLength(0);
 			expect(window.getComputedStyle(menu)?.display).not.toBe("none");
 
 			// Ensure settings + templates are saved
-			const { api } = require("../../comfy/web/scripts/api");
+			const { api } = require("../../sdbx/web/scripts/api");
 			expect(api.createUser).toHaveBeenCalledTimes(+isCreate);
 			expect(api.storeSettings).toHaveBeenCalledTimes(+isCreate);
 			expect(api.storeUserData).toHaveBeenCalledTimes(+isCreate);
 			if (isCreate) {
-				expect(api.storeUserData).toHaveBeenCalledWith("comfy.templates.json", null, { stringify: false });
+				expect(api.storeUserData).toHaveBeenCalledWith("sdbx.templates.json", null, { stringify: false });
 				expect(s.app.isNewUserSession).toBeTruthy();
 			} else {
 				expect(s.app.isNewUserSession).toBeFalsy();
@@ -226,10 +226,10 @@ describe("users", () => {
 			expectNoUserScreen();
 
 			// It should store the settings
-			const { api } = require("../../comfy/web/scripts/api");
+			const { api } = require("../../sdbx/web/scripts/api");
 			expect(api.storeSettings).toHaveBeenCalledTimes(1);
 			expect(api.storeUserData).toHaveBeenCalledTimes(1);
-			expect(api.storeUserData).toHaveBeenCalledWith("comfy.templates.json", null, { stringify: false });
+			expect(api.storeUserData).toHaveBeenCalledWith("sdbx.templates.json", null, { stringify: false });
 			expect(app.isNewUserSession).toBeTruthy();
 		});
 		it("doesnt show user creation if default user", async () => {
@@ -240,7 +240,7 @@ describe("users", () => {
 			expectNoUserScreen();
 
 			// It should store the settings
-			const { api } = require("../../comfy/web/scripts/api");
+			const { api } = require("../../sdbx/web/scripts/api");
 			expect(api.storeSettings).toHaveBeenCalledTimes(0);
 			expect(api.storeUserData).toHaveBeenCalledTimes(0);
 			expect(app.isNewUserSession).toBeFalsy();
@@ -264,7 +264,7 @@ describe("users", () => {
 			expectNoUserScreen();
 
 			// It should store the settings
-			const { api } = require("../../comfy/web/scripts/api");
+			const { api } = require("../../sdbx/web/scripts/api");
 			expect(api.storeSettings).toHaveBeenCalledTimes(0);
 			expect(api.storeUserData).toHaveBeenCalledTimes(0);
 			expect(app.isNewUserSession).toBeFalsy();
@@ -277,7 +277,7 @@ describe("users", () => {
 			expectNoUserScreen();
 
 			// It should store the settings
-			const { api } = require("../../comfy/web/scripts/api");
+			const { api } = require("../../sdbx/web/scripts/api");
 			expect(api.storeSettings).toHaveBeenCalledTimes(0);
 			expect(api.storeUserData).toHaveBeenCalledTimes(0);
 			expect(app.isNewUserSession).toBeFalsy();

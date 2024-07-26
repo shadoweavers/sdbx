@@ -1,15 +1,15 @@
-# This sample shows how to execute a ComfyUI workflow against a remote ComfyUI server or the server running on your
+# This sample shows how to execute a sdbx workflow against a remote sdbx server or the server running on your
 # local machine. It will return the bytes of the image in the workflow.
 #
-# This script does not need to run within a ComfyUI directory. Instead, this can be used inside your own
+# This script does not need to run within a sdbx directory. Instead, this can be used inside your own
 # Python application or located elsewhere. It should **not** be in the Git repository directory.
 #
-# First, you will need to install ComfyUI. You do not need the ComfyUI repository or all of the ComfyUI dependencies to
+# First, you will need to install sdbx. You do not need the sdbx repository or all of the sdbx dependencies to
 # run a script against a server on your machine or elsewhere. You can install the convenient client and types with:
-#   pip install --no-deps git+https://github.com/hiddenswitch/ComfyUI.git
+#   pip install --no-deps git+https://github.com/darkshapes/sdbx.git
 #   pip install aiohttp[speedups]
 #
-# Now you should develop your workflow. Start ComfyUI as normal; navigate to "Settings" in the menu, and check "Enable
+# Now you should develop your workflow. Start sdbx as normal; navigate to "Settings" in the menu, and check "Enable
 # Dev mode Options". Then click "Save (API Format)". Copy and paste the contents of this file here:
 _PROMPT_FROM_WEB_UI = {
     "3": {
@@ -89,7 +89,7 @@ _PROMPT_FROM_WEB_UI = {
     "9": {
         "class_type": "SaveImage",
         "inputs": {
-            "filename_prefix": "ComfyUI",
+            "filename_prefix": "sdbx",
             "images": [
                 "8",
                 0
@@ -101,7 +101,7 @@ _PROMPT_FROM_WEB_UI = {
 
 # Observe this is an ordinary dictionary. The JSON that was saved from the workflow is compatible with Python syntax.
 # 
-# Because you will be accessing a remote ComfyUI server, it should remain running somewhere. It can be your local machine,
+# Because you will be accessing a remote sdbx server, it should remain running somewhere. It can be your local machine,
 # or some other machine. Do what makes sense for your application.
 # 
 # We'll now write the entrypoint of our script. This is an `async def main()` because async helps us start and stop the
@@ -117,15 +117,15 @@ async def main():
     prompt_dict["3"]["inputs"]["seed"] = 5
 
     # Now we will validate the prompt. This Prompt class contains everything we need to validate the prompt.
-    from comfy.api.components.schema.prompt import Prompt
+    from sdbx.api.components.schema.prompt import Prompt
     prompt = Prompt.validate(prompt_dict)
 
-    # Your prompt is ready to be processed. You should start your ComfyUI server; or, specify a remote URL for it.
-    # If you want to run your own ComfyUI server, follow the **Manual Install (Windows, Linux, macOS)** instructions.
+    # Your prompt is ready to be processed. You should start your sdbx server; or, specify a remote URL for it.
+    # If you want to run your own sdbx server, follow the **Manual Install (Windows, Linux, macOS)** instructions.
     # Then, as the README specifies, `cd` into the directory that contains your `models/` folder and run:
-    #   comfyui --listen
+    #   sdbxui --listen
     # Let's create the client we will use to access it:
-    from comfy.client.aio_client import AsyncRemoteComfyClient
+    from sdbx.client.aio_client import AsyncRemoteComfyClient
     client = AsyncRemoteComfyClient(server_address="http://localhost:8188")
 
     # Now let's get the bytes of the PNG image saved by the SaveImage node:

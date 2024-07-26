@@ -33,11 +33,11 @@ def fix_empty_latent_channels(model, latent_image):
     return latent_image
 
 def prepare_sampling(model, noise_shape, positive, negative, noise_mask):
-    logging.warning("Warning: comfy.sample.prepare_sampling isn't used anymore and can be removed")
+    logging.warning("Warning: sdbx.sample.prepare_sampling isn't used anymore and can be removed")
     return model, positive, negative, noise_mask, []
 
 def cleanup_additional_models(models):
-    logging.warning("Warning: comfy.sample.cleanup_additional_models isn't used anymore and can be removed")
+    logging.warning("Warning: sdbx.sample.cleanup_additional_models isn't used anymore and can be removed")
 
 def sample(model, noise, steps, cfg, sampler_name, scheduler, positive, negative, latent_image, denoise=1.0, disable_noise=False, start_step=None, last_step=None, force_full_denoise=False, noise_mask=None, sigmas=None, callback=None, disable_pbar=False, seed=None):
     sampler = samplers.KSampler(model, steps=steps, device=model.load_device, sampler=sampler_name, scheduler=scheduler, denoise=denoise, model_options=model.model_options)

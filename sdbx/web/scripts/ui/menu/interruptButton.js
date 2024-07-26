@@ -11,7 +11,7 @@ export function getInteruptButton(visibility) {
 		action: () => {
 			api.interrupt();
 		},
-		classList: ["comfyui-button", "comfyui-interrupt-button", visibility],
+		classList: ["sdbxui-button", "sdbxui-interrupt-button", visibility],
 	});
 
 	api.addEventListener("status", ({ detail }) => {

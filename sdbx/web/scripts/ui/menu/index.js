@@ -12,7 +12,7 @@ import { ComfyViewQueueButton } from "./viewQueue.js";
 import { getInteruptButton } from "./interruptButton.js";
 
 const collapseOnMobile = (t) => {
-	(t.element ?? t).classList.add("comfyui-menu-mobile-collapse");
+	(t.element ?? t).classList.add("sdbxui-menu-mobile-collapse");
 	return t;
 };
 const showOnMobile = (t) => {
@@ -47,7 +47,7 @@ export class ComfyAppMenu {
 				content: t,
 			});
 
-		this.logo = $el("h1.comfyui-logo.nlg-hide", { title: "ComfyUI" }, "ComfyUI");
+		this.logo = $el("h1.sdbxui-logo.nlg-hide", { title: "ComfyUI" }, "ComfyUI");
 		this.saveButton = new ComfySplitButton(
 			{
 				primary: getSaveButton(),
@@ -128,15 +128,15 @@ export class ComfyAppMenu {
 				btn.icon = this.element.classList.toggle("expanded") ? "menu-open" : "menu";
 				window.dispatchEvent(new Event("resize"));
 			},
-			classList: "comfyui-button comfyui-menu-button",
+			classList: "sdbxui-button sdbxui-menu-button",
 		});
 
-		this.element = $el("nav.comfyui-menu.lg", { style: { display: "none" } }, [
+		this.element = $el("nav.sdbxui-menu.lg", { style: { display: "none" } }, [
 			this.logo,
 			this.workflows.element,
 			this.saveButton.element,
 			collapseOnMobile(this.actionsGroup).element,
-			$el("section.comfyui-menu-push"),
+			$el("section.sdbxui-menu-push"),
 			collapseOnMobile(this.settingsGroup).element,
 			collapseOnMobile(this.viewGroup).element,
 
@@ -258,8 +258,8 @@ export class ComfyAppMenu {
 			let innerSize = 0;
 			let count = 1;
 			for (const c of this.element.children) {
-				if (c.classList.contains("comfyui-menu-push")) continue; // ignore right push
-				if (idx && c.classList.contains("comfyui-menu-mobile-collapse")) continue; // ignore collapse items
+				if (c.classList.contains("sdbxui-menu-push")) continue; // ignore right push
+				if (idx && c.classList.contains("sdbxui-menu-mobile-collapse")) continue; // ignore collapse items
 				innerSize += c.clientWidth;
 				count++;
 			}

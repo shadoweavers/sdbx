@@ -22,7 +22,7 @@ _server_stub_instance = ServerStub()
 
 class EmbeddedComfyClient:
     """
-    Embedded client for comfy executing prompts as a library.
+    Embedded client for sdbx executing prompts as a library.
 
     This client manages a single-threaded executor to run long-running or blocking tasks
     asynchronously without blocking the asyncio event loop. It initializes a PromptExecutor
@@ -40,15 +40,15 @@ class EmbeddedComfyClient:
     }
 
     # Validate your workflow (the prompt)
-    from comfy.api.components.schema.prompt import Prompt
+    from sdbx.api.components.schema.prompt import Prompt
     prompt = Prompt.validate(prompt_dict)
-    # Then use the client to run your workflow. This will start, then stop, a local ComfyUI workflow executor.
+    # Then use the client to run your workflow. This will start, then stop, a local sdbx workflow executor.
     # It does not connect to a remote server.
     async def main():
         async with EmbeddedComfyClient() as client:
             outputs = await client.queue_prompt(prompt)
             print(outputs)
-        print("Now that we've exited the with statement, all your VRAM has been cleared from ComfyUI")
+        print("Now that we've exited the with statement, all your VRAM has been cleared from sdbx")
 
     if __name__ == "__main__"
         asyncio.run(main())
@@ -62,7 +62,7 @@ class EmbeddedComfyClient:
         self._executor = ThreadPoolExecutor(max_workers=max_workers)
         self._configuration = configuration
         # we don't want to import the executor yet
-        self._prompt_executor: Optional["comfy.cmd.execution.PromptExecutor"] = None
+        self._prompt_executor: Optional["sdbx.cmd.execution.PromptExecutor"] = None
         self._is_running = False
 
     @property

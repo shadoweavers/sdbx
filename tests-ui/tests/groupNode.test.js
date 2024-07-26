@@ -432,7 +432,7 @@ describe("group node", () => {
 			nodes.save,
 		]);
 
-		const { api } = require("../../comfy/web/scripts/api");
+		const { api } = require("../../sdbx/web/scripts/api");
 
 		api.dispatchEvent(new CustomEvent("execution_start", {}));
 		api.dispatchEvent(new CustomEvent("executing", { detail: `${nodes.save.id}` }));

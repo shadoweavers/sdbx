@@ -5,7 +5,7 @@ import { $el } from "../../ui.js";
 import { applyClasses } from "../utils.js";
 
 export class ComfyPopup extends EventTarget {
-	element = $el("div.comfyui-popup");
+	element = $el("div.sdbxui-popup");
 
 	/**
 	 * @param {{
@@ -45,7 +45,7 @@ export class ComfyPopup extends EventTarget {
 			this.element.replaceChildren(...this.children);
 			this.update();
 		});
-		this.classList = prop(this, "classList", classList, () => applyClasses(this.element, this.classList, "comfyui-popup", horizontal));
+		this.classList = prop(this, "classList", classList, () => applyClasses(this.element, this.classList, "sdbxui-popup", horizontal));
 		this.open = prop(this, "open", false, (v, o) => {
 			if (v === o) return;
 			if (v) {

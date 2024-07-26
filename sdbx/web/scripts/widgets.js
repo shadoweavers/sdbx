@@ -242,7 +242,7 @@ function createIntWidget(node, inputName, inputData, app, isSeedInput) {
 
 function addMultilineWidget(node, name, opts, app) {
 	const inputEl = document.createElement("textarea");
-	inputEl.className = "comfy-multiline-input";
+	inputEl.className = "sdbx-multiline-input";
 	inputEl.value = opts.defaultVal;
 	inputEl.placeholder = opts.placeholder || name;
 

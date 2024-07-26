@@ -63,7 +63,7 @@ class VAEDecodeAudio:
 
 
 def create_vorbis_comment_block(comment_dict, last_block):
-    vendor_string = b'ComfyUI'
+    vendor_string = b'sdbx'
     vendor_length = len(vendor_string)
 
     comments = []
@@ -125,7 +125,7 @@ class SaveAudio:
     @classmethod
     def INPUT_TYPES(s):
         return {"required": { "audio": ("AUDIO", ),
-                              "filename_prefix": ("STRING", {"default": "audio/ComfyUI"})},
+                              "filename_prefix": ("STRING", {"default": "audio/sdbx"})},
                 "hidden": {"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"},
                 }
 
@@ -136,7 +136,7 @@ class SaveAudio:
 
     CATEGORY = "_for_testing/audio"
 
-    def save_audio(self, audio, filename_prefix="ComfyUI", prompt=None, extra_pnginfo=None):
+    def save_audio(self, audio, filename_prefix="sdbx", prompt=None, extra_pnginfo=None):
         import torchaudio  # pylint: disable=import-error
 
         filename_prefix += self.prefix_append

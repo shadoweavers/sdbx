@@ -13,7 +13,7 @@ const ext = {
 			// If we are a dark menu (only used for combo boxes) then add a filter input
 			if (options?.className === "dark" && values?.length > 10) {
 				const filter = document.createElement("input");
-				filter.classList.add("comfy-context-menu-filter");
+				filter.classList.add("sdbx-context-menu-filter");
 				filter.placeholder = "Filter list";
 				this.root.prepend(filter);
 

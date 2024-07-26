@@ -8,7 +8,7 @@ import { ComfyQueueOptions } from "./queueOptions.js";
 import { prop } from "../../utils.js";
 
 export class ComfyQueueButton {
-	element = $el("div.comfyui-queue-button");
+	element = $el("div.sdbxui-queue-button");
 	#internalQueueSize = 0;
 
 	queuePrompt = async (e) => {
@@ -19,7 +19,7 @@ export class ComfyQueueButton {
 
 	constructor(app) {
 		this.app = app;
-		this.queueSizeElement = $el("span.comfyui-queue-count", {
+		this.queueSizeElement = $el("span.sdbxui-queue-count", {
 			textContent: "?",
 		});
 
@@ -31,7 +31,7 @@ export class ComfyQueueButton {
 				this.queueSizeElement,
 			]),
 			icon: "play",
-			classList: "comfyui-button",
+			classList: "sdbxui-button",
 			action: this.queuePrompt,
 		});
 

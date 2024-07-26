@@ -1,13 +1,13 @@
 // @ts-check
-/// <reference path="../../comfy/web/types/litegraph.d.ts" />
+/// <reference path="../../sdbx/web/types/litegraph.d.ts" />
 
 /**
- * @typedef { import("../../comfy/web/scripts/app")["app"] } app
- * @typedef { import("../../comfy/web/types/litegraph") } LG
- * @typedef { import("../../comfy/web/types/litegraph").IWidget } IWidget
- * @typedef { import("../../comfy/web/types/litegraph").ContextMenuItem } ContextMenuItem
- * @typedef { import("../../comfy/web/types/litegraph").INodeInputSlot } INodeInputSlot
- * @typedef { import("../../comfy/web/types/litegraph").INodeOutputSlot } INodeOutputSlot
+ * @typedef { import("../../sdbx/web/scripts/app")["app"] } app
+ * @typedef { import("../../sdbx/web/types/litegraph") } LG
+ * @typedef { import("../../sdbx/web/types/litegraph").IWidget } IWidget
+ * @typedef { import("../../sdbx/web/types/litegraph").ContextMenuItem } ContextMenuItem
+ * @typedef { import("../../sdbx/web/types/litegraph").INodeInputSlot } INodeInputSlot
+ * @typedef { import("../../sdbx/web/types/litegraph").INodeOutputSlot } INodeOutputSlot
  * @typedef { InstanceType<LG["LGraphNode"]> & { widgets?: Array<IWidget> } } LGNode
  * @typedef { (...args: EzOutput[] | [...EzOutput[], Record<string, unknown>]) => EzNode } EzNodeFactory
  */

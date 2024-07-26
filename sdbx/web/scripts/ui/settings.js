@@ -11,15 +11,15 @@ export class ComfySettingsDialog extends ComfyDialog {
 		this.element = $el(
 			"dialog",
 			{
-				id: "comfy-settings-dialog",
+				id: "sdbx-settings-dialog",
 				parent: document.body,
 			},
 			[
-				$el("table.comfy-modal-content.comfy-table", [
+				$el("table.sdbx-modal-content.sdbx-table", [
 					$el(
 						"caption",
 						{ textContent: "Settings" },
-						$el("button.comfy-btn", {
+						$el("button.sdbx-btn", {
 							type: "button",
 							textContent: "\u00d7",
 							onclick: () => {
@@ -168,7 +168,7 @@ export class ComfySettingsDialog extends ComfyDialog {
 				const labelCell = $el("td", [
 					$el("label", {
 						for: htmlID,
-						classList: [tooltip !== "" ? "comfy-tooltip-indicator" : ""],
+						classList: [tooltip !== "" ? "sdbx-tooltip-indicator" : ""],
 						textContent: name,
 					}),
 				]);

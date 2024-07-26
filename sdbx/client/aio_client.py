@@ -87,7 +87,7 @@ class AsyncRemoteComfyClient:
 
     async def queue_prompt_ui(self, prompt: PromptDict) -> Dict[str, List[Path]]:
         """
-        Uses the comfyui UI API calls to retrieve a list of paths of output files
+        Uses the sdbxui UI API calls to retrieve a list of paths of output files
         :param prompt:
         :return:
         """

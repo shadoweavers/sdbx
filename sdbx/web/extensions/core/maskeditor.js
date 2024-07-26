@@ -98,8 +98,8 @@ class MaskEditorDialog extends ComfyDialog {
 
 	constructor() {
 		super();
-		this.element = $el("div.comfy-modal", { parent: document.body }, 
-			[ $el("div.comfy-modal-content", 
+		this.element = $el("div.sdbx-modal", { parent: document.body }, 
+			[ $el("div.sdbx-modal-content", 
 				[...this.createButtons()]),
 			]);
 	}
@@ -137,7 +137,7 @@ class MaskEditorDialog extends ComfyDialog {
 		divElement.style.fontFamily = "sans-serif";
 		divElement.style.marginRight = "4px";
 		divElement.style.color = "var(--input-text)";
-		divElement.style.backgroundColor = "var(--comfy-input-bg)";
+		divElement.style.backgroundColor = "var(--sdbx-input-bg)";
 		divElement.style.borderRadius = "8px";
 		divElement.style.borderColor = "var(--border-color)";
 		divElement.style.borderStyle = "solid";
@@ -171,7 +171,7 @@ class MaskEditorDialog extends ComfyDialog {
 		divElement.style.fontFamily = "sans-serif";
 		divElement.style.marginRight = "4px";
 		divElement.style.color = "var(--input-text)";
-		divElement.style.backgroundColor = "var(--comfy-input-bg)";
+		divElement.style.backgroundColor = "var(--sdbx-input-bg)";
 		divElement.style.borderRadius = "8px";
 		divElement.style.borderColor = "var(--border-color)";
 		divElement.style.borderStyle = "solid";

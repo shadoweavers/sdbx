@@ -103,7 +103,7 @@ def cuda_malloc_warning():
                 cuda_malloc_warning = True
         if cuda_malloc_warning:
             logging.warning(
-                "\nWARNING: this card most likely does not support cuda-malloc, if you get \"CUDA error\" please run ComfyUI with: --disable-cuda-malloc\n")
+                "\nWARNING: this card most likely does not support cuda-malloc, if you get \"CUDA error\" please run sdbx with: --disable-cuda-malloc\n")
 
 
 async def main():
@@ -172,7 +172,7 @@ async def main():
     worker_thread_server = server if not distributed else ServerStub()
     if not distributed or args.distributed_queue_worker:
         if distributed:
-            logging.warning(f"Distributed workers started in the default thread loop cannot notify clients of progress updates. Instead of comfyui or main.py, use comfyui-worker.")
+            logging.warning(f"Distributed workers started in the default thread loop cannot notify clients of progress updates. Instead of sdbxui or main.py, use sdbxui-worker.")
         threading.Thread(target=prompt_worker, daemon=True, args=(q, worker_thread_server,)).start()
 
     # server has been imported and things should be looking good

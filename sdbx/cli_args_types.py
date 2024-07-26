@@ -103,7 +103,7 @@ class Configuration(dict):
         verbose (bool): Shows extra output for debugging purposes such as import errors of custom nodes.
         disable_known_models (bool): Disables automatic downloads of known models and prevents them from appearing in the UI.
         max_queue_size (int): The API will reject prompt requests if the queue's size exceeds this value.
-        otel_service_name (str): The name of the service or application that is generating telemetry data. Default: "comfyui".
+        otel_service_name (str): The name of the service or application that is generating telemetry data. Default: "sdbxui".
         otel_service_version (str): The version of the service or application that is generating telemetry data. Default: "0.0.1".
         otel_exporter_otlp_endpoint (Optional[str]): A base endpoint URL for any signal type, with an optionally-specified port number. Helpful for when you're sending more than one signal to the same endpoint and want one environment variable to control the endpoint.
         force_channels_last (bool): Force channels last format when inferencing the models.
@@ -174,7 +174,7 @@ class Configuration(dict):
         self.distributed_queue_connection_uri: Optional[str] = None
         self.distributed_queue_worker: bool = False
         self.distributed_queue_frontend: bool = False
-        self.distributed_queue_name: str = "comfyui"
+        self.distributed_queue_name: str = "sdbxui"
         self.external_address: Optional[str] = None
         self.disable_known_models: bool = False
         self.max_queue_size: int = 65536
@@ -182,7 +182,7 @@ class Configuration(dict):
         self.force_hf_local_dir_mode = False
 
         # from opentracing docs
-        self.otel_service_name: str = "comfyui"
+        self.otel_service_name: str = "sdbxui"
         self.otel_service_version: str = "0.0.1"
         self.otel_exporter_otlp_endpoint: Optional[str] = None
         for key, value in kwargs.items():

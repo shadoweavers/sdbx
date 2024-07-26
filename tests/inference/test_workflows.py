@@ -1,10 +1,10 @@
 import pytest
 
-from comfy.api.components.schema.prompt import Prompt
-from comfy.cli_args_types import Configuration
-from comfy.client.embedded_comfy_client import EmbeddedComfyClient
-from comfy.model_downloader import add_known_models, KNOWN_LORAS
-from comfy.model_downloader_types import CivitFile
+from sdbx.api.components.schema.prompt import Prompt
+from sdbx.cli_args_types import Configuration
+from sdbx.client.embedded_sdbx_client import EmbeddedComfyClient
+from sdbx.model_downloader import add_known_models, KNOWN_LORAS
+from sdbx.model_downloader_types import CivitFile
 
 _workflows = {
     "lora_1": {
@@ -102,7 +102,7 @@ _workflows = {
         },
         "9": {
             "inputs": {
-                "filename_prefix": "ComfyUI",
+                "filename_prefix": "sdbx",
                 "images": [
                     "8",
                     0
@@ -140,7 +140,7 @@ _workflows = {
 @pytest.mark.asyncio
 async def client(tmp_path_factory) -> EmbeddedComfyClient:
     config = Configuration()
-    config.cwd = str(tmp_path_factory.mktemp("comfy_test_cwd"))
+    config.cwd = str(tmp_path_factory.mktemp("sdbx_test_cwd"))
     async with EmbeddedComfyClient(config) as client:
         yield client
 

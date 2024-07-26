@@ -1,13 +1,13 @@
-# This sample shows how to execute a ComfyUI workflow, saving an image file to the location you specify.
-# It does not require the server to be run. It runs ComfyUI embedded, as a library. No process is started.
+# This sample shows how to execute a sdbx workflow, saving an image file to the location you specify.
+# It does not require the server to be run. It runs sdbx embedded, as a library. No process is started.
 #
-# This script does not need to run within a ComfyUI directory. Instead, this can be used inside your own
+# This script does not need to run within a sdbx directory. Instead, this can be used inside your own
 # Python application or located elsewhere. It should **not** be in the Git repository directory.
 #
-# First, you will need to install ComfyUI. Follow the **Manual Install (Windows, Linux, macOS)** instructions in the
-# README.md. If you are an experienced developer, instead run `pip install git+https://github.com/hiddenswitch/ComfyUI.git`
+# First, you will need to install sdbx. Follow the **Manual Install (Windows, Linux, macOS)** instructions in the
+# README.md. If you are an experienced developer, instead run `pip install git+https://github.com/darkshapes/sdbx.git`
 #
-# Now you should develop your workflow. Start ComfyUI as normal; navigate to "Settings" in the menu, and check "Enable
+# Now you should develop your workflow. Start sdbx as normal; navigate to "Settings" in the menu, and check "Enable
 # Dev mode Options". Then click "Save (API Format)". Copy and paste the contents of this file here:
 _PROMPT_FROM_WEB_UI = {
     "3": {
@@ -87,7 +87,7 @@ _PROMPT_FROM_WEB_UI = {
     "9": {
         "class_type": "SaveImage",
         "inputs": {
-            "filename_prefix": "ComfyUI",
+            "filename_prefix": "sdbx",
             "images": [
                 "8",
                 0
@@ -115,28 +115,28 @@ async def main():
     prompt_dict["3"]["inputs"]["seed"] = 5
 
     # Now we will validate the prompt. This Prompt class contains everything we need to validate the prompt.
-    from comfy.api.components.schema.prompt import Prompt
+    from sdbx.api.components.schema.prompt import Prompt
     prompt = Prompt.validate(prompt_dict)
 
     # Your prompt is ready to be processed.
-    # You should **not** be running the ComfyUI application (the thing you start with /main.py). You don't need it. You
+    # You should **not** be running the sdbx application (the thing you start with /main.py). You don't need it. You
     # are not making any HTTP requests, you are not running a server, you are not connecting to anything, you are not
-    # executing the main.py from the ComfyUI git repository, you don't even need that Git repository located anywhere.
+    # executing the main.py from the sdbx git repository, you don't even need that Git repository located anywhere.
 
-    from comfy.cli_args_types import Configuration
+    from sdbx.cli_args_types import Configuration
 
     # Let's specify some settings. Suppose this is the structure of your directories:
-    #   C:/Users/comfyanonymous/Documents/models
-    #   C:/Users/comfyanonymous/Documents/models/checkpoints
-    #   C:/Users/comfyanonymous/Documents/models/loras
-    #   C:/Users/comfyanonymous/Documents/outputs
-    # Then your "current working directory" (`cwd`) should be set to "C:/Users/comfyanonymous/Documents":
-    #   configuration.cwd = "C:/Users/comfyanonymous/Documents/"
+    #   C:/Users/sdbxanonymous/Documents/models
+    #   C:/Users/sdbxanonymous/Documents/models/checkpoints
+    #   C:/Users/sdbxanonymous/Documents/models/loras
+    #   C:/Users/sdbxanonymous/Documents/outputs
+    # Then your "current working directory" (`cwd`) should be set to "C:/Users/sdbxanonymous/Documents":
+    #   configuration.cwd = "C:/Users/sdbxanonymous/Documents/"
     # Or, if your models directory is located in the same directory as this script:
     #   configuration.cwd = os.path.dirname(__file__)
     configuration = Configuration()
 
-    from comfy.client.embedded_comfy_client import EmbeddedComfyClient
+    from sdbx.client.embedded_sdbx_client import EmbeddedComfyClient
     async with EmbeddedComfyClient(configuration=configuration) as client:
         # This will run your prompt
         outputs = await client.queue_prompt(prompt)

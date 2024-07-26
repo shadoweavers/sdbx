@@ -17,7 +17,7 @@ export class ComfyViewListButton {
 	constructor(app, { button, list, mode }) {
 		this.app = app;
 		this.button = button;
-		this.element = $el("div.comfyui-button-wrapper", this.button.element);
+		this.element = $el("div.sdbxui-button-wrapper", this.button.element);
 		this.popup = new ComfyPopup({
 			target: this.element,
 			container: this.element,
@@ -50,7 +50,7 @@ export class ComfyViewList {
 		this.popup = popup;
 		this.type = mode.toLowerCase();
 
-		this.items = $el(`div.comfyui-${this.type}-items.comfyui-view-list-items`);
+		this.items = $el(`div.sdbxui-${this.type}-items.sdbxui-view-list-items`);
 		this.clear = new ComfyButton({
 			icon: "cancel",
 			content: "Clear",
@@ -69,7 +69,7 @@ export class ComfyViewList {
 			},
 		});
 
-		this.element = $el(`div.comfyui-${this.type}-popup.comfyui-view-list-popup`, [
+		this.element = $el(`div.sdbxui-${this.type}-popup.sdbxui-view-list-popup`, [
 			$el("h3", mode),
 			$el("header", [this.clear.element, this.refresh.element]),
 			this.items,

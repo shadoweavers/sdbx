@@ -33,7 +33,7 @@ export class ClipspaceDialog extends ComfyDialog {
 		if(ClipspaceDialog.instance) {
 			const self = ClipspaceDialog.instance;
 			// allow reconstruct controls when copying from non-image to image content.
-			const children = $el("div.comfy-modal-content", [ self.createImgSettings(), ...self.createButtons() ]);
+			const children = $el("div.sdbx-modal-content", [ self.createImgSettings(), ...self.createButtons() ]);
 
 			if(self.element) {
 				// update
@@ -42,7 +42,7 @@ export class ClipspaceDialog extends ComfyDialog {
 			}
 			else {
 				// new
-				self.element = $el("div.comfy-modal", { parent: document.body }, [children,]);
+				self.element = $el("div.sdbx-modal", { parent: document.body }, [children,]);
 			}
 
 			if(self.element.children[0].children.length <= 1) {

@@ -3,8 +3,8 @@
 :root {
 	--fg-color: #000;
 	--bg-color: #fff;
-	--comfy-menu-bg: #353535;
-	--comfy-input-bg: #222;
+	--sdbx-menu-bg: #353535;
+	--sdbx-input-bg: #222;
 	--input-text: #ddd;
 	--descrip-text: #999;
 	--drag-text: #ccc;
@@ -48,13 +48,13 @@ body {
 	max-width: -webkit-fill-available;
 }
 
-.comfyui-body-top {
+.sdbxui-body-top {
 	order: 0;
 	grid-column: 1/-1;
 	z-index: 10;
 }
 
-.comfyui-body-left {
+.sdbxui-body-left {
 	order: 1;
 	z-index: 10;
 }
@@ -66,19 +66,19 @@ body {
 	grid-column: 1/-1;
 }
 
-.comfyui-body-right {
+.sdbxui-body-right {
 	order: 3;
 	z-index: 10;
 }
 
-.comfyui-body-bottom {
+.sdbxui-body-bottom {
 	order: 4;
 	grid-column: 1/-1;
 	z-index: 10;
 }
 
-.comfy-multiline-input {
-	background-color: var(--comfy-input-bg);
+.sdbx-multiline-input {
+	background-color: var(--sdbx-input-bg);
 	color: var(--input-text);
 	overflow: hidden;
 	overflow-y: auto;
@@ -89,12 +89,12 @@ body {
 	font-size: 10px;
 }
 
-.comfy-modal {
+.sdbx-modal {
 	display: none; /* Hidden by default */
 	position: fixed; /* Stay in place */
 	z-index: 100; /* Sit on top */
 	padding: 30px 30px 10px 30px;
-	background-color: var(--comfy-menu-bg); /* Modal background */
+	background-color: var(--sdbx-menu-bg); /* Modal background */
 	color: var(--error-text);
 	box-shadow: 0 0 20px #888888;
 	border-radius: 10px;
@@ -109,24 +109,24 @@ body {
 	font-size: 15px;
 }
 
-.comfy-modal-content {
+.sdbx-modal-content {
 	display: flex;
 	flex-direction: column;
 }
 
-.comfy-modal p {
+.sdbx-modal p {
 	overflow: auto;
 	white-space: pre-line; /* This will respect line breaks */
 	margin-bottom: 20px; /* Add some margin between the text and the close button*/
 }
 
-.comfy-modal select,
-.comfy-modal input[type=button],
-.comfy-modal input[type=checkbox] {
+.sdbx-modal select,
+.sdbx-modal input[type=button],
+.sdbx-modal input[type=checkbox] {
 	margin: 3px 3px 3px 4px;
 }
 
-.comfy-menu-hamburger {
+.sdbx-menu-hamburger {
 	position: fixed;
 	top: 10px;
 	z-index: 9999;
@@ -137,14 +137,14 @@ body {
 	flex-direction: column;
 	cursor: pointer;
 }
-.comfy-menu-hamburger div {
+.sdbx-menu-hamburger div {
 	height: 3px;
 	width: 100%;
 	border-radius: 20px;
 	background-color: white;
 }
 
-.comfy-menu {
+.sdbx-menu {
 	font-size: 15px;
 	position: absolute;
 	top: 50%;
@@ -156,18 +156,18 @@ body {
 	flex-direction: column;
 	align-items: center;
 	color: var(--descrip-text);
-	background-color: var(--comfy-menu-bg);
+	background-color: var(--sdbx-menu-bg);
 	font-family: sans-serif;
 	padding: 10px;
 	border-radius: 0 8px 8px 8px;
 	box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
 }
 
-.comfy-menu-header {
+.sdbx-menu-header {
 	display: flex;
 }
 
-.comfy-menu-actions {
+.sdbx-menu-actions {
 	display: flex;
 	gap: 3px;
 	align-items: center;
@@ -177,7 +177,7 @@ body {
 	font-size: 22px;
 }
 
-.comfy-menu .comfy-menu-actions button {
+.sdbx-menu .sdbx-menu-actions button {
 	background-color: rgba(0, 0, 0, 0);
 	padding: 0;
 	border: none;
@@ -185,11 +185,11 @@ body {
 	font-size: inherit;
 }
 
-.comfy-menu .comfy-menu-actions .comfy-settings-btn {
+.sdbx-menu .sdbx-menu-actions .sdbx-settings-btn {
 	font-size: 0.6em;
 }
 
-button.comfy-close-menu-btn {
+button.sdbx-close-menu-btn {
 	font-size: 1em;
 	line-height: 12px;
 	color: #ccc;
@@ -197,49 +197,49 @@ button.comfy-close-menu-btn {
 	top: -1px;
 }
 
-.comfy-menu-queue-size {
+.sdbx-menu-queue-size {
 	flex: auto;
 }
 
-.comfy-menu button,
-.comfy-modal button {
+.sdbx-menu button,
+.sdbx-modal button {
 	font-size: 20px;
 }
 
-.comfy-menu-btns {
+.sdbx-menu-btns {
 	margin-bottom: 10px;
 	width: 100%;
 }
 
-.comfy-menu-btns button {
+.sdbx-menu-btns button {
 	font-size: 10px;
 	width: 50%;
 	color: var(--descrip-text) !important;
 }
 
-.comfy-menu > button {
+.sdbx-menu > button {
 	width: 100%;
 }
 
-.comfy-btn,
-.comfy-menu > button,
-.comfy-menu-btns button,
-.comfy-menu .comfy-list button,
-.comfy-modal button {
+.sdbx-btn,
+.sdbx-menu > button,
+.sdbx-menu-btns button,
+.sdbx-menu .sdbx-list button,
+.sdbx-modal button {
 	color: var(--input-text);
-	background-color: var(--comfy-input-bg);
+	background-color: var(--sdbx-input-bg);
 	border-radius: 8px;
 	border-color: var(--border-color);
 	border-style: solid;
 	margin-top: 2px;
 }
 
-.comfy-btn:hover:not(:disabled),
-.comfy-menu > button:hover,
-.comfy-menu-btns button:hover,
-.comfy-menu .comfy-list button:hover,
-.comfy-modal button:hover,
-.comfy-menu-actions button:hover {
+.sdbx-btn:hover:not(:disabled),
+.sdbx-menu > button:hover,
+.sdbx-menu-btns button:hover,
+.sdbx-menu .sdbx-list button:hover,
+.sdbx-modal button:hover,
+.sdbx-menu-actions button:hover {
 	filter: brightness(1.2);
 	will-change: transform;
 	cursor: pointer;
@@ -267,85 +267,85 @@ span.drag-handle::after {
 	content: '.. .. ..';
 }
 
-.comfy-queue-btn {
+.sdbx-queue-btn {
 	width: 100%;
 }
 
-.comfy-list {
+.sdbx-list {
 	color: var(--descrip-text);
-	background-color: var(--comfy-menu-bg);
+	background-color: var(--sdbx-menu-bg);
 	margin-bottom: 10px;
 	border-color: var(--border-color);
 	border-style: solid;
 }
 
-.comfy-list-items {
+.sdbx-list-items {
 	overflow-y: scroll;
 	max-height: 100px;
 	min-height: 25px;
-	background-color: var(--comfy-input-bg);
+	background-color: var(--sdbx-input-bg);
 	padding: 5px;
 }
 
-.comfy-list h4 {
+.sdbx-list h4 {
 	min-width: 160px;
 	margin: 0;
 	padding: 3px;
 	font-weight: normal;
 }
 
-.comfy-list-items button {
+.sdbx-list-items button {
 	font-size: 10px;
 }
 
-.comfy-list-actions {
+.sdbx-list-actions {
 	margin: 5px;
 	display: flex;
 	gap: 5px;
 	justify-content: center;
 }
 
-.comfy-list-actions button {
+.sdbx-list-actions button {
 	font-size: 12px;
 }
 
-button.comfy-queue-btn {
+button.sdbx-queue-btn {
 	margin: 6px 0 !important;
 }
 
-.comfy-modal.comfy-settings,
-.comfy-modal.comfy-manage-templates {
+.sdbx-modal.sdbx-settings,
+.sdbx-modal.sdbx-manage-templates {
 	text-align: center;
 	font-family: sans-serif;
 	color: var(--descrip-text);
 	z-index: 99;
 }
 
-.comfy-modal.comfy-settings input[type="range"] {
+.sdbx-modal.sdbx-settings input[type="range"] {
 	vertical-align: middle;
 }
 
-.comfy-modal.comfy-settings input[type="range"] + input[type="number"] {
+.sdbx-modal.sdbx-settings input[type="range"] + input[type="number"] {
 	width: 3.5em;
 }
 
-.comfy-modal input,
-.comfy-modal select {
+.sdbx-modal input,
+.sdbx-modal select {
 	color: var(--input-text);
-	background-color: var(--comfy-input-bg);
+	background-color: var(--sdbx-input-bg);
 	border-radius: 8px;
 	border-color: var(--border-color);
 	border-style: solid;
 	font-size: inherit;
 }
 
-.comfy-tooltip-indicator {
+.sdbx-tooltip-indicator {
 	text-decoration: underline;
 	text-decoration-style: dashed;
 }
 
 @media only screen and (max-height: 850px) {
-	.comfy-menu {
+	.sdbx-menu {
 		top: 0 !important;
 		bottom: 0 !important;
 		left: auto !important;
@@ -353,18 +353,18 @@ button.comfy-queue-btn {
 		border-radius: 0;
 	}
 
-	.comfy-menu span.drag-handle {
+	.sdbx-menu span.drag-handle {
 		display: none;
 	}
 	
-	.comfy-menu-queue-size {
+	.sdbx-menu-queue-size {
 		flex: unset;
 	}
 
-	.comfy-menu-header {
+	.sdbx-menu-header {
 		justify-content: space-between;
 	}
-	.comfy-menu-actions {
+	.sdbx-menu-actions {
 		gap: 10px;
 		font-size: 28px;
 	}
@@ -374,7 +374,7 @@ button.comfy-queue-btn {
 
 .graphdialog {
 	min-height: 1em;
-	background-color: var(--comfy-menu-bg);
+	background-color: var(--sdbx-menu-bg);
 }
 
 .graphdialog .name {
@@ -391,7 +391,7 @@ button.comfy-queue-btn {
 }
 
 .graphdialog input, .graphdialog textarea, .graphdialog select {
-	background-color: var(--comfy-input-bg);
+	background-color: var(--sdbx-input-bg);
 	border: 2px solid;
 	border-color: var(--border-color);
 	color: var(--input-text);
@@ -408,47 +408,47 @@ dialog::backdrop {
 	background: rgba(0, 0, 0, 0.5);
 }
 
-.comfy-dialog.comfyui-dialog {
+.sdbx-dialog.sdbxui-dialog {
 	top: 0;
 }
 
-.comfy-dialog.comfy-modal {
+.sdbx-dialog.sdbx-modal {
 	font-family: Arial, sans-serif;
 	border-color: var(--bg-color);
 	box-shadow: none;
   	border: 2px solid var(--border-color);
 }
 
-.comfy-dialog .comfy-modal-content {
+.sdbx-dialog .sdbx-modal-content {
 	flex-direction: row;
 	flex-wrap: wrap;
 	gap: 10px;
 	color: var(--fg-color);
 }
 
-.comfy-dialog .comfy-modal-content h3 {
+.sdbx-dialog .sdbx-modal-content h3 {
 	margin-top: 0;
 }
 
-.comfy-dialog .comfy-modal-content > p {
+.sdbx-dialog .sdbx-modal-content > p {
 	width: 100%;
 }
 
-.comfy-dialog .comfy-modal-content > .comfyui-button {
+.sdbx-dialog .sdbx-modal-content > .sdbxui-button {
 	flex: 1;
 	justify-content: center;
 }
 
-#comfy-settings-dialog {
+#sdbx-settings-dialog {
 	padding: 0;
 	width: 41rem;
 }
 
-#comfy-settings-dialog tr > td:first-child {
+#sdbx-settings-dialog tr > td:first-child {
 	text-align: right;
 }
 
-#comfy-settings-dialog tbody button, #comfy-settings-dialog table > button {
+#sdbx-settings-dialog tbody button, #sdbx-settings-dialog table > button {
 	background-color: var(--bg-color);
 	border: 1px var(--border-color) solid;
 	border-radius: 0;
@@ -457,20 +457,20 @@ dialog::backdrop {
 	padding: 0.5rem;
 }
 
-#comfy-settings-dialog button:hover {
+#sdbx-settings-dialog button:hover {
 	background-color: var(--tr-odd-bg-color);
 }
 
 /* General CSS for tables */
 
-.comfy-table {
+.sdbx-table {
 	border-collapse: collapse;
 	color: var(--input-text);
 	font-family: Arial, sans-serif;
 	width: 100%;
 }
 
-.comfy-table caption {
+.sdbx-table caption {
 	position: sticky;
 	top: 0;
 	background-color: var(--bg-color);
@@ -482,7 +482,7 @@ dialog::backdrop {
 	border-bottom: 1px solid var(--border-color);
 }
 
-.comfy-table caption .comfy-btn {
+.sdbx-table caption .sdbx-btn {
 	position: absolute;
 	top: -2px;
 	right: 0;
@@ -496,20 +496,20 @@ dialog::backdrop {
 	font-size: 20px;
 }
 
-.comfy-table caption .comfy-btn:focus {
+.sdbx-table caption .sdbx-btn:focus {
 	outline: none;
 }
 
-.comfy-table tr:nth-child(even) {
+.sdbx-table tr:nth-child(even) {
 	background-color: var(--tr-even-bg-color);
 }
 
-.comfy-table tr:nth-child(odd) {
+.sdbx-table tr:nth-child(odd) {
 	background-color: var(--tr-odd-bg-color);
 }
 
-.comfy-table td,
-.comfy-table th {
+.sdbx-table td,
+.sdbx-table th {
 	border: 1px solid var(--border-color);
 	padding: 8px;
 }
@@ -536,13 +536,13 @@ dialog::backdrop {
 .litegraph.litecontextmenu,
 .litegraph.litecontextmenu.dark {
 	z-index: 9999 !important;
-	background-color: var(--comfy-menu-bg) !important;
+	background-color: var(--sdbx-menu-bg) !important;
 	filter: brightness(95%);
 	will-change: transform;
 }
 
 .litegraph.litecontextmenu .litemenu-entry:hover:not(.disabled):not(.separator) {
-	background-color: var(--comfy-menu-bg) !important;
+	background-color: var(--sdbx-menu-bg) !important;
 	filter: brightness(155%);
 	will-change: transform;
 	color: var(--input-text);
@@ -550,23 +550,23 @@ dialog::backdrop {
 
 .litegraph.litecontextmenu .litemenu-entry.submenu,
 .litegraph.litecontextmenu.dark .litemenu-entry.submenu {
-	background-color: var(--comfy-menu-bg) !important;
+	background-color: var(--sdbx-menu-bg) !important;
 	color: var(--input-text);
 }
 
 .litegraph.litecontextmenu input {
-	background-color: var(--comfy-input-bg) !important;
+	background-color: var(--sdbx-input-bg) !important;
 	color: var(--input-text) !important;
 }
 
-.comfy-context-menu-filter {
+.sdbx-context-menu-filter {
 	box-sizing: border-box;
 	border: 1px solid #999;
 	margin: 0 0 5px 5px;
 	width: calc(100% - 10px);
 }
 
-.comfy-img-preview {
+.sdbx-img-preview {
 	pointer-events: none;
 	overflow: hidden;
 	display: flex;
@@ -575,13 +575,13 @@ dialog::backdrop {
 	justify-content: center;
 }
 
-.comfy-img-preview img {
+.sdbx-img-preview img {
 	object-fit: contain;
-	width: var(--comfy-img-preview-width);
-	height: var(--comfy-img-preview-height);
+	width: var(--sdbx-img-preview-width);
+	height: var(--sdbx-img-preview-height);
 }
 
-.comfy-missing-nodes li button {
+.sdbx-missing-nodes li button {
 	font-size: 12px;
 	margin-left: 5px;
 }
@@ -590,20 +590,20 @@ dialog::backdrop {
 
 .litegraph.litesearchbox {
 	z-index: 9999 !important;
-	background-color: var(--comfy-menu-bg) !important;
+	background-color: var(--sdbx-menu-bg) !important;
 	overflow: hidden;
 	display: block;
 }
 
 .litegraph.litesearchbox input,
 .litegraph.litesearchbox select {
-	background-color: var(--comfy-input-bg) !important;
+	background-color: var(--sdbx-input-bg) !important;
 	color: var(--input-text);
 }
 
 .litegraph.lite-search-item {
 	color: var(--input-text);
-	background-color: var(--comfy-input-bg);
+	background-color: var(--sdbx-input-bg);
 	filter: brightness(80%);
 	will-change: transform;
 	padding-left: 0.2em;
@@ -616,23 +616,23 @@ dialog::backdrop {
 }
 
 @media only screen and (max-width: 450px) {
-	#comfy-settings-dialog .comfy-table tbody {
+	#sdbx-settings-dialog .sdbx-table tbody {
 		display: grid;
 	}
-	#comfy-settings-dialog .comfy-table tr {
+	#sdbx-settings-dialog .sdbx-table tr {
 		display: grid;
 	}
-	#comfy-settings-dialog tr > td:first-child {
+	#sdbx-settings-dialog tr > td:first-child {
 		text-align: center;
 		border-bottom: none;
 		padding-bottom: 0;
 	}
-	#comfy-settings-dialog tr > td:not(:first-child) {
+	#sdbx-settings-dialog tr > td:not(:first-child) {
 		text-align: center;
 		border-top: none;
 	}
 }
 
-audio.comfy-audio.empty-audio-widget {
+audio.sdbx-audio.empty-audio-widget {
 	display: none;
 }

@@ -3,10 +3,10 @@ import shutil
 
 import pytest
 
-from comfy.cli_args import args
-from comfy.cmd import folder_paths
-from comfy.cmd.folder_paths import FolderPathsTuple
-from comfy.model_downloader import KNOWN_HUGGINGFACE_MODEL_REPOS, get_huggingface_repo_list, \
+from sdbx.cli_args import args
+from sdbx.cmd import folder_paths
+from sdbx.cmd.folder_paths import FolderPathsTuple
+from sdbx.model_downloader import KNOWN_HUGGINGFACE_MODEL_REPOS, get_huggingface_repo_list, \
     get_or_download_huggingface_repo, _get_cache_hits, _delete_repo_from_huggingface_cache
 
 _gitattributes = """*.7z filter=lfs diff=lfs merge=lfs -text
@@ -51,7 +51,7 @@ saved_model/**/* filter=lfs diff=lfs merge=lfs -text
 def test_known_repos(tmp_path_factory):
     test_cache_dir = tmp_path_factory.mktemp("huggingface_cache")
     test_local_dir = tmp_path_factory.mktemp("huggingface_locals")
-    test_repo_id = "doctorpangloss/comfyui_downloader_test"
+    test_repo_id = "doctorpangloss/sdbxui_downloader_test"
     prev_huggingface = folder_paths.folder_names_and_paths["huggingface"]
     prev_huggingface_cache = folder_paths.folder_names_and_paths["huggingface_cache"]
     prev_hub_cache = os.getenv("HF_HUB_CACHE")

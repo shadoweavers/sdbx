@@ -1,4 +1,4 @@
-#Rename this to extra_model_paths.yaml and ComfyUI will load it
+# Rename this to extra_model_paths.yaml and sdbx will load it
 
 
 # Config for a1111 ui
@@ -19,11 +19,11 @@ a1111:
   hypernetworks: models/hypernetworks
   controlnet: models/ControlNet
 
-# Config for comfyui
-# Your base path should be either an existing comfy install or a central folder where you store all of your models, loras, etc.
+# Config for sdbx
+# Your base path should be either an existing sdbx install or a central folder where you store all of your models, loras, etc.
 
-#comfyui:
-#     base_path: path/to/comfyui/
+#sdbxui:
+#     base_path: path/to/sdbxui/
 #     checkpoints: models/checkpoints/
 #     clip: models/clip/
 #     clip_vision: models/clip_vision/

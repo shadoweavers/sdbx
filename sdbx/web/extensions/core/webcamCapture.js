@@ -37,7 +37,7 @@ app.registerExtension({
 						if (window.isSecureContext) {
 							label.textContent = "Unable to load webcam, please ensure access is granted:\n" + error.message;
 						} else {
-							label.textContent = "Unable to load webcam. A secure context is required, if you are not accessing ComfyUI on localhost (127.0.0.1) you will have to enable TLS (https)\n\n" + error.message;
+							label.textContent = "Unable to load webcam. A secure context is required, if you are not accessing sdbx on localhost (127.0.0.1) you will have to enable TLS (https)\n\n" + error.message;
 						}
 
 						container.replaceChildren(label);
@@ -51,7 +51,7 @@ app.registerExtension({
 		};
 	},
 	nodeCreated(node) {
-		if ((node.type, node.constructor.comfyClass !== "WebcamCapture")) return;
+		if ((node.type, node.constructor.sdbxClass !== "WebcamCapture")) return;
 
 		let video;
 		const camera = node.widgets.find((w) => w.name === "image");

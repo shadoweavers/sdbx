@@ -4,14 +4,14 @@ import { $el } from "../../ui.js";
 import { prop } from "../../utils.js";
 
 export class ComfyQueueOptions extends EventTarget {
-	element = $el("div.comfyui-queue-options");
+	element = $el("div.sdbxui-queue-options");
 
 	constructor(app) {
 		super();
 		this.app = app;
 
 		this.batchCountInput = $el("input", {
-			className: "comfyui-queue-batch-value",
+			className: "sdbxui-queue-batch-value",
 			type: "number",
 			min: "1",
 			value: "1",
@@ -27,7 +27,7 @@ export class ComfyQueueOptions extends EventTarget {
 		});
 
 		this.element.append(
-			$el("div.comfyui-queue-batch", [
+			$el("div.sdbxui-queue-batch", [
 				$el(
 					"label",
 					{
@@ -52,7 +52,7 @@ export class ComfyQueueOptions extends EventTarget {
 				})
 			);
 
-		this.autoQueueEl = $el("div.comfyui-queue-mode", [
+		this.autoQueueEl = $el("div.sdbxui-queue-mode", [
 			$el("span", "Auto Queue:"),
 			createOption("Disabled", "", true),
 			createOption("Instant", "instant"),

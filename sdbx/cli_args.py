@@ -33,12 +33,12 @@ def _create_parser() -> EnhancedConfigArgParser:
     parser.add_argument("--max-upload-size", type=float, default=100, help="Set the maximum upload size in MB.")
     parser.add_argument("--extra-model-paths-config", type=str, default=None, metavar="PATH", nargs='+',
                         action='append', help="Load one or more extra_model_paths.yaml files.")
-    parser.add_argument("--output-directory", type=str, default=None, help="Set the ComfyUI output directory.")
+    parser.add_argument("--output-directory", type=str, default=None, help="Set the sdbx output directory.")
     parser.add_argument("--temp-directory", type=str, default=None,
-                        help="Set the ComfyUI temp directory (default is in the ComfyUI directory).")
-    parser.add_argument("--input-directory", type=str, default=None, help="Set the ComfyUI input directory.")
+                        help="Set the sdbx temp directory (default is in the sdbx directory).")
+    parser.add_argument("--input-directory", type=str, default=None, help="Set the sdbx input directory.")
     parser.add_argument("--auto-launch", action="store_true",
-                        help="Automatically launch ComfyUI in the default browser.")
+                        help="Automatically launch sdbx in the default browser.")
     parser.add_argument("--disable-auto-launch", action="store_true", help="Disable auto launching the browser.")
     parser.add_argument("--cuda-device", type=int, default=None, metavar="DEVICE_ID",
                         help="Set the id of the cuda device this instance will use.")
@@ -109,7 +109,7 @@ def _create_parser() -> EnhancedConfigArgParser:
     vram_group.add_argument("--cpu", action="store_true", help="To use the CPU for everything (slow).")
 
     parser.add_argument("--disable-smart-memory", action="store_true",
-                        help="Force ComfyUI to agressively offload to regular ram instead of keeping models in vram when it can.")
+                        help="Force sdbx to agressively offload to regular ram instead of keeping models in vram when it can.")
     parser.add_argument("--deterministic", action="store_true",
                         help="Make pytorch use slower deterministic algorithms when it can. Note that this might not make images deterministic in all cases.")
 
@@ -146,7 +146,7 @@ def _create_parser() -> EnhancedConfigArgParser:
         action="store_true",
         help='Frontends will start the web UI and connect to the provided AMQP URL to submit prompts.'
     )
-    parser.add_argument("--distributed-queue-name", type=str, default="comfyui",
+    parser.add_argument("--distributed-queue-name", type=str, default="sdbxui",
                         help="This name will be used by the frontends and workers to exchange prompt requests and replies. Progress updates will be prefixed by the queue name, followed by a '.', then the user ID")
     parser.add_argument("--external-address", required=False,
                         help="Specifies a base URL for external addresses reported by the API, such as for image paths.")
@@ -154,14 +154,14 @@ def _create_parser() -> EnhancedConfigArgParser:
     parser.add_argument("--disable-known-models", action="store_true", help="Disables automatic downloads of known models and prevents them from appearing in the UI.")
     parser.add_argument("--max-queue-size", type=int, default=65536, help="The API will reject prompt requests if the queue's size exceeds this value.")
     # tracing
-    parser.add_argument("--otel-service-name", type=str, default="comfyui", env_var="OTEL_SERVICE_NAME", help="The name of the service or application that is generating telemetry data.")
+    parser.add_argument("--otel-service-name", type=str, default="sdbxui", env_var="OTEL_SERVICE_NAME", help="The name of the service or application that is generating telemetry data.")
     parser.add_argument("--otel-service-version", type=str, default=__version__, env_var="OTEL_SERVICE_VERSION", help="The version of the service or application that is generating telemetry data.")
     parser.add_argument("--otel-exporter-otlp-endpoint", type=str, default=None, env_var="OTEL_EXPORTER_OTLP_ENDPOINT", help="A base endpoint URL for any signal type, with an optionally-specified port number. Helpful for when you're sending more than one signal to the same endpoint and want one environment variable to control the endpoint.")
     parser.add_argument("--force-channels-last", action="store_true", help="Force channels last format when inferencing the models.")
     parser.add_argument("--force-hf-local-dir-mode", action="store_true", help="Download repos from huggingface.co to the models/huggingface directory with the \"local_dir\" argument instead of models/huggingface_cache with the \"cache_dir\" argument, recreating the traditional file structure.")
 
     # now give plugins a chance to add configuration
-    for entry_point in entry_points().select(group='comfyui.custom_config'):
+    for entry_point in entry_points().select(group='sdbxui.custom_config'):
         try:
             plugin_callable: ConfigurationExtender | ModuleType = entry_point.load()
             if isinstance(plugin_callable, ModuleType):

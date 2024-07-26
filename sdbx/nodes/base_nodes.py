@@ -32,7 +32,7 @@ from .. import controlnet
 from ..open_exr import load_exr
 from .. import node_helpers
 from ..sd import VAE
-from ..utils import comfy_tqdm
+from ..utils import sdbx_tqdm
 
 
 class CLIPTextEncode:
@@ -397,7 +397,7 @@ class SaveLatent:
     @classmethod
     def INPUT_TYPES(s):
         return {"required": { "samples": ("LATENT", ),
-                              "filename_prefix": ("STRING", {"default": "latents/ComfyUI"})},
+                              "filename_prefix": ("STRING", {"default": "latents/sdbx"})},
                 "hidden": {"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"},
                 }
     RETURN_TYPES = ()
@@ -407,7 +407,7 @@ class SaveLatent:
 
     CATEGORY = "_for_testing"
 
-    def save(self, samples, filename_prefix="ComfyUI", prompt=None, extra_pnginfo=None):
+    def save(self, samples, filename_prefix="sdbx", prompt=None, extra_pnginfo=None):
         full_output_folder, filename, counter, subfolder, filename_prefix = folder_paths.get_save_image_path(filename_prefix, self.output_dir)
 
         # support save metadata for latent sharing
@@ -534,7 +534,7 @@ class DiffusersLoader:
                     model_path = path
                     break
         if not os.path.exists(model_path):
-            with comfy_tqdm():
+            with sdbx_tqdm():
                 model_path = snapshot_download(model_path)
 
         return diffusers_load.load_diffusers(model_path, output_vae=output_vae, output_clip=output_clip, embedding_directory=folder_paths.get_folder_paths("embeddings"))
@@ -1415,7 +1415,7 @@ class SaveImage:
     def INPUT_TYPES(s):
         return {"required":
                     {"images": ("IMAGE", ),
-                     "filename_prefix": ("STRING", {"default": "ComfyUI"})},
+                     "filename_prefix": ("STRING", {"default": "sdbx"})},
                 "hidden": {"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"},
                 }
 
@@ -1426,7 +1426,7 @@ class SaveImage:
 
     CATEGORY = "image"
 
-    def save_images(self, images, filename_prefix="ComfyUI", prompt=None, extra_pnginfo=None):
+    def save_images(self, images, filename_prefix="sdbx", prompt=None, extra_pnginfo=None):
         filename_prefix += self.prefix_append
         full_output_folder, filename, counter, subfolder, filename_prefix = folder_paths.get_save_image_path(filename_prefix, self.output_dir, images[0].shape[1], images[0].shape[0])
         results = list()

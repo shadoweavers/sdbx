@@ -9,5 +9,5 @@ globalProperties:
     - "api_response.py"
 additionalProperties:
   generateSourceCodeOnly: true
-  packageName: comfy.api
+  packageName: sdbx.api
   generateAliasAsModel: true

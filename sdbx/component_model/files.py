@@ -6,7 +6,7 @@ from importlib import resources as resources
 from typing import Optional
 
 
-def get_path_as_dict(config_dict_or_path: str | dict | None, config_path_inside_package: str, package: str = 'comfy') -> dict:
+def get_path_as_dict(config_dict_or_path: str | dict | None, config_path_inside_package: str, package: str = 'sdbx') -> dict:
     """
     Given a package and a filename inside the package, returns it as a JSON dict; or, returns the file pointed to by
     config_dict_or_path, when it is not None and when it exists

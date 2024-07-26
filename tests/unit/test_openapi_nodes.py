@@ -155,7 +155,7 @@ def test_legacy_output_uris(use_temporary_output_directory):
     images_ = [_image_1x1, _image_1x1]
     output_paths, = n.execute(images=images_)
     # from SaveImage node
-    full_output_folder, filename, counter, subfolder, filename_prefix = folder_paths.get_save_image_path("ComfyUI", str(use_temporary_output_directory), images_[0].shape[1], images_[0].shape[0])
+    full_output_folder, filename, counter, subfolder, filename_prefix = folder_paths.get_save_image_path("sdbx", str(use_temporary_output_directory), images_[0].shape[1], images_[0].shape[0])
     file1 = f"{filename}_{counter:05}_.png"
     file2 = f"{filename}_{counter + 1:05}_.png"
     files = [file1, file2]

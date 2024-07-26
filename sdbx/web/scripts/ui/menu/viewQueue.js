@@ -11,7 +11,7 @@ export class ComfyViewQueueButton extends ComfyViewListButton {
 				content: "View Queue",
 				icon: "format-list-numbered",
 				tooltip: "View queue",
-				classList: "comfyui-button comfyui-queue-button",
+				classList: "sdbxui-button sdbxui-queue-button",
 			}),
 			list: ComfyViewQueueList,
 			mode: "Queue",

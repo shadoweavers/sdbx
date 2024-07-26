@@ -51,11 +51,11 @@ const colorPalettes = {
 				"EVENT_LINK_COLOR": "#A86",
 				"CONNECTING_LINK_COLOR": "#AFA",
 			},
-			"comfy_base": {
+			"sdbx_base": {
 				"fg-color": "#fff",
 				"bg-color": "#202020",
-				"comfy-menu-bg": "#353535",
-				"comfy-input-bg": "#222",
+				"sdbx-menu-bg": "#353535",
+				"sdbx-input-bg": "#222",
 				"input-text": "#ddd",
 				"descrip-text": "#999",
 				"drag-text": "#ccc",
@@ -112,11 +112,11 @@ const colorPalettes = {
 				"EVENT_LINK_COLOR": "#FF9800",
 				"CONNECTING_LINK_COLOR": "#2196F3",
 			},
-			"comfy_base": {
+			"sdbx_base": {
 				"fg-color": "#222",
 				"bg-color": "#DDD",
-				"comfy-menu-bg": "#F5F5F5",
-				"comfy-input-bg": "#C9C9C9",
+				"sdbx-menu-bg": "#F5F5F5",
+				"sdbx-input-bg": "#C9C9C9",
 				"input-text": "#222",
 				"descrip-text": "#444",
 				"drag-text": "#555",
@@ -172,11 +172,11 @@ const colorPalettes = {
 				"EVENT_LINK_COLOR": "#268bd2", // Solarized Blue
 				"CONNECTING_LINK_COLOR": "#859900", // Solarized Green
 			},
-			"comfy_base": {
+			"sdbx_base": {
 				"fg-color": "#fdf6e3", // Base3
 				"bg-color": "#002b36", // Base03
-				"comfy-menu-bg": "#073642", // Base02
-				"comfy-input-bg": "#002b36", // Base03
+				"sdbx-menu-bg": "#073642", // Base02
+				"sdbx-input-bg": "#002b36", // Base03
 				"input-text": "#93a1a1", // Base1
 				"descrip-text": "#586e75", // Base01
 				"drag-text": "#839496", // Base0
@@ -245,11 +245,11 @@ const colorPalettes = {
 			  "EVENT_LINK_COLOR": "#A86",
 			  "CONNECTING_LINK_COLOR": "#AFA"
 			},
-			"comfy_base": {
+			"sdbx_base": {
 			  "fg-color": "#fff",
 			  "bg-color": "#2b2f38",
-			  "comfy-menu-bg": "#242730",
-			  "comfy-input-bg": "#2b2f38",
+			  "sdbx-menu-bg": "#242730",
+			  "sdbx-input-bg": "#2b2f38",
 			  "input-text": "#ddd",
 			  "descrip-text": "#b2b7bd",
 			  "drag-text": "#ccc",
@@ -318,11 +318,11 @@ const colorPalettes = {
 			  "EVENT_LINK_COLOR": "#A86",
 			  "CONNECTING_LINK_COLOR": "#AFA"
 			},
-			"comfy_base": {
+			"sdbx_base": {
 			  "fg-color": "#e5eaf0",
 			  "bg-color": "#2e3440",
-			  "comfy-menu-bg": "#161b22",
-			  "comfy-input-bg": "#2e3440",
+			  "sdbx-menu-bg": "#161b22",
+			  "sdbx-input-bg": "#2e3440",
 			  "input-text": "#bcc2c8",
 			  "descrip-text": "#999",
 			  "drag-text": "#ccc",
@@ -391,11 +391,11 @@ const colorPalettes = {
 			  "EVENT_LINK_COLOR": "#A86",
 			  "CONNECTING_LINK_COLOR": "#AFA"
 			},
-			"comfy_base": {
+			"sdbx_base": {
 			  "fg-color": "#e5eaf0",
 			  "bg-color": "#161b22",
-			  "comfy-menu-bg": "#13171d",
-			  "comfy-input-bg": "#161b22",
+			  "sdbx-menu-bg": "#13171d",
+			  "sdbx-input-bg": "#161b22",
 			  "input-text": "#bcc2c8",
 			  "descrip-text": "#999",
 			  "drag-text": "#ccc",
@@ -478,7 +478,7 @@ app.registerExtension({
 				"colors": {
 					"node_slot": {},
 					"litegraph_base": {},
-					"comfy_base": {}
+					"sdbx_base": {}
 				}
 			};
 
@@ -489,9 +489,9 @@ app.registerExtension({
 					colorPalette.colors.litegraph_base[key] = "";
 				}
 			}
-			for (const key in defaultColorPalette.colors.comfy_base) {
-				if (!colorPalette.colors.comfy_base[key]) {
-					colorPalette.colors.comfy_base[key] = "";
+			for (const key in defaultColorPalette.colors.sdbx_base) {
+				if (!colorPalette.colors.sdbx_base[key]) {
+					colorPalette.colors.sdbx_base[key] = "";
 				}
 			}
 
@@ -591,11 +591,11 @@ app.registerExtension({
 						}
 					}
 				}
-				// Sets the color of ComfyUI elements
-				if (colorPalette.colors.comfy_base) {
+				// Sets the color of sdbx elements
+				if (colorPalette.colors.sdbx_base) {
 					const rootStyle = document.documentElement.style;
-					for (const key in colorPalette.colors.comfy_base) {
-						rootStyle.setProperty('--' + key, colorPalette.colors.comfy_base[key]);
+					for (const key in colorPalette.colors.sdbx_base) {
+						rootStyle.setProperty('--' + key, colorPalette.colors.sdbx_base[key]);
 					}
 				}
 				app.canvas.draw(true, true);

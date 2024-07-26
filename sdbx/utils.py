@@ -680,7 +680,7 @@ def get_project_root() -> str:
 
 
 @contextmanager
-def comfy_tqdm():
+def sdbx_tqdm():
     """
     Monky patches child calls to tqdm and sends the progress to the UI
     :return:
@@ -707,7 +707,7 @@ def comfy_tqdm():
 
 
 @contextmanager
-def comfy_progress(total: float) -> ProgressBar:
+def sdbx_progress(total: float) -> ProgressBar:
     ctx = current_execution_context()
     if ctx.server.receive_all_progress_notifications:
         yield ProgressBar(total)

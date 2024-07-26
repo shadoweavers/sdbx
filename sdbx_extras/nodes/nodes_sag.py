@@ -4,10 +4,10 @@ import torch.nn.functional as F
 import math
 
 from einops import rearrange, repeat
-from comfy.ldm.modules.attention import optimized_attention
-from comfy import samplers
+from sdbx.ldm.modules.attention import optimized_attention
+from sdbx import samplers
 
-# from comfy/ldm/modules/attention.py
+# from sdbx/ldm/modules/attention.py
 # but modified to return attention scores as well as output
 def attention_basic_with_sim(q, k, v, heads, mask=None, attn_precision=None):
     b, _, dim_head = q.shape

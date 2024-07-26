@@ -21,7 +21,7 @@ import { GroupNodeConfig, GroupNodeHandler } from "./groupNode.js";
 // Open the manage dialog and Drag and drop elements using the "Name:" label as handle
 
 const id = "Comfy.NodeTemplates";
-const file = "comfy.templates.json";
+const file = "sdbx.templates.json";
 
 class ManageTemplates extends ComfyDialog {
 	constructor() {
@@ -30,7 +30,7 @@ class ManageTemplates extends ComfyDialog {
 			this.templates = v;
 		});
 
-		this.element.classList.add("comfy-manage-templates");
+		this.element.classList.add("sdbx-manage-templates");
 		this.draggedEl = null;
 		this.saveVisualCue = null;
 		this.emptyImg = new Image();
@@ -183,7 +183,7 @@ class ManageTemplates extends ComfyDialog {
 									gridTemplateColumns: "1fr auto",
 									border: "1px dashed transparent",
 									gap: "5px",
-									backgroundColor: "var(--comfy-menu-bg)"
+									backgroundColor: "var(--sdbx-menu-bg)"
 								},
 								ondragstart: (e) => {
 									this.draggedEl = e.currentTarget;
@@ -253,14 +253,14 @@ class ManageTemplates extends ComfyDialog {
 												el.style.transitionDuration = '0s';
 												this.saveVisualCue = setTimeout(function () {
 													el.style.transitionDuration = '.7s';
-													el.style.backgroundColor = 'var(--comfy-input-bg)';
+													el.style.backgroundColor = 'var(--sdbx-input-bg)';
 												}, 15);
 											},
 											onkeypress: (e) => {
 												var el = e.target;
 												clearTimeout(this.saveVisualCue);
 												el.style.transitionDuration = '0s';
-												el.style.backgroundColor = 'var(--comfy-input-bg)';
+												el.style.backgroundColor = 'var(--sdbx-input-bg)';
 											},
 											$: (el) => (nameInput = el),
 										})

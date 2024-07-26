@@ -15,7 +15,7 @@ from .package_typing import ExportedNodes
 from ..cmd.main_pre import tracer
 from ..component_model.files import get_package_as_path
 
-_comfy_nodes: ExportedNodes = ExportedNodes()
+_sdbx_nodes: ExportedNodes = ExportedNodes()
 
 
 def _import_nodes_in_module(exported_nodes: ExportedNodes, module: types.ModuleType):
@@ -102,28 +102,28 @@ def _import_and_enumerate_nodes_in_module(module: types.ModuleType,
 @tracer.start_as_current_span("Import All Nodes In Workspace")
 def import_all_nodes_in_workspace(vanilla_custom_nodes=True, raise_on_failure=False) -> ExportedNodes:
     # now actually import the nodes, to improve control of node loading order
-    from comfy_extras import nodes as comfy_extras_nodes
+    from sdbx_extras import nodes as sdbx_extras_nodes
     from ..cli_args import args
     from . import base_nodes
     from .vanilla_node_importing import mitigated_import_of_vanilla_custom_nodes
     # only load these nodes once
-    if len(_comfy_nodes) == 0:
+    if len(_sdbx_nodes) == 0:
         base_and_extra = reduce(lambda x, y: x.update(y),
                                 map(lambda module_inner: _import_and_enumerate_nodes_in_module(module_inner, raise_on_failure=raise_on_failure), [
                                     # this is the list of default nodes to import
                                     base_nodes,
-                                    comfy_extras_nodes
+                                    sdbx_extras_nodes
                                 ]),
                                 ExportedNodes())
         custom_nodes_mappings = ExportedNodes()
 
         if args.disable_all_custom_nodes:
             logging.info("Loading custom nodes was disabled, only base and extra nodes were loaded")
-            _comfy_nodes.update(base_and_extra)
-            return _comfy_nodes
+            _sdbx_nodes.update(base_and_extra)
+            return _sdbx_nodes
 
         # load from entrypoints
-        for entry_point in entry_points().select(group='comfyui.custom_nodes'):
+        for entry_point in entry_points().select(group='sdbxui.custom_nodes'):
             # Load the module associated with the current entry point
             try:
                 module = entry_point.load()
@@ -143,5 +143,5 @@ def import_all_nodes_in_workspace(vanilla_custom_nodes=True, raise_on_failure=Fa
         # don't allow custom nodes to overwrite base nodes
         custom_nodes_mappings -= base_and_extra
 
-        _comfy_nodes.update(base_and_extra + custom_nodes_mappings)
-    return _comfy_nodes
+        _sdbx_nodes.update(base_and_extra + custom_nodes_mappings)
+    return _sdbx_nodes

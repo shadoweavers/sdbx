@@ -6,8 +6,8 @@ export class ComfyDialog extends EventTarget {
 	constructor(type = "div", buttons = null) {
 		super();
 		this.#buttons = buttons;
-		this.element = $el(type + ".comfy-modal", { parent: document.body }, [
-			$el("div.comfy-modal-content", [$el("p", { $: (p) => (this.textElement = p) }), ...this.createButtons()]),
+		this.element = $el(type + ".sdbx-modal", { parent: document.body }, [
+			$el("div.sdbx-modal-content", [$el("p", { $: (p) => (this.textElement = p) }), ...this.createButtons()]),
 		]);
 	}
 

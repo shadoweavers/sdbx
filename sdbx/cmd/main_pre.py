@@ -3,7 +3,7 @@ This should be imported before entrypoints to correctly configure global options
 
 Use this instead of cli_args to import the args:
 
->>> from comfy.cmd.main_pre import args
+>>> from sdbx.cmd.main_pre import args
 
 It will enable command line argument parsing. If this isn't desired, you must author your own implementation of these fixes.
 """
@@ -62,7 +62,7 @@ def _create_tracer():
     if has_endpoint:
         otlp_exporter = OTLPSpanExporter()
     # elif is_debugging:
-    #     otlp_exporter = ConsoleSpanExporter("comfyui")
+    #     otlp_exporter = ConsoleSpanExporter("sdbxui")
     else:
         otlp_exporter = SpanExporter()
 

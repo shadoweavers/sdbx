@@ -10,7 +10,7 @@ export class ComfyViewHistoryButton extends ComfyViewListButton {
 				content: "View History",
 				icon: "history",
 				tooltip: "View history",
-				classList: "comfyui-button comfyui-history-button",
+				classList: "sdbxui-button sdbxui-history-button",
 			}),
 			list: ComfyViewHistoryList,
 			mode: "History",

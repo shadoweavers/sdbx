@@ -12,7 +12,7 @@ from aiormq import AMQPConnectionError
 
 from .distributed_progress import DistributedExecutorToClientProgress
 from .distributed_types import RpcRequest, RpcReply
-from ..client.embedded_comfy_client import EmbeddedComfyClient
+from ..client.embedded_sdbx_client import EmbeddedComfyClient
 from ..cmd.main_pre import tracer
 from ..component_model.queue_types import ExecutionStatus
 
@@ -22,9 +22,9 @@ class DistributedPromptWorker:
     A distributed prompt worker.
     """
 
-    def __init__(self, embedded_comfy_client: Optional[EmbeddedComfyClient] = None,
+    def __init__(self, embedded_sdbx_client: Optional[EmbeddedComfyClient] = None,
                  connection_uri: str = "amqp://localhost:5672/",
-                 queue_name: str = "comfyui",
+                 queue_name: str = "sdbxui",
                  health_check_port: int = 9090,
                  loop: Optional[AbstractEventLoop] = None):
         self._rpc = None
@@ -33,7 +33,7 @@ class DistributedPromptWorker:
         self._queue_name = queue_name
         self._connection_uri = connection_uri
         self._loop = loop or asyncio.get_event_loop()
-        self._embedded_comfy_client = embedded_comfy_client
+        self._embedded_sdbx_client = embedded_sdbx_client
         self._health_check_port = health_check_port
         self._health_check_site = None
 
@@ -70,7 +70,7 @@ class DistributedPromptWorker:
                                    ExecutionStatus("error", False, [str(e)])))
         reply: RpcReply
         try:
-            output_dict = await self._embedded_comfy_client.queue_prompt(request_obj.prompt,
+            output_dict = await self._embedded_sdbx_client.queue_prompt(request_obj.prompt,
                                                                          request_obj.prompt_id,
                                                                          client_id=request_obj.user_id)
             reply = RpcReply(request_obj.prompt_id, request_obj.user_token, output_dict,
@@ -93,10 +93,10 @@ class DistributedPromptWorker:
         self._channel = await self._connection.channel()
         self._rpc = await JsonRPC.create(channel=self._channel, auto_delete=True, durable=False)
 
-        if self._embedded_comfy_client is None:
-            self._embedded_comfy_client = EmbeddedComfyClient(progress_handler=DistributedExecutorToClientProgress(self._rpc, self._queue_name, self._loop))
-        if not self._embedded_comfy_client.is_running:
-            await self._exit_stack.enter_async_context(self._embedded_comfy_client)
+        if self._embedded_sdbx_client is None:
+            self._embedded_sdbx_client = EmbeddedComfyClient(progress_handler=DistributedExecutorToClientProgress(self._rpc, self._queue_name, self._loop))
+        if not self._embedded_sdbx_client.is_running:
+            await self._exit_stack.enter_async_context(self._embedded_sdbx_client)
 
         await self._rpc.register(self._queue_name, self._do_work_item)
         await self._start_health_check_server()

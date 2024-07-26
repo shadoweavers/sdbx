@@ -5,12 +5,12 @@ import aiohttp
 import pytest
 from can_ada import URL, parse
 
-from comfy.client.aio_client import AsyncRemoteComfyClient
-from comfy.client.sdxl_with_refiner_workflow import sdxl_workflow_with_refiner
+from sdbx.client.aio_client import AsyncRemoteComfyClient
+from sdbx.client.sdxl_with_refiner_workflow import sdxl_workflow_with_refiner
 
 
 @pytest.mark.asyncio
-async def test_completes_prompt(comfy_background_server):
+async def test_completes_prompt(sdbx_background_server):
     client = AsyncRemoteComfyClient()
     random_seed = random.randint(1, 4294967295)
     prompt = sdxl_workflow_with_refiner("test", inference_steps=1, seed=random_seed, refiner_steps=1)
@@ -19,7 +19,7 @@ async def test_completes_prompt(comfy_background_server):
 
 
 @pytest.mark.asyncio
-async def test_completes_prompt_with_ui(comfy_background_server):
+async def test_completes_prompt_with_ui(sdbx_background_server):
     client = AsyncRemoteComfyClient()
     random_seed = random.randint(1, 4294967295)
     prompt = sdxl_workflow_with_refiner("test", inference_steps=1, seed=random_seed, refiner_steps=1)
@@ -29,7 +29,7 @@ async def test_completes_prompt_with_ui(comfy_background_server):
 
 
 @pytest.mark.asyncio
-async def test_completes_prompt_with_image_urls(comfy_background_server):
+async def test_completes_prompt_with_image_urls(sdbx_background_server):
     client = AsyncRemoteComfyClient()
     random_seed = random.randint(1, 4294967295)
     prompt = sdxl_workflow_with_refiner("test", inference_steps=1, seed=random_seed, refiner_steps=1, filename_prefix="subdirtest/sdxl")

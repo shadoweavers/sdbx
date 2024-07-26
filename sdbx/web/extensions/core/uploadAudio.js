@@ -70,7 +70,7 @@ async function uploadFile(
 app.registerExtension({
   name: "Comfy.AudioWidget",
   async beforeRegisterNodeDef(nodeType, nodeData) {
-    if (["LoadAudio", "SaveAudio", "PreviewAudio"].includes(nodeType.comfyClass)) {
+    if (["LoadAudio", "SaveAudio", "PreviewAudio"].includes(nodeType.sdbxClass)) {
       nodeData.input.required.audioUI = ["AUDIO_UI"]
     }
   },
@@ -79,7 +79,7 @@ app.registerExtension({
       AUDIO_UI(node, inputName) {
         const audio = document.createElement("audio")
         audio.controls = true
-        audio.classList.add("comfy-audio")
+        audio.classList.add("sdbx-audio")
         audio.setAttribute("name", "media")
 
         const audioUIWidget = node.addDOMWidget(

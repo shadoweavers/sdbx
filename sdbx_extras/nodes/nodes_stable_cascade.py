@@ -17,8 +17,8 @@
 """
 
 import torch
-import comfy.nodes.common
-import comfy.utils
+import sdbx.nodes.common
+import sdbx.utils
 
 
 class StableCascade_EmptyLatentImage:
@@ -28,8 +28,8 @@ class StableCascade_EmptyLatentImage:
     @classmethod
     def INPUT_TYPES(s):
         return {"required": {
-            "width": ("INT", {"default": 1024, "min": 256, "max": comfy.nodes.common.MAX_RESOLUTION, "step": 8}),
-            "height": ("INT", {"default": 1024, "min": 256, "max": comfy.nodes.common.MAX_RESOLUTION, "step": 8}),
+            "width": ("INT", {"default": 1024, "min": 256, "max": sdbx.nodes.common.MAX_RESOLUTION, "step": 8}),
+            "height": ("INT", {"default": 1024, "min": 256, "max": sdbx.nodes.common.MAX_RESOLUTION, "step": 8}),
             "compression": ("INT", {"default": 42, "min": 4, "max": 128, "step": 1}),
             "batch_size": ("INT", {"default": 1, "min": 1, "max": 4096})
         }}
@@ -71,7 +71,7 @@ class StableCascade_StageC_VAEEncode:
         out_width = (width // compression) * vae.downscale_ratio
         out_height = (height // compression) * vae.downscale_ratio
 
-        s = comfy.utils.common_upscale(image.movedim(-1,1), out_width, out_height, "bicubic", "center").movedim(1,-1)
+        s = sdbx.utils.common_upscale(image.movedim(-1,1), out_width, out_height, "bicubic", "center").movedim(1,-1)
 
         c_latent = vae.encode(s[:,:,:,:3])
         b_latent = torch.zeros([c_latent.shape[0], 4, (height // 8) * 2, (width // 8) * 2])

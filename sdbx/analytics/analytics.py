@@ -33,7 +33,7 @@ def initialize_event_tracking(loop: Optional[asyncio.AbstractEventLoop] = None):
 
     _event_tracker = MultiEventTracker(_event_trackers)
 
-    def track_event(name: str, url: str = "app://sdbxui", props: Optional[dict] = None):
+    def track_event(name: str, url: str = "app://sdbx", props: Optional[dict] = None):
         # not awaited, we don't care about event tracking in terms of blocking
         loop.create_task(_event_tracker.track_event(name, url, props=props))
 

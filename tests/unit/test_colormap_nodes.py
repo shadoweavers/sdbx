@@ -1,6 +1,6 @@
 import pytest
 import torch
-from comfy_extras.nodes.nodes_apply_color_map import ImageApplyColorMap
+from sdbx_extras.nodes.nodes_apply_color_map import ImageApplyColorMap
 
 
 @pytest.fixture

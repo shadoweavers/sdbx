@@ -9,8 +9,8 @@ import uuid
 import functools
 import typing_extensions
 
-from comfy.api import exceptions
-from comfy.api.configurations import schema_configuration
+from sdbx.api import exceptions
+from sdbx.api.configurations import schema_configuration
 
 from . import validation
 

@@ -134,7 +134,7 @@ class DistributedPromptQueue(AbstractPromptQueue, AsyncAbstractPromptQueue):
             worker_event_loop = asyncio.get_event_loop()
         except RuntimeError:
             worker_event_loop = None
-        assert self._loop != worker_event_loop, "get only makes sense in the context of the legacy sdbxui prompt worker"
+        assert self._loop != worker_event_loop, "get only makes sense in the context of the legacy comfyui prompt worker"
         # spin wait
         timeout = timeout or 30.0
         item = None
@@ -232,7 +232,7 @@ class DistributedPromptQueue(AbstractPromptQueue, AsyncAbstractPromptQueue):
 
     def __init__(self,
                  caller_server: Optional[ExecutorToClientProgress | PromptServer] = None,
-                 queue_name: str = "sdbxui",
+                 queue_name: str = "sdbx",
                  connection_uri="amqp://localhost/",
                  is_caller=True,
                  is_callee=True,

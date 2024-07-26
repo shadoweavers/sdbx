@@ -1,6 +1,6 @@
-from comfy.cmd import folder_paths
-from comfy.nodes.base_nodes import LoadImage
-from comfy.nodes.common import MAX_RESOLUTION
+from sdbx.cmd import folder_paths
+from sdbx.nodes.base_nodes import LoadImage
+from sdbx.nodes.common import MAX_RESOLUTION
 
 
 class WebcamCapture(LoadImage):

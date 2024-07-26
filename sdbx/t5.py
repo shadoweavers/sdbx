@@ -1,6 +1,6 @@
 import torch
 import math
-from comfy.ldm.modules.attention import optimized_attention_for_device
+from sdbx.ldm.modules.attention import optimized_attention_for_device
 
 class T5LayerNorm(torch.nn.Module):
     def __init__(self, hidden_size, eps=1e-6, dtype=None, device=None, operations=None):

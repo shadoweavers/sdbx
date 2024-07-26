@@ -1,5 +1,5 @@
 import torch
-from comfy import utils
+from sdbx import utils
 
 class PatchModelAddDownscale:
     upscale_methods = ["bicubic", "nearest-exact", "bilinear", "area", "bislerp"]

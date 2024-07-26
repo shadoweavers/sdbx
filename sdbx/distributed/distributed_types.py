@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Tuple, Literal, List
 
 from ..api.components.schema.prompt import PromptDict, Prompt
-from ..auth.permissions import ComfyJwt, jwt_decode
+from ..auth.permissions import sdbxJwt, jwt_decode
 from ..component_model.queue_types import NamedQueueTuple, TaskInvocation, ExecutionStatus
 
 
@@ -18,7 +18,7 @@ class DistributedBase:
         return self.decoded_token["sub"]
 
     @property
-    def decoded_token(self) -> ComfyJwt:
+    def decoded_token(self) -> sdbxJwt:
         return jwt_decode(self.user_token)
 
 

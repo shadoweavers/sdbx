@@ -28,10 +28,10 @@ from __future__ import annotations
 import string
 from typing import Optional, List
 
-from comfy.language.transformers_model_management import TransformersManagedModel
-from comfy.nodes.package_typing import CustomNode, InputTypes, ValidatedNodeResult
-from comfy.sd import CLIP
-from comfy.sd1_clip import SDTokenizer
+from sdbx.language.transformers_model_management import TransformersManagedModel
+from sdbx.nodes.package_typing import CustomNode, InputTypes, ValidatedNodeResult
+from sdbx.sd import CLIP
+from sdbx.sd1_clip import SDTokenizer
 
 
 class TextDiffuserAddTokens(CustomNode):

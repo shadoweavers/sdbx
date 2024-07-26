@@ -3,7 +3,7 @@ import numpy as np
 import torch
 from torch import Tensor
 
-from comfy.nodes.package_typing import CustomNode, InputTypes, ValidatedNodeResult
+from sdbx.nodes.package_typing import CustomNode, InputTypes, ValidatedNodeResult
 
 _available_colormaps = ["Grayscale"] + [attr for attr in dir(cv2) if attr.startswith('COLORMAP')]
 

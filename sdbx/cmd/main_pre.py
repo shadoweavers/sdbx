@@ -62,7 +62,7 @@ def _create_tracer():
     if has_endpoint:
         otlp_exporter = OTLPSpanExporter()
     # elif is_debugging:
-    #     otlp_exporter = ConsoleSpanExporter("sdbxui")
+    #     otlp_exporter = ConsoleSpanExporter("sdbx")
     else:
         otlp_exporter = SpanExporter()
 

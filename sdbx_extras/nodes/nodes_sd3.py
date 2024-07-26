@@ -1,10 +1,10 @@
 import torch
 
-import comfy.model_management
-import comfy.sd
-from comfy.cmd import folder_paths
-from comfy.model_downloader import get_or_download, get_filename_list_with_downloadable, KNOWN_CLIP_MODELS
-from comfy.nodes import base_nodes as nodes
+import sdbx.model_management
+import sdbx.sd
+from sdbx.cmd import folder_paths
+from sdbx.model_downloader import get_or_download, get_filename_list_with_downloadable, KNOWN_CLIP_MODELS
+from sdbx.nodes import base_nodes as nodes
 
 
 class TripleCLIPLoader:
@@ -23,13 +23,13 @@ class TripleCLIPLoader:
         clip_path1 = get_or_download("clip", clip_name1, KNOWN_CLIP_MODELS)
         clip_path2 = get_or_download("clip", clip_name2, KNOWN_CLIP_MODELS)
         clip_path3 = get_or_download("clip", clip_name3, KNOWN_CLIP_MODELS)
-        clip = comfy.sd.load_clip(ckpt_paths=[clip_path1, clip_path2, clip_path3], embedding_directory=folder_paths.get_folder_paths("embeddings"))
+        clip = sdbx.sd.load_clip(ckpt_paths=[clip_path1, clip_path2, clip_path3], embedding_directory=folder_paths.get_folder_paths("embeddings"))
         return (clip,)
 
 
 class EmptySD3LatentImage:
     def __init__(self):
-        self.device = comfy.model_management.intermediate_device()
+        self.device = sdbx.model_management.intermediate_device()
 
     @classmethod
     def INPUT_TYPES(s):

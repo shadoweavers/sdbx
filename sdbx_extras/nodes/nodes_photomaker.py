@@ -1,9 +1,9 @@
 import torch
 import torch.nn as nn
-from comfy.cmd import folder_paths
-from comfy import clip_model, model_management, utils
-from comfy import clip_vision
-from comfy import ops
+from sdbx.cmd import folder_paths
+from sdbx import clip_model, model_management, utils
+from sdbx import clip_vision
+from sdbx import ops
 
 # code for model from: https://github.com/TencentARC/PhotoMaker/blob/main/photomaker/model.py under Apache License Version 2.0
 VISION_CONFIG_DICT = {

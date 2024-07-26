@@ -1,7 +1,7 @@
 import typing
 import typing_extensions
 
-from comfy.api.apis.tags.default_api import DefaultApi
+from sdbx.api.apis.tags.default_api import DefaultApi
 
 TagToApi = typing.TypedDict(
     'TagToApi',

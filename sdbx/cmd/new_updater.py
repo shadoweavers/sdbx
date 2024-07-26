@@ -7,11 +7,11 @@ base_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", ".."
 def update_windows_updater():
     top_path = os.path.dirname(base_path)
     updater_path = os.path.join(base_path, ".ci/update_windows/update.py")
-    bat_path = os.path.join(base_path, ".ci/update_windows/update_sdbxui.bat")
+    bat_path = os.path.join(base_path, ".ci/update_windows/update_sdbx.bat")
 
     dest_updater_path = os.path.join(top_path, "update/update.py")
-    dest_bat_path = os.path.join(top_path, "update/update_sdbxui.bat")
-    dest_bat_deps_path = os.path.join(top_path, "update/update_sdbxui_and_python_dependencies.bat")
+    dest_bat_path = os.path.join(top_path, "update/update_sdbx.bat")
+    dest_bat_deps_path = os.path.join(top_path, "update/update_sdbx_and_python_dependencies.bat")
 
     try:
         with open(dest_bat_path, 'rb') as f:
@@ -26,7 +26,7 @@ def update_windows_updater():
     try:
         with open(dest_bat_deps_path, 'rb') as f:
             contents = f.read()
-            contents = contents.replace(b'..\\python_embeded\\python.exe .\\update.py ..\\sdbx\\', b'call update_sdbxui.bat nopause')
+            contents = contents.replace(b'..\\python_embeded\\python.exe .\\update.py ..\\sdbx\\', b'call update_sdbx.bat nopause')
         with open(dest_bat_deps_path, 'wb') as f:
             f.write(contents)
     except:

@@ -7,7 +7,7 @@ from typing import NamedTuple
 from sdbx.component_model.executor_types import ExecutorToClientProgress
 from sdbx.distributed.server_stub import ServerStub
 
-_current_context = ContextVar("sdbxui_execution_context")
+_current_context = ContextVar("sdbx_execution_context")
 
 
 class ExecutionContext(NamedTuple):

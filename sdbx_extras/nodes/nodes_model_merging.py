@@ -1,14 +1,14 @@
-from comfy import sd, utils
-from comfy import model_base
-from comfy import model_management
-from comfy import model_sampling
-from comfy.cmd import folder_paths
+from sdbx import sd, utils
+from sdbx import model_base
+from sdbx import model_management
+from sdbx import model_sampling
+from sdbx.cmd import folder_paths
 
 import torch
 import json
 import os
 
-from comfy.cli_args import args
+from sdbx.cli_args import args
 
 class ModelMergeSimple:
     @classmethod

@@ -1,18 +1,18 @@
 import typing
 import typing_extensions
 
-from comfy.api.apis.paths.solidus import Solidus
-from comfy.api.apis.paths.api_v1_images_digest import ApiV1ImagesDigest
-from comfy.api.apis.paths.api_v1_prompts import ApiV1Prompts
-from comfy.api.apis.paths.embeddings import Embeddings
-from comfy.api.apis.paths.extensions import Extensions
-from comfy.api.apis.paths.history import History
-from comfy.api.apis.paths.interrupt import Interrupt
-from comfy.api.apis.paths.object_info import ObjectInfo
-from comfy.api.apis.paths.prompt import Prompt
-from comfy.api.apis.paths.queue import Queue
-from comfy.api.apis.paths.upload_image import UploadImage
-from comfy.api.apis.paths.view import View
+from sdbx.api.apis.paths.solidus import Solidus
+from sdbx.api.apis.paths.api_v1_images_digest import ApiV1ImagesDigest
+from sdbx.api.apis.paths.api_v1_prompts import ApiV1Prompts
+from sdbx.api.apis.paths.embeddings import Embeddings
+from sdbx.api.apis.paths.extensions import Extensions
+from sdbx.api.apis.paths.history import History
+from sdbx.api.apis.paths.interrupt import Interrupt
+from sdbx.api.apis.paths.object_info import ObjectInfo
+from sdbx.api.apis.paths.prompt import Prompt
+from sdbx.api.apis.paths.queue import Queue
+from sdbx.api.apis.paths.upload_image import UploadImage
+from sdbx.api.apis.paths.view import View
 
 PathToApi = typing.TypedDict(
     'PathToApi',

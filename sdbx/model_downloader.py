@@ -164,9 +164,9 @@ KNOWN_CHECKPOINTS = [
     HuggingFile("stabilityai/stable-diffusion-xl-refiner-1.0", "sd_xl_refiner_1.0.safetensors"),
     HuggingFile("stabilityai/sdxl-turbo", "sd_xl_turbo_1.0_fp16.safetensors"),
     HuggingFile("stabilityai/sdxl-turbo", "sd_xl_turbo_1.0.safetensors", show_in_ui=False),
-    HuggingFile("stabilityai/stable-cascade", "sdbxui_checkpoints/stable_cascade_stage_b.safetensors"),
-    HuggingFile("stabilityai/stable-cascade", "sdbxui_checkpoints/stable_cascade_stage_c.safetensors"),
-    HuggingFile("stabilityai/stable-cascade", "sdbxui_checkpoints/stage_a.safetensors", show_in_ui=False),
+    HuggingFile("stabilityai/stable-cascade", "sdbx_checkpoints/stable_cascade_stage_b.safetensors"),
+    HuggingFile("stabilityai/stable-cascade", "sdbx_checkpoints/stable_cascade_stage_c.safetensors"),
+    HuggingFile("stabilityai/stable-cascade", "sdbx_checkpoints/stage_a.safetensors", show_in_ui=False),
     HuggingFile("runwayml/stable-diffusion-v1-5", "v1-5-pruned-emaonly.safetensors"),
     HuggingFile("runwayml/stable-diffusion-v1-5", "v1-5-pruned-emaonly.ckpt", show_in_ui=False),
     HuggingFile("runwayml/stable-diffusion-v1-5", "v1-5-pruned.ckpt", show_in_ui=False),
@@ -196,7 +196,7 @@ KNOWN_CHECKPOINTS = [
 ]
 
 KNOWN_UNCLIP_CHECKPOINTS = [
-    HuggingFile("stabilityai/stable-cascade", "sdbxui_checkpoints/stable_cascade_stage_c.safetensors"),
+    HuggingFile("stabilityai/stable-cascade", "sdbx_checkpoints/stable_cascade_stage_c.safetensors"),
     HuggingFile("stabilityai/stable-diffusion-2-1-unclip", "sd21-unclip-h.ckpt"),
     HuggingFile("stabilityai/stable-diffusion-2-1-unclip", "sd21-unclip-l.ckpt"),
 ]

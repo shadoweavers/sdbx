@@ -1,7 +1,7 @@
 import torch
-from comfy import samplers
-from comfy import sampler_helpers
-from comfy import node_helpers
+from sdbx import samplers
+from sdbx import sampler_helpers
+from sdbx import node_helpers
 
 def perp_neg(x, noise_pred_pos, noise_pred_neg, noise_pred_nocond, neg_scale, cond_scale):
     pos = noise_pred_pos - noise_pred_nocond

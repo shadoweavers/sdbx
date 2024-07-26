@@ -3,8 +3,8 @@
 
 #My modified one here is more basic but has less chances of breaking with sdbx updates.
 
-import comfy.model_patcher
-import comfy.samplers
+import sdbx.model_patcher
+import sdbx.samplers
 
 class PerturbedAttentionGuidance:
     @classmethod
@@ -42,8 +42,8 @@ class PerturbedAttentionGuidance:
                 return cfg_result
 
             # Replace Self-attention with PAG
-            model_options = comfy.model_patcher.set_model_options_patch_replace(model_options, perturbed_attention, "attn1", unet_block, unet_block_id)
-            (pag,) = comfy.samplers.calc_cond_batch(model, [cond], x, sigma, model_options)
+            model_options = sdbx.model_patcher.set_model_options_patch_replace(model_options, perturbed_attention, "attn1", unet_block, unet_block_id)
+            (pag,) = sdbx.samplers.calc_cond_batch(model, [cond], x, sigma, model_options)
 
             return cfg_result + (cond_pred - pag) * scale
 

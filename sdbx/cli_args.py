@@ -146,7 +146,7 @@ def _create_parser() -> EnhancedConfigArgParser:
         action="store_true",
         help='Frontends will start the web UI and connect to the provided AMQP URL to submit prompts.'
     )
-    parser.add_argument("--distributed-queue-name", type=str, default="sdbxui",
+    parser.add_argument("--distributed-queue-name", type=str, default="sdbx",
                         help="This name will be used by the frontends and workers to exchange prompt requests and replies. Progress updates will be prefixed by the queue name, followed by a '.', then the user ID")
     parser.add_argument("--external-address", required=False,
                         help="Specifies a base URL for external addresses reported by the API, such as for image paths.")
@@ -154,14 +154,14 @@ def _create_parser() -> EnhancedConfigArgParser:
     parser.add_argument("--disable-known-models", action="store_true", help="Disables automatic downloads of known models and prevents them from appearing in the UI.")
     parser.add_argument("--max-queue-size", type=int, default=65536, help="The API will reject prompt requests if the queue's size exceeds this value.")
     # tracing
-    parser.add_argument("--otel-service-name", type=str, default="sdbxui", env_var="OTEL_SERVICE_NAME", help="The name of the service or application that is generating telemetry data.")
+    parser.add_argument("--otel-service-name", type=str, default="sdbx", env_var="OTEL_SERVICE_NAME", help="The name of the service or application that is generating telemetry data.")
     parser.add_argument("--otel-service-version", type=str, default=__version__, env_var="OTEL_SERVICE_VERSION", help="The version of the service or application that is generating telemetry data.")
     parser.add_argument("--otel-exporter-otlp-endpoint", type=str, default=None, env_var="OTEL_EXPORTER_OTLP_ENDPOINT", help="A base endpoint URL for any signal type, with an optionally-specified port number. Helpful for when you're sending more than one signal to the same endpoint and want one environment variable to control the endpoint.")
     parser.add_argument("--force-channels-last", action="store_true", help="Force channels last format when inferencing the models.")
     parser.add_argument("--force-hf-local-dir-mode", action="store_true", help="Download repos from huggingface.co to the models/huggingface directory with the \"local_dir\" argument instead of models/huggingface_cache with the \"cache_dir\" argument, recreating the traditional file structure.")
 
     # now give plugins a chance to add configuration
-    for entry_point in entry_points().select(group='sdbxui.custom_config'):
+    for entry_point in entry_points().select(group='sdbx.custom_config'):
         try:
             plugin_callable: ConfigurationExtender | ModuleType = entry_point.load()
             if isinstance(plugin_callable, ModuleType):

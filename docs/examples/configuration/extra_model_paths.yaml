@@ -22,8 +22,8 @@ a1111:
 # Config for sdbx
 # Your base path should be either an existing sdbx install or a central folder where you store all of your models, loras, etc.
 
-#sdbxui:
-#     base_path: path/to/sdbxui/
+#sdbx:
+#     base_path: path/to/sdbx/
 #     checkpoints: models/checkpoints/
 #     clip: models/clip/
 #     clip_vision: models/clip_vision/

@@ -1,8 +1,8 @@
 import torch
 
-from comfy.nodes.common import MAX_RESOLUTION
-from comfy import utils
-import comfy.utils
+from sdbx.nodes.common import MAX_RESOLUTION
+from sdbx import utils
+import sdbx.utils
 
 
 def camera_embeddings(elevation, azimuth):
@@ -119,7 +119,7 @@ class SV3D_Conditioning:
     def encode(self, clip_vision, init_image, vae, width, height, video_frames, elevation):
         output = clip_vision.encode_image(init_image)
         pooled = output.image_embeds.unsqueeze(0)
-        pixels = comfy.utils.common_upscale(init_image.movedim(-1,1), width, height, "bilinear", "center").movedim(1,-1)
+        pixels = sdbx.utils.common_upscale(init_image.movedim(-1,1), width, height, "bilinear", "center").movedim(1,-1)
         encode_pixels = pixels[:,:,:,:3]
         t = vae.encode(encode_pixels)
 

@@ -1,7 +1,7 @@
 import torch
 from skimage.morphology import skeletonize, thin
 
-import comfy.model_management
+import sdbx.model_management
 
 
 class SkeletonizeThin:
@@ -20,7 +20,7 @@ class SkeletonizeThin:
     def process_image(self, image, binary_threshold, approach):
         use_skeletonize = approach == "skeletonize"
         use_thinning = approach == "thinning"
-        device = comfy.model_management.intermediate_device()
+        device = sdbx.model_management.intermediate_device()
         if len(image.shape) == 3:
             image = image.unsqueeze(0)
 
@@ -43,7 +43,7 @@ class SkeletonizeThin:
             result = torch.from_numpy(result).float().to(device)
             result = result.unsqueeze(-1).repeat(1, 1, 3)
             results.append(result)
-        final_result = torch.stack(results).to(comfy.model_management.intermediate_device())
+        final_result = torch.stack(results).to(sdbx.model_management.intermediate_device())
         return (final_result,)
 
 

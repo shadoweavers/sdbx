@@ -1,9 +1,9 @@
 import numpy as np
 import scipy.ndimage
 import torch
-from comfy import utils
+from sdbx import utils
 
-from comfy.nodes.common import MAX_RESOLUTION
+from sdbx.nodes.common import MAX_RESOLUTION
 
 
 def composite(destination, source, x, y, mask = None, multiplier = 8, resize_source = False):

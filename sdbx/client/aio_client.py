@@ -19,7 +19,7 @@ from ..api.schemas import immutabledict
 from ..component_model.file_output_path import file_output_path
 
 
-class AsyncRemoteComfyClient:
+class AsyncRemotesdbxClient:
     """
     An asynchronous client for remote servers
     """
@@ -49,7 +49,7 @@ class AsyncRemoteComfyClient:
         :param prompt:
         :return: the API response from the server containing URLs and the outputs for the UI (nodes with OUTPUT_NODE == true)
         """
-        prompt_json = AsyncRemoteComfyClient.__json_encoder.encode(prompt)
+        prompt_json = AsyncRemotesdbxClient.__json_encoder.encode(prompt)
         async with aiohttp.ClientSession() as session:
             response: ClientResponse
             async with session.post(urljoin(self.server_address, "/api/v1/prompts"), data=prompt_json,
@@ -74,7 +74,7 @@ class AsyncRemoteComfyClient:
         :param prompt:
         :return:
         """
-        prompt_json = AsyncRemoteComfyClient.__json_encoder.encode(prompt)
+        prompt_json = AsyncRemotesdbxClient.__json_encoder.encode(prompt)
         async with aiohttp.ClientSession() as session:
             response: ClientResponse
             async with session.post(urljoin(self.server_address, "/api/v1/prompts"), data=prompt_json,
@@ -87,12 +87,12 @@ class AsyncRemoteComfyClient:
 
     async def queue_prompt_ui(self, prompt: PromptDict) -> Dict[str, List[Path]]:
         """
-        Uses the sdbxui UI API calls to retrieve a list of paths of output files
+        Uses the sdbx UI API calls to retrieve a list of paths of output files
         :param prompt:
         :return:
         """
         prompt_request = PromptRequest.validate({"prompt": prompt, "client_id": self.client_id})
-        prompt_request_json = AsyncRemoteComfyClient.__json_encoder.encode(prompt_request)
+        prompt_request_json = AsyncRemotesdbxClient.__json_encoder.encode(prompt_request)
         async with aiohttp.ClientSession() as session:
             async with session.ws_connect(self.websocket_address) as ws:
                 async with session.post(urljoin(self.server_address, "/prompt"), data=prompt_request_json,

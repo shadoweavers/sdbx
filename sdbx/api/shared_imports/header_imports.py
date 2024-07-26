@@ -3,7 +3,7 @@ import io
 import typing
 import typing_extensions
 
-from comfy.api import api_client, schemas
+from sdbx.api import api_client, schemas
 
 __all__ = [
     'decimal',

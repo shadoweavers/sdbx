@@ -123,7 +123,7 @@ def import_all_nodes_in_workspace(vanilla_custom_nodes=True, raise_on_failure=Fa
             return _sdbx_nodes
 
         # load from entrypoints
-        for entry_point in entry_points().select(group='sdbxui.custom_nodes'):
+        for entry_point in entry_points().select(group='sdbx.custom_nodes'):
             # Load the module associated with the current entry point
             try:
                 module = entry_point.load()

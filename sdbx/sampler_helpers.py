@@ -1,7 +1,7 @@
 import torch
-from comfy import model_management
-from comfy import utils
-from comfy import conds
+from sdbx import model_management
+from sdbx import utils
+from sdbx import conds
 
 def prepare_mask(noise_mask, shape, device):
     """ensures noise mask is of proper dimensions"""

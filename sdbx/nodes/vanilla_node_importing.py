@@ -138,7 +138,7 @@ def _vanilla_load_custom_nodes_2(node_paths: Iterable[str]) -> ExportedNodes:
             if module_path.endswith(".disabled"): continue
             time_before = time.perf_counter()
             possible_exported_nodes = _vanilla_load_custom_nodes_1(module_path, base_node_names)
-            # sdbxui-manager mitigation
+            # ComfyUI-manager mitigation
             import_succeeded = len(possible_exported_nodes.NODE_CLASS_MAPPINGS) > 0 or "ComfyUI-Manager" in module_path
             node_import_times.append(
                 (time.perf_counter() - time_before, module_path, import_succeeded))

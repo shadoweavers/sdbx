@@ -1,7 +1,7 @@
 from functools import reduce
 from operator import add, mul, pow
 
-from comfy.nodes.package_typing import CustomNode, InputTypes
+from sdbx.nodes.package_typing import CustomNode, InputTypes
 
 
 class FloatAdd(CustomNode):

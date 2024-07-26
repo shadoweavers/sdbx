@@ -1,5 +1,5 @@
 import torch
-from comfy import utils
+from sdbx import utils
 
 class SD_4XUpscale_Conditioning:
     @classmethod

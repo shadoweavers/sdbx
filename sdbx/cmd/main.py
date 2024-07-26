@@ -172,7 +172,7 @@ async def main():
     worker_thread_server = server if not distributed else ServerStub()
     if not distributed or args.distributed_queue_worker:
         if distributed:
-            logging.warning(f"Distributed workers started in the default thread loop cannot notify clients of progress updates. Instead of sdbxui or main.py, use sdbxui-worker.")
+            logging.warning(f"Distributed workers started in the default thread loop cannot notify clients of progress updates. Instead of sdbx or main.py, use sdbx-worker.")
         threading.Thread(target=prompt_worker, daemon=True, args=(q, worker_thread_server,)).start()
 
     # server has been imported and things should be looking good

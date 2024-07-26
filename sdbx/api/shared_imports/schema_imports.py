@@ -8,8 +8,8 @@ import typing
 import typing_extensions
 import uuid
 
-from comfy.api import schemas
-from comfy.api.configurations import schema_configuration
+from sdbx.api import schemas
+from sdbx.api.configurations import schema_configuration
 
 U = typing.TypeVar('U')
 

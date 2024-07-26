@@ -1,6 +1,6 @@
 from torch import Tensor
 
-from comfy.nodes.package_typing import CustomNode, InputTypes, ValidatedNodeResult
+from sdbx.nodes.package_typing import CustomNode, InputTypes, ValidatedNodeResult
 
 
 class ImageMin(CustomNode):

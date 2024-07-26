@@ -100,7 +100,7 @@ def frontend_backend_worker_with_rabbitmq(tmp_path_factory) -> str:
         connection_uri = f"amqp://guest:guest@127.0.0.1:{params.port}"
 
         frontend_command = [
-            "sdbxui",
+            "sdbx",
             "--listen=0.0.0.0",
             "--port=9001",
             "--cpu",
@@ -111,7 +111,7 @@ def frontend_backend_worker_with_rabbitmq(tmp_path_factory) -> str:
 
         processes_to_close.append(subprocess.Popen(frontend_command, stdout=sys.stdout, stderr=sys.stderr))
         backend_command = [
-            "sdbxui-worker",
+            "sdbx-worker",
             "--port=9002",
             f"-w={str(tmp_path)}",
             f"--distributed-queue-connection-uri={connection_uri}",

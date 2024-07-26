@@ -123,7 +123,7 @@ async def main():
     # Your prompt is ready to be processed. You should start your sdbx server; or, specify a remote URL for it.
     # If you want to run your own sdbx server, follow the **Manual Install (Windows, Linux, macOS)** instructions.
     # Then, as the README specifies, `cd` into the directory that contains your `models/` folder and run:
-    #   sdbxui --listen
+    #   sdbx --listen
     # Let's create the client we will use to access it:
     from sdbx.client.aio_client import AsyncRemoteComfyClient
     client = AsyncRemoteComfyClient(server_address="http://localhost:8188")

@@ -83,7 +83,7 @@ async def test_distributed_prompt_queues_same_process():
                     worker.task_done(incoming_named.prompt_id, outputs, ExecutionStatus("success", True, []))
 
                 thread_pool.submit(lambda: asyncio.run(in_thread()))
-                # this was completed over the sdbxui queue interface, so it should be a task invocation
+                # this was completed over the ComfyUI queue interface, so it should be a task invocation
                 frontend_pov_result: TaskInvocation = await test_prompt.completed
                 assert frontend_pov_result is not None
                 assert frontend_pov_result.item_id == test_prompt.prompt_id

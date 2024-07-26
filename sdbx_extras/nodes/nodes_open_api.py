@@ -529,7 +529,7 @@ class SaveImagesResponse(CustomNode):
                 metadata_uris: Optional[Sequence[str | None]] = None,
                 local_uris: Optional[Sequence[Optional[str]]] = None,
                 pil_save_format="png",
-                # from sdbxui
+                # from sdbx
                 prompt: Optional[dict] = None,
                 extra_pnginfo=None,
                 *args,

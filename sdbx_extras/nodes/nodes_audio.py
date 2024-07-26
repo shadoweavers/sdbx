@@ -1,18 +1,18 @@
 import hashlib
 
 import torch
-import comfy.model_management
-from comfy.cmd import folder_paths
+import sdbx.model_management
+from sdbx.cmd import folder_paths
 import os
 import io
 import json
 import struct
 import random
-from comfy.cli_args import args
+from sdbx.cli_args import args
 
 class EmptyLatentAudio:
     def __init__(self):
-        self.device = comfy.model_management.intermediate_device()
+        self.device = sdbx.model_management.intermediate_device()
 
     @classmethod
     def INPUT_TYPES(s):

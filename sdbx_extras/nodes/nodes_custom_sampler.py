@@ -1,13 +1,13 @@
-import comfy.sampler_names
-from comfy import samplers
-from comfy import model_management
-from comfy import sample
-from comfy.execution_context import current_execution_context
-from comfy.k_diffusion import sampling as k_diffusion_sampling
-from comfy.cmd import latent_preview
+import sdbx.sampler_names
+from sdbx import samplers
+from sdbx import model_management
+from sdbx import sample
+from sdbx.execution_context import current_execution_context
+from sdbx.k_diffusion import sampling as k_diffusion_sampling
+from sdbx.cmd import latent_preview
 import torch
-from comfy import utils
-from comfy import node_helpers
+from sdbx import utils
+from sdbx import node_helpers
 
 
 class BasicScheduler:
@@ -15,7 +15,7 @@ class BasicScheduler:
     def INPUT_TYPES(s):
         return {"required":
                     {"model": ("MODEL",),
-                     "scheduler": (comfy.sampler_names.SCHEDULER_NAMES,),
+                     "scheduler": (sdbx.sampler_names.SCHEDULER_NAMES,),
                      "steps": ("INT", {"default": 20, "min": 1, "max": 10000}),
                      "denoise": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.01}),
                       }
@@ -198,7 +198,7 @@ class KSamplerSelect:
     @classmethod
     def INPUT_TYPES(s):
         return {"required":
-                    {"sampler_name": (comfy.sampler_names.SAMPLER_NAMES,),
+                    {"sampler_name": (sdbx.sampler_names.SAMPLER_NAMES,),
                       }
                }
     RETURN_TYPES = ("SAMPLER",)
@@ -229,7 +229,7 @@ class SamplerDPMPP_3M_SDE:
             sampler_name = "dpmpp_3m_sde"
         else:
             sampler_name = "dpmpp_3m_sde_gpu"
-        sampler = comfy.samplers.ksampler(sampler_name, {"eta": eta, "s_noise": s_noise})
+        sampler = sdbx.samplers.ksampler(sampler_name, {"eta": eta, "s_noise": s_noise})
         return (sampler, )
 
 class SamplerDPMPP_2M_SDE:
@@ -293,7 +293,7 @@ class SamplerEulerAncestral:
     FUNCTION = "get_sampler"
 
     def get_sampler(self, eta, s_noise):
-        sampler = comfy.samplers.ksampler("euler_ancestral", {"eta": eta, "s_noise": s_noise})
+        sampler = sdbx.samplers.ksampler("euler_ancestral", {"eta": eta, "s_noise": s_noise})
         return (sampler, )
 
 class SamplerEulerAncestralCFGPP:
@@ -310,7 +310,7 @@ class SamplerEulerAncestralCFGPP:
     FUNCTION = "get_sampler"
 
     def get_sampler(self, eta, s_noise):
-        sampler = comfy.samplers.ksampler(
+        sampler = sdbx.samplers.ksampler(
             "euler_ancestral_cfg_pp",
             {"eta": eta, "s_noise": s_noise})
         return (sampler, )
@@ -328,7 +328,7 @@ class SamplerLMS:
     FUNCTION = "get_sampler"
 
     def get_sampler(self, order):
-        sampler = comfy.samplers.ksampler("lms", {"order": order})
+        sampler = sdbx.samplers.ksampler("lms", {"order": order})
         return (sampler, )
 
 class SamplerDPMAdaptative:
@@ -353,7 +353,7 @@ class SamplerDPMAdaptative:
     FUNCTION = "get_sampler"
 
     def get_sampler(self, order, rtol, atol, h_init, pcoeff, icoeff, dcoeff, accept_safety, eta, s_noise):
-        sampler = comfy.samplers.ksampler("dpm_adaptive", {"order": order, "rtol": rtol, "atol": atol, "h_init": h_init, "pcoeff": pcoeff,
+        sampler = sdbx.samplers.ksampler("dpm_adaptive", {"order": order, "rtol": rtol, "atol": atol, "h_init": h_init, "pcoeff": pcoeff,
                                                               "icoeff": icoeff, "dcoeff": dcoeff, "accept_safety": accept_safety, "eta": eta,
                                                               "s_noise":s_noise })
         return (sampler, )
@@ -374,7 +374,7 @@ class Noise_RandomNoise:
     def generate_noise(self, input_latent):
         latent_image = input_latent["samples"]
         batch_inds = input_latent["batch_index"] if "batch_index" in input_latent else None
-        return comfy.sample.prepare_noise(latent_image, self.seed, batch_inds)
+        return sdbx.sample.prepare_noise(latent_image, self.seed, batch_inds)
 
 class SamplerCustom:
     @classmethod
@@ -403,7 +403,7 @@ class SamplerCustom:
         latent = latent_image
         latent_image = latent["samples"]
         latent = latent.copy()
-        latent_image = comfy.sample.fix_empty_latent_channels(model, latent_image)
+        latent_image = sdbx.sample.fix_empty_latent_channels(model, latent_image)
         latent["samples"] = latent_image
 
         if not add_noise:
@@ -430,7 +430,7 @@ class SamplerCustom:
             out_denoised = out
         return (out, out_denoised)
 
-class Guider_Basic(comfy.samplers.CFGGuider):
+class Guider_Basic(sdbx.samplers.CFGGuider):
     def set_conds(self, positive):
         self.inner_set_conds({"positive": positive})
 
@@ -470,12 +470,12 @@ class CFGGuider:
     CATEGORY = "sampling/custom_sampling/guiders"
 
     def get_guider(self, model, positive, negative, cfg):
-        guider = comfy.samplers.CFGGuider(model)
+        guider = sdbx.samplers.CFGGuider(model)
         guider.set_conds(positive, negative)
         guider.set_cfg(cfg)
         return (guider,)
 
-class Guider_DualCFG(comfy.samplers.CFGGuider):
+class Guider_DualCFG(sdbx.samplers.CFGGuider):
     def set_cfg(self, cfg1, cfg2):
         self.cfg1 = cfg1
         self.cfg2 = cfg2
@@ -488,8 +488,8 @@ class Guider_DualCFG(comfy.samplers.CFGGuider):
         negative_cond = self.conds.get("negative", None)
         middle_cond = self.conds.get("middle", None)
 
-        out = comfy.samplers.calc_cond_batch(self.inner_model, [negative_cond, middle_cond, self.conds.get("positive", None)], x, timestep, model_options)
-        return comfy.samplers.cfg_function(self.inner_model, out[1], out[0], self.cfg2, x, timestep, model_options=model_options, cond=middle_cond, uncond=negative_cond) + (out[2] - out[1]) * self.cfg1
+        out = sdbx.samplers.calc_cond_batch(self.inner_model, [negative_cond, middle_cond, self.conds.get("positive", None)], x, timestep, model_options)
+        return sdbx.samplers.cfg_function(self.inner_model, out[1], out[0], self.cfg2, x, timestep, model_options=model_options, cond=middle_cond, uncond=negative_cond) + (out[2] - out[1]) * self.cfg1
 
 class DualCFGGuider:
     @classmethod
@@ -565,7 +565,7 @@ class SamplerCustomAdvanced:
         latent = latent_image
         latent_image = latent["samples"]
         latent = latent.copy()
-        latent_image = comfy.sample.fix_empty_latent_channels(guider.model_patcher, latent_image)
+        latent_image = sdbx.sample.fix_empty_latent_channels(guider.model_patcher, latent_image)
         latent["samples"] = latent_image
 
         noise_mask = None
@@ -577,7 +577,7 @@ class SamplerCustomAdvanced:
 
         disable_pbar = not current_execution_context().server.receive_all_progress_notifications
         samples = guider.sample(noise.generate_noise(latent), latent_image, sampler, sigmas, denoise_mask=noise_mask, callback=callback, disable_pbar=disable_pbar, seed=noise.seed)
-        samples = samples.to(comfy.model_management.intermediate_device())
+        samples = samples.to(sdbx.model_management.intermediate_device())
 
         out = latent.copy()
         out["samples"] = samples

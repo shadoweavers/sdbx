@@ -20,7 +20,7 @@ from ..distributed.server_stub import ServerStub
 _server_stub_instance = ServerStub()
 
 
-class EmbeddedComfyClient:
+class EmbeddedsdbxClient:
     """
     Embedded client for sdbx executing prompts as a library.
 
@@ -45,7 +45,7 @@ class EmbeddedComfyClient:
     # Then use the client to run your workflow. This will start, then stop, a local sdbx workflow executor.
     # It does not connect to a remote server.
     async def main():
-        async with EmbeddedComfyClient() as client:
+        async with EmbeddedsdbxClient() as client:
             outputs = await client.queue_prompt(prompt)
             print(outputs)
         print("Now that we've exited the with statement, all your VRAM has been cleared from sdbx")

@@ -1,5 +1,5 @@
-from comfy import utils
-from comfy.cmd import folder_paths
+from sdbx import utils
+from sdbx.cmd import folder_paths
 import torch
 import logging
 

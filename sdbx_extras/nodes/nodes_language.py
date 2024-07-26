@@ -30,7 +30,7 @@ try:
 
     logging.info("Additional LLaVA models are now supported")
 except ImportError as exc:
-    logging.info(f"Install LLavA with `pip install git+https://github.com/AppMana/appmana-sdbxui-llava` for additional LLaVA support")
+    logging.info(f"Install LLavA with `pip install git+https://github.com/AppMana/appmana-comfyui-llava` for additional LLaVA support")
 
 # aka kwargs type
 _GENERATION_KWARGS_TYPE = Dict[str, Any]

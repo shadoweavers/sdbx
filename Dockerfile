@@ -5,5 +5,5 @@ WORKDIR /workspace
 # tries to address https://github.com/pytorch/pytorch/issues/104801
 # and issues reported by importing nodes_canny
 ENV PYTORCH_CUDA_ALLOC_CONF="backend:cudaMallocAsync"
-RUN sdbxui --quick-test-for-ci --cpu --cwd /workspace
-CMD ["/usr/local/bin/sdbxui", "--listen"]
+RUN sdbx --quick-test-for-ci --cpu --cwd /workspace
+CMD ["/usr/local/bin/sdbx", "--listen"]

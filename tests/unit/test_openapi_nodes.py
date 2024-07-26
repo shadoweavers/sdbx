@@ -9,8 +9,8 @@ import torch
 from PIL import Image
 from freezegun import freeze_time
 
-from comfy.cmd import folder_paths
-from comfy_extras.nodes.nodes_open_api import SaveImagesResponse, IntRequestParameter, FloatRequestParameter, \
+from sdbx.cmd import folder_paths
+from sdbx_extras.nodes.nodes_open_api import SaveImagesResponse, IntRequestParameter, FloatRequestParameter, \
     StringRequestParameter, HashImage, StringPosixPathJoin, LegacyOutputURIs, DevNullUris, StringJoin, StringToUri, \
     UriFormat, ImageExifMerge, ImageExifCreationDateAndBatchNumber, ImageExif, ImageExifUncommon, \
     StringEnumRequestParameter, ExifContainer, BooleanRequestParameter, ImageRequestParameter
@@ -255,7 +255,7 @@ def test_file_request_parameter(use_temporary_input_directory):
     n = ImageRequestParameter()
     loaded_image, = n.execute(value=image_path)
     assert loaded_image.shape == (1, 1, 1, 3)
-    from comfy.nodes.base_nodes import LoadImage
+    from sdbx.nodes.base_nodes import LoadImage
 
     load_image_node = LoadImage()
     load_image_node_rgb, _ = load_image_node.load_image(image=os.path.basename(image_path))

@@ -5,7 +5,7 @@ import typing
 import typing_extensions
 import uuid
 
-from comfy.api import schemas, api_response
+from sdbx.api import schemas, api_response
 
 __all__ = [
     'decimal',

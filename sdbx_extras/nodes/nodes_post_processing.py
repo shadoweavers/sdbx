@@ -4,8 +4,8 @@ import torch.nn.functional as F
 from PIL import Image
 import math
 
-from comfy import utils
-from comfy import model_management
+from sdbx import utils
+from sdbx import model_management
 
 
 class Blend:

@@ -2,7 +2,7 @@ import dataclasses
 import typing
 import typing_extensions
 
-from comfy.api import security_schemes
+from sdbx.api import security_schemes
 
 __all__ = [
     'dataclasses',

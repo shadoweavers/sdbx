@@ -394,7 +394,7 @@ paths:
                   Additionally, a list of URLs to binary outputs, whenever save nodes are used.
                   
                   For each SaveImage node, there will be two URLs: the internal URL returned by the worker, and
-                  the URL for the image based on the `--external-address` / `COMFYUI_EXTERNAL_ADDRESS` configuration.
+                  the URL for the image based on the `--external-address` / `COMFYUIm_EXTERNAL_ADDRESS` configuration.
                   
                   Hashing function for web browsers:
                   

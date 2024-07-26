@@ -30,7 +30,7 @@ core = [
     "accelerate>=0.25.0",
     "kornia>=0.7.1",
     "huggingface_hub",
-    "huggingface_extra_chat_templates @ git+https://github.com/AppMana/appmana-sdbxui-chat-templates.git",
+    "huggingface_extra_chat_templates @ git+https://github.com/AppMana/appmana-comfyui-chat-templates.git",
 
     # Mathematical Libraries
     "numpy>=1.26.3,<2.0.0",

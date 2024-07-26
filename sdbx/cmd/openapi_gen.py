@@ -27,7 +27,7 @@ def main():
         print("java must be installed to generate openapi clients automatically", file=sys.stderr)
         raise FileNotFoundError("java")
 
-    cache_dir = user_cache_dir(appname="sdbxui")
+    cache_dir = user_cache_dir(appname="sdbx")
     jar = join(cache_dir, _openapi_jar_basename)
 
     if not exists(jar):

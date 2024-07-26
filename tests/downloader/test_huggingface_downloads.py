@@ -51,7 +51,7 @@ saved_model/**/* filter=lfs diff=lfs merge=lfs -text
 def test_known_repos(tmp_path_factory):
     test_cache_dir = tmp_path_factory.mktemp("huggingface_cache")
     test_local_dir = tmp_path_factory.mktemp("huggingface_locals")
-    test_repo_id = "doctorpangloss/sdbxui_downloader_test"
+    test_repo_id = "doctorpangloss/comfyui_downloader_test"
     prev_huggingface = folder_paths.folder_names_and_paths["huggingface"]
     prev_huggingface_cache = folder_paths.folder_names_and_paths["huggingface_cache"]
     prev_hub_cache = os.getenv("HF_HUB_CACHE")

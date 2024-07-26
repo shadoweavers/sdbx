@@ -10,7 +10,7 @@ from .distributed_types import RpcRequest, RpcReply
 
 
 class DistributedPromptClient:
-    def __init__(self, queue_name: str = "sdbxui",
+    def __init__(self, queue_name: str = "sdbx",
                  connection_uri="amqp://localhost/",
                  loop: Optional[AbstractEventLoop] = None):
         self.queue_name = queue_name

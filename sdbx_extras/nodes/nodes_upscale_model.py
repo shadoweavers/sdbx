@@ -2,9 +2,9 @@ import logging
 import torch
 
 from spandrel import ModelLoader, ImageModelDescriptor
-from comfy import model_management
-from comfy import utils
-from comfy.model_downloader import get_filename_list_with_downloadable, KNOWN_UPSCALERS, get_or_download
+from sdbx import model_management
+from sdbx import utils
+from sdbx.model_downloader import get_filename_list_with_downloadable, KNOWN_UPSCALERS, get_or_download
 
 
 try:

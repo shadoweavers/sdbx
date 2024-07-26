@@ -1,9 +1,9 @@
-from comfy.model_downloader import get_filename_list_with_downloadable, KNOWN_IMAGE_ONLY_CHECKPOINTS, get_or_download
-from comfy.nodes.common import MAX_RESOLUTION
+from sdbx.model_downloader import get_filename_list_with_downloadable, KNOWN_IMAGE_ONLY_CHECKPOINTS, get_or_download
+from sdbx.nodes.common import MAX_RESOLUTION
 import torch
-import comfy.utils
-import comfy.sd
-from comfy.cmd import folder_paths
+import sdbx.utils
+import sdbx.sd
+from sdbx.cmd import folder_paths
 from . import nodes_model_merging
 
 
@@ -19,7 +19,7 @@ class ImageOnlyCheckpointLoader:
 
     def load_checkpoint(self, ckpt_name, output_vae=True, output_clip=True):
         ckpt_path = get_or_download("checkpoints", ckpt_name, KNOWN_IMAGE_ONLY_CHECKPOINTS)
-        out = comfy.sd.load_checkpoint_guess_config(ckpt_path, output_vae=True, output_clip=False, output_clipvision=True, embedding_directory=folder_paths.get_folder_paths("embeddings"))
+        out = sdbx.sd.load_checkpoint_guess_config(ckpt_path, output_vae=True, output_clip=False, output_clipvision=True, embedding_directory=folder_paths.get_folder_paths("embeddings"))
         return (out[0], out[3], out[2])
 
 
@@ -46,7 +46,7 @@ class SVD_img2vid_Conditioning:
     def encode(self, clip_vision, init_image, vae, width, height, video_frames, motion_bucket_id, fps, augmentation_level):
         output = clip_vision.encode_image(init_image)
         pooled = output.image_embeds.unsqueeze(0)
-        pixels = comfy.utils.common_upscale(init_image.movedim(-1,1), width, height, "bilinear", "center").movedim(1,-1)
+        pixels = sdbx.utils.common_upscale(init_image.movedim(-1,1), width, height, "bilinear", "center").movedim(1,-1)
         encode_pixels = pixels[:,:,:,:3]
         if augmentation_level > 0:
             encode_pixels += torch.randn_like(pixels) * augmentation_level

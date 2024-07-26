@@ -1,6 +1,6 @@
-from comfy.nodes.common import MAX_RESOLUTION
-from comfy.cmd import folder_paths
-from comfy.cli_args import args
+from sdbx.nodes.common import MAX_RESOLUTION
+from sdbx.cmd import folder_paths
+from sdbx.cli_args import args
 
 from PIL import Image
 from PIL.PngImagePlugin import PngInfo

@@ -99,7 +99,6 @@ dev = [
     "pytest-asyncio",
     "testcontainers",
     "testcontainers-rabbitmq",
-    "freezegun",
     "coverage",
 
     # Linting and type checking

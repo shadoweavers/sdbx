@@ -35,7 +35,6 @@ jobs:
       run: |
         source venv/bin/activate
         pylint sdbx/
-        pylint sdbx_extras/
   build_and_execute_linux:
     name: Installation, Unit and Workflow Tests for Linux
     runs-on: ${{ matrix.runner.labels }}
@@ -78,4 +77,3 @@ jobs:
       - name: Lint for errors
         run: |
           pylint sdbx/
-          pylint sdbx_extras/

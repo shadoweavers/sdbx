@@ -740,3 +740,35 @@ def seed_for_block(seed):
         np.random.set_state(numpy_rng_state)
         if torch.cuda.is_available():
             torch.cuda.set_rng_state_all(cuda_rng_state)
+
+
+def recursive_search(directory, excluded_dir_names=None):
+    if not os.path.isdir(directory):
+        return [], {}
+
+    if excluded_dir_names is None:
+        excluded_dir_names = []
+
+    result = []
+    dirs = {}
+
+    # Attempt to add the initial directory to dirs with error handling
+    try:
+        dirs[directory] = os.path.getmtime(directory)
+    except FileNotFoundError:
+        logging.warning(f"Warning: Unable to access {directory}. Skipping this path.")
+
+    for dirpath, subdirs, filenames in os.walk(directory, followlinks=True, topdown=True):
+        subdirs[:] = [d for d in subdirs if d not in excluded_dir_names]
+        for file_name in filenames:
+            relative_path = os.path.relpath(os.path.join(dirpath, file_name), directory)
+            result.append(relative_path)
+
+        for d in subdirs:
+            path = os.path.join(dirpath, d)
+            try:
+                dirs[path] = os.path.getmtime(path)
+            except FileNotFoundError:
+                logging.warning(f"Warning: Unable to access {path}. Skipping this path.")
+                continue
+    return result, dirs

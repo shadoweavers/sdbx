@@ -12,7 +12,7 @@ from typing import Tuple, List
 import pytest
 import requests
 
-from sdbx.cli_args_types import Configuration
+from sdbx.config import Configuration
 
 # fixes issues with running the testcontainers rabbitmqcontainer on Windows
 os.environ["TC_HOST"] = "localhost"
@@ -41,7 +41,7 @@ def get_lan_ip():
 
 def run_server(server_arguments: Configuration):
     from sdbx.cmd.main import main
-    from sdbx.cli_args import args
+    from sdbx.args import args
     import asyncio
     for arg, value in server_arguments.items():
         args[arg] = value

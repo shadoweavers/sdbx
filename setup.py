@@ -40,7 +40,7 @@ The package index to torch built against CPU features.
 cpu_torch_index = ("https://download.pytorch.org/whl/cpu", "https://download.pytorch.org/whl/nightly/cpu")
 
 """
-Indicates if this is installing an editable (develop) mode package
+Indicates if this is installing an editable (develop) mode package.
 """
 is_editable = "--editable" in sys.argv or "-e" in sys.argv
 force_cpu = "--force-cpu" in sys.argv

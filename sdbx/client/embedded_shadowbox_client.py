@@ -11,7 +11,7 @@ from opentelemetry import context
 from opentelemetry.trace import Span, Status, StatusCode
 
 from ..api.components.schema.prompt import PromptDict
-from ..cli_args_types import Configuration
+from ..config import Configuration
 from ..cmd.main_pre import tracer
 from ..component_model.executor_types import ExecutorToClientProgress
 from ..component_model.make_mutable import make_mutable
@@ -20,7 +20,7 @@ from ..distributed.server_stub import ServerStub
 _server_stub_instance = ServerStub()
 
 
-class EmbeddedsdbxClient:
+class EmbeddedShadowboxClient:
     """
     Embedded client for sdbx executing prompts as a library.
 

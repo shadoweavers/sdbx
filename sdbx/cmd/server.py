@@ -31,7 +31,7 @@ from .. import interruption
 from .. import model_management
 from .. import utils
 from ..app.user_manager import UserManager
-from ..cli_args import args
+from ..args import args
 from ..client.client_types import FileOutput
 from ..cmd import execution
 from ..cmd import folder_paths

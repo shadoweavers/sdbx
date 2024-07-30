@@ -1,9 +1,10 @@
 import os
 import importlib.util
-from ..cli_args import args
 import subprocess
 
-#Can't use pytorch to get the GPU names because the cuda malloc has to be set before the first import.
+from sdbx import config
+
+# Can't use pytorch to get the GPU names because the cuda malloc has to be set before the first import.
 def get_gpu_names():
     if os.name == 'nt':
         import ctypes
@@ -66,7 +67,7 @@ def cuda_malloc_supported():
     return True
 
 
-if not args.cuda_malloc:
+if not config.computational.cuda_malloc:
     try:
         version = ""
         torch_spec = importlib.util.find_spec("torch")
@@ -77,13 +78,13 @@ if not args.cuda_malloc:
                 module = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(module)
                 version = module.__version__
-        if int(version[0]) >= 2: #enable by default for torch version 2.0 and up
-            args.cuda_malloc = cuda_malloc_supported()
+        if int(version[0]) >= 2: # enable by default for torch version 2.0 and up
+            config.computational.cuda_malloc = cuda_malloc_supported()
     except:
         pass
 
 
-if args.cuda_malloc and not args.disable_cuda_malloc:
+if config.computational.cuda_malloc:
     env_var = os.environ.get('PYTORCH_CUDA_ALLOC_CONF', None)
     if env_var is None:
         env_var = "backend:cudaMallocAsync"

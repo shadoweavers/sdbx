@@ -16,7 +16,7 @@ from requests import Session
 from safetensors import safe_open
 from safetensors.torch import save_file
 
-from .cli_args import args
+from sdbx import config
 from .cmd import folder_paths
 from .component_model.deprecation import _deprecate_method
 from .interruption import InterruptProcessingException
@@ -29,14 +29,14 @@ _hf_fs = HfFileSystem()
 
 def get_filename_list_with_downloadable(folder_name: str, known_files: List[Any]) -> List[str]:
     existing = frozenset(folder_paths.get_filename_list(folder_name))
-    downloadable = frozenset() if args.disable_known_models else frozenset(str(f) for f in known_files)
+    downloadable = frozenset(str(f) for f in known_files) if config.known_models else frozenset()
     return sorted(list(existing | downloadable))
 
 
 def get_or_download(folder_name: str, filename: str, known_files: List[HuggingFile | CivitFile]) -> Optional[str]:
     path = folder_paths.get_full_path(folder_name, filename)
 
-    if path is None and not args.disable_known_models:
+    if path is None and config.known_models:
         try:
             # todo: should this be the first or last path?
             this_model_directory = folder_paths.get_folder_paths(folder_name)[0]
@@ -361,7 +361,7 @@ def add_known_models(folder_name: str, known_models: List[Union[CivitFile, Huggi
     if len(models) < 1:
         return known_models
 
-    if args.disable_known_models:
+    if not config.known_models:
         logging.warning(f"Known models have been disabled in the options (while adding {folder_name}/{','.join(map(str, models))})")
 
     pre_existing = frozenset(known_models)
@@ -404,10 +404,10 @@ def get_huggingface_repo_list(*extra_cache_dirs: str) -> List[str]:
                 existing_local_dir_repos.add(f"{user_dir.name}/{model_dir.name}")
 
     known_repo_ids = frozenset(KNOWN_HUGGINGFACE_MODEL_REPOS)
-    if args.disable_known_models:
-        return list(existing_repo_ids | existing_local_dir_repos)
-    else:
+    if config.known_models:
         return list(existing_repo_ids | existing_local_dir_repos | known_repo_ids)
+    else:
+        return list(existing_repo_ids | existing_local_dir_repos)
 
 
 def get_or_download_huggingface_repo(repo_id: str) -> Optional[str]:
@@ -420,19 +420,19 @@ def get_or_download_huggingface_repo(repo_id: str) -> Optional[str]:
     logging.debug(f"cache {'hit' if local_dirs_cache_hit or cache_dirs_cache_hit else 'miss'} for repo_id={repo_id} because local_dirs={local_dirs_cache_hit}, cache_dirs={cache_dirs_cache_hit}")
 
     # if we're in forced local directory mode, only use the local dir snapshots, and otherwise, download
-    if args.force_hf_local_dir_mode:
-        # todo: we still have to figure out a way to download things to the right places by default
-        if len(local_dirs_snapshots) > 0:
-            return local_dirs_snapshots[0]
-        elif not args.disable_known_models:
-            destination = os.path.join(local_dirs[0], repo_id)
-            logging.debug(f"downloading repo_id={repo_id}, local_dir={destination}")
-            return snapshot_download(repo_id, local_dir=destination)
+    # if config.force_hf_local_dir_mode:
+    #     # todo: we still have to figure out a way to download things to the right places by default
+    #     if len(local_dirs_snapshots) > 0:
+    #         return local_dirs_snapshots[0]
+    #     elif config.known_models:
+    #         destination = os.path.join(local_dirs[0], repo_id)
+    #         logging.debug(f"downloading repo_id={repo_id}, local_dir={destination}")
+    #         return snapshot_download(repo_id, local_dir=destination)
 
     snapshots = local_dirs_snapshots + cache_dirs_snapshots
     if len(snapshots) > 0:
         return snapshots[0]
-    elif not args.disable_known_models:
+    elif config.known_models:
         logging.debug(f"downloading repo_id={repo_id}")
         return snapshot_download(repo_id)
 

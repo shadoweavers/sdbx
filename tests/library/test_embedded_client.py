@@ -3,7 +3,7 @@ import asyncio
 import pytest
 import torch
 
-from sdbx.cli_args_types import Configuration
+from sdbx.config import Configuration
 from sdbx.client.embedded_sdbx_client import EmbeddedComfyClient
 from sdbx.client.sdxl_with_refiner_workflow import sdxl_workflow_with_refiner
 

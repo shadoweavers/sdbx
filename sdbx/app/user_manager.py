@@ -5,7 +5,7 @@ import uuid
 import glob
 import shutil
 from aiohttp import web
-from ..cli_args import args
+from ..args import args
 from ..cmd.folder_paths import user_directory
 from .app_settings import AppSettings
 

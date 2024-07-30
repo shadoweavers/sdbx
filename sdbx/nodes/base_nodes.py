@@ -21,7 +21,7 @@ from .. import sd
 from .. import utils
 from .. import clip_vision as clip_vision_module
 from .. import model_management
-from ..cli_args import args
+from ..args import args
 
 from ..cmd import folder_paths, latent_preview
 from ..execution_context import current_execution_context

@@ -17,7 +17,7 @@ def initialize_event_tracking(loop: Optional[asyncio.AbstractEventLoop] = None):
     assert loop is not None
     _event_trackers = []
     # perform the imports at the time this is invoked to prevent side effects and ordering issues
-    from ..cli_args import args
+    from ..args import args
 
     identity = str(uuid.uuid4())
     if args.analytics_use_identity_provider and sys.platform == "nt":

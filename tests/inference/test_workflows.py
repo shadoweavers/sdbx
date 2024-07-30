@@ -1,7 +1,7 @@
 import pytest
 
 from sdbx.api.components.schema.prompt import Prompt
-from sdbx.cli_args_types import Configuration
+from sdbx.config import Configuration
 from sdbx.client.embedded_sdbx_client import EmbeddedComfyClient
 from sdbx.model_downloader import add_known_models, KNOWN_LORAS
 from sdbx.model_downloader_types import CivitFile

@@ -11,54 +11,39 @@ from typing import Literal, List
 import psutil
 import torch
 
+from sdbx.config import config, VRAM, Precision
 from . import interruption
-from .cli_args import args
 from .model_management_types import ModelManageable
 
 model_management_lock = RLock()
-
-
-class VRAMState(Enum):
-    DISABLED = 0  # No vram present: no need to move models to vram
-    NO_VRAM = 1  # Very low vram: enable all the options to save vram
-    LOW_VRAM = 2
-    NORMAL_VRAM = 3
-    HIGH_VRAM = 4
-    SHARED = 5  # No dedicated vram: memory shared between CPU and GPU but models still need to be moved between both.
-
 
 class CPUState(Enum):
     GPU = 0
     CPU = 1
     MPS = 2
 
-
-# Determine VRAM State
-vram_state = VRAMState.NORMAL_VRAM
-set_vram_to = VRAMState.NORMAL_VRAM
 cpu_state = CPUState.GPU
 
 total_vram = 0
 
-lowvram_available = True
 xpu_available = False
 
-if args.deterministic:
+if config.computational.deterministic:
     logging.info("Using deterministic algorithms for pytorch")
     torch.use_deterministic_algorithms(True, warn_only=True)
 
 directml_device = None
-if args.directml is not None:
+if config.computational.directml:
     import torch_directml  # pylint: disable=import-error
 
-    device_index = args.directml
-    if device_index < 0:
+    d = config.computational.directml
+    if not isinstance(d, int):
         directml_device = torch_directml.device()
     else:
-        directml_device = torch_directml.device(device_index)
-    logging.info("Using directml with device: {}".format(torch_directml.device_name(device_index)))
+        directml_device = torch_directml.device(d)
+    logging.info("Using directml with device: {}".format(torch_directml.device_name(d)))
     # torch_directml.disable_tiled_resources(True)
-    lowvram_available = False  # TODO: need to find a way to get free memory in directml before this can be enabled by default.
+    config.memory.vram = max(config.memory.vram, VRAM.LOW) # TODO: need to find a way to get free memory in directml before this can be enabled by default.
 
 try:
     import intel_extension_for_pytorch as ipex  # pylint: disable=import-error
@@ -75,9 +60,8 @@ try:
 except:
     pass
 
-if args.cpu:
+if config.computational.cpu_only:
     cpu_state = CPUState.CPU
-
 
 def is_intel_xpu():
     global cpu_state
@@ -154,7 +138,7 @@ except:
 
 XFORMERS_VERSION = ""
 XFORMERS_ENABLED_VAE = True
-if args.disable_xformers:
+if not config.computational.xformers:
     XFORMERS_IS_AVAILABLE = False
 else:
     try:
@@ -196,7 +180,7 @@ def is_amd():
 
 
 ENABLE_PYTORCH_ATTENTION = False
-if args.use_pytorch_cross_attention:
+if config.computational.cross_attention == "torch":
     ENABLE_PYTORCH_ATTENTION = True
     XFORMERS_IS_AVAILABLE = False
 
@@ -206,12 +190,12 @@ try:
     if is_nvidia() or is_amd():
         torch_version = torch.version.__version__
         if int(torch_version[0]) >= 2:
-            if ENABLE_PYTORCH_ATTENTION == False and args.use_split_cross_attention == False and args.use_quad_cross_attention == False:
+            if ENABLE_PYTORCH_ATTENTION == False and config.computational.cross_attention not in ("split", "quad"):
                 ENABLE_PYTORCH_ATTENTION = True
             if torch.cuda.is_bf16_supported() and torch.cuda.get_device_properties(torch.cuda.current_device()).major >= 8:
                 VAE_DTYPES = [torch.bfloat16] + VAE_DTYPES
     if is_intel_xpu():
-        if args.use_split_cross_attention == False and args.use_quad_cross_attention == False:
+        if config.computational.cross_attention not in ("split", "quad"):
             ENABLE_PYTORCH_ATTENTION = True
 except:
     pass
@@ -219,7 +203,7 @@ except:
 if is_intel_xpu():
     VAE_DTYPES = [torch.bfloat16] + VAE_DTYPES
 
-if args.cpu_vae:
+if config.computational.cpu_vae:
     VAE_DTYPES = [torch.float32]
 
 if ENABLE_PYTORCH_ATTENTION:
@@ -227,46 +211,15 @@ if ENABLE_PYTORCH_ATTENTION:
     torch.backends.cuda.enable_flash_sdp(True)
     torch.backends.cuda.enable_mem_efficient_sdp(True)
 
-if args.lowvram:
-    set_vram_to = VRAMState.LOW_VRAM
-    lowvram_available = True
-elif args.novram:
-    set_vram_to = VRAMState.NO_VRAM
-elif args.highvram or args.gpu_only:
-    vram_state = VRAMState.HIGH_VRAM
+if config.precision.fp != Precision.MIXED:
+    logging.info(f"Forcing {config.precision.fp}. If this improves performance, please report.")
 
-FORCE_FP32 = False
-FORCE_FP16 = False
-FORCE_BF16 = False
-if args.force_fp32:
-    logging.info("Forcing FP32, if this improves things please report it.")
-    FORCE_FP32 = True
+config.memory.vram = min(config.memory.vram, VRAM.NORMAL)
 
-if args.force_fp16 or cpu_state == CPUState.MPS:
-    logging.info("Forcing FP16.")
-    FORCE_FP16 = True
+logging.info(f"Set vram state to: {vram_state.name}. CPU state is {cpu_state}")
 
-if args.force_bf16:
-    logging.info("Force BF16")
-    FORCE_BF16 = True
-
-if lowvram_available:
-    if set_vram_to in (VRAMState.LOW_VRAM, VRAMState.NO_VRAM):
-        vram_state = set_vram_to
-
-if cpu_state != CPUState.GPU:
-    vram_state = VRAMState.DISABLED
-
-if cpu_state == CPUState.MPS:
-    vram_state = VRAMState.SHARED
-
-logging.info(f"Set vram state to: {vram_state.name}")
-
-DISABLE_SMART_MEMORY = args.disable_smart_memory
-
-if DISABLE_SMART_MEMORY:
+if not config.memory.smart_memory:
     logging.info("Disabling smart memory management")
-
 
 def get_torch_device_name(device):
     if hasattr(device, 'type'):
@@ -336,7 +289,7 @@ class LoadedModel:
             self.model_unload()
             raise e
 
-        if is_intel_xpu() and not args.disable_ipex_optimize:
+        if is_intel_xpu() and config.computational.ipex_optimize:
             self.real_model = ipex.optimize(self.real_model.eval(), graph_mode=True, concat_linear=True)
 
         self.weights_loaded = True
@@ -406,7 +359,7 @@ def free_memory(memory_required, device, keep_loaded=[]):
 
         for x in sorted(can_unload):
             i = x[-1]
-            if not DISABLE_SMART_MEMORY:
+            if config.memory.smart_memory:
                 if get_free_memory(device) > memory_required:
                     break
             current_loaded_models[i].model_unload()
@@ -418,15 +371,13 @@ def free_memory(memory_required, device, keep_loaded=[]):
         if len(unloaded_model) > 0:
             soft_empty_cache()
         else:
-            if vram_state != VRAMState.HIGH_VRAM:
+            if config.memory.vram < VRAM.HIGH:
                 mem_free_total, mem_free_torch = get_free_memory(device, torch_free_too=True)
                 if mem_free_torch > mem_free_total * 0.25:
                     soft_empty_cache()
 
 
 def load_models_gpu(models, memory_required=0, force_patch_weights=False):
-    global vram_state
-
     with model_management_lock:
         inference_memory = minimum_inference_memory()
         extra_mem = max(inference_memory, memory_required)
@@ -482,21 +433,21 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False):
         for loaded_model in models_to_load:
             model = loaded_model.model
             torch_dev = model.load_device
+
             if is_device_cpu(torch_dev):
-                vram_set_state = VRAMState.DISABLED
-            else:
-                vram_set_state = vram_state
+                cpu = True
+
             lowvram_model_memory = 0
-            if lowvram_available and (vram_set_state == VRAMState.LOW_VRAM or vram_set_state == VRAMState.NORMAL_VRAM):
-                model_size = loaded_model.model_memory_required(torch_dev)
-                current_free_mem = get_free_memory(torch_dev)
-                lowvram_model_memory = int(max(64 * (1024 * 1024), (current_free_mem - 1024 * (1024 * 1024)) / 1.3))
-                if model_size <= (current_free_mem - inference_memory):  # only switch to lowvram if really necessary
 
-                    lowvram_model_memory = 0
-
-            if vram_set_state == VRAMState.NO_VRAM:
-                lowvram_model_memory = 64 * 1024 * 1024
+            if not cpu:
+                if config.memory.vram == VRAM.NONE:
+                    lowvram_model_memory = 64 * 1024 * 1024
+                elif config.memory.vram <= VRAM.NORMAL:
+                    model_size = loaded_model.model_memory_required(torch_dev)
+                    current_free_mem = get_free_memory(torch_dev)
+                    lowvram_model_memory = int(max(64 * (1024 * 1024), (current_free_mem - 1024 * (1024 * 1024)) / 1.3))
+                    if model_size <= (current_free_mem - inference_memory):  # only switch to lowvram if really necessary
+                        lowvram_model_memory = 0
 
             loaded_model.model_load(lowvram_model_memory, force_patch_weights=force_patch_weights)
             current_loaded_models.insert(0, loaded_model)
@@ -552,7 +503,7 @@ def dtype_size(dtype):
 
 
 def unet_offload_device():
-    if vram_state == VRAMState.HIGH_VRAM:
+    if config.memory.vram == VRAM.HIGH:
         return get_torch_device()
     else:
         return torch.device("cpu")
@@ -560,11 +511,11 @@ def unet_offload_device():
 
 def unet_initial_load_device(parameters, dtype):
     torch_dev = get_torch_device()
-    if vram_state == VRAMState.HIGH_VRAM:
+    if config.memory.vram == VRAM.HIGH:
         return torch_dev
 
     cpu_dev = torch.device("cpu")
-    if DISABLE_SMART_MEMORY:
+    if not config.memory.smart_memory:
         return cpu_dev
 
     model_size = dtype_size(dtype) * parameters
@@ -578,21 +529,13 @@ def unet_initial_load_device(parameters, dtype):
 
 
 def unet_dtype(device=None, model_params=0, supported_dtypes=(torch.float16, torch.bfloat16, torch.float32)):
-    if args.bf16_unet:
-        return torch.bfloat16
-    if args.fp16_unet:
-        return torch.float16
-    if args.fp8_e4m3fn_unet:
-        return torch.float8_e4m3fn
-    if args.fp8_e5m2_unet:
-        return torch.float8_e5m2
     if should_use_fp16(device=device, model_params=model_params, manual_cast=True):
         if torch.float16 in supported_dtypes:
             return torch.float16
     if should_use_bf16(device, model_params=model_params, manual_cast=True):
         if torch.bfloat16 in supported_dtypes:
             return torch.bfloat16
-    return torch.float32
+    return torch[config.precision.unet.value]
 
 
 # None means no manual cast
@@ -618,16 +561,16 @@ def unet_manual_cast(weight_dtype, inference_device, supported_dtypes=(torch.flo
 
 
 def text_encoder_offload_device():
-    if args.gpu_only:
+    if config.computational.gpu_only:
         return get_torch_device()
     else:
         return torch.device("cpu")
 
 
 def text_encoder_device():
-    if args.gpu_only:
+    if config.computational.gpu_only:
         return get_torch_device()
-    elif vram_state == VRAMState.HIGH_VRAM or vram_state == VRAMState.NORMAL_VRAM:
+    elif config.memory.vram >= VRAM.NORMAL:
         if should_use_fp16(prioritize_performance=False):
             return get_torch_device()
         else:
@@ -637,36 +580,24 @@ def text_encoder_device():
 
 
 def text_encoder_dtype(device=None):
-    if args.fp8_e4m3fn_text_enc:
-        return torch.float8_e4m3fn
-    elif args.fp8_e5m2_text_enc:
-        return torch.float8_e5m2
-    elif args.fp16_text_enc:
-        return torch.float16
-    elif args.fp32_text_enc:
-        return torch.float32
-
-    if is_device_cpu(device):
-        return torch.float16
-
-    return torch.float16
+    return torch[config.precision.text_encoder.value]
 
 
 def intermediate_device():
-    if args.gpu_only:
+    if config.computational.gpu_only:
         return get_torch_device()
     else:
         return torch.device("cpu")
 
 
 def vae_device():
-    if args.cpu_vae:
+    if config.computational.cpu_vae:
         return torch.device("cpu")
     return get_torch_device()
 
 
 def vae_offload_device():
-    if args.gpu_only:
+    if config.computational.gpu_only:
         return get_torch_device()
     else:
         return torch.device("cpu")
@@ -674,12 +605,8 @@ def vae_offload_device():
 
 def vae_dtype(device=None, allowed_dtypes=[]):
     global VAE_DTYPES
-    if args.fp16_vae:
-        return torch.float16
-    elif args.bf16_vae:
-        return torch.bfloat16
-    elif args.fp32_vae:
-        return torch.float32
+    if config.precision.vae != Precision.MIXED:
+        return torch[config.precision.vae.value]
 
     for d in allowed_dtypes:
         if d == torch.float16 and should_use_fp16(device, prioritize_performance=False):
@@ -731,7 +658,7 @@ def device_supports_non_blocking(device):
         return False  # pytorch bug? mps doesn't support non blocking
     if is_intel_xpu():
         return False
-    if args.deterministic:  # TODO: figure out why deterministic breaks non blocking from gpu to cpu (previews)
+    if config.computational.deterministic:  # TODO: figure out why deterministic breaks non blocking from gpu to cpu (previews)
         return False
     if directml_device:
         return False
@@ -742,11 +669,11 @@ def device_should_use_non_blocking(device):
     if not device_supports_non_blocking(device):
         return False
     return False
-    # return True #TODO: figure out why this causes memory issues on Nvidia and possibly others
+    # return True # TODO: figure out why this causes memory issues on Nvidia and possibly others
 
 
 def force_channels_last():
-    if args.force_channels_last:
+    if config.organization.channels_last:
         return True
 
     # TODO
@@ -814,13 +741,12 @@ def pytorch_attention_flash_attention():
 
 
 def force_upcast_attention_dtype():
-    upcast = args.force_upcast_attention
     try:
         if platform.mac_ver()[0] in ['14.5']:  # black image bug on OSX Sonoma 14.5
-            upcast = True
+            config.computational.upcast_attention = "force"
     except:
         pass
-    if upcast:
+    if config.computational.upcast_attention == "force":
         return torch.float32
     else:
         return None
@@ -891,14 +817,14 @@ def should_use_fp16(device=None, model_params=0, prioritize_performance=True, ma
         if is_device_cpu(device):
             return False
 
-    if FORCE_FP16:
+    if config.precision.fp == Precision.FP16:
         return True
 
     if device is not None:
         if is_device_mps(device):
             return True
 
-    if FORCE_FP32:
+    if config.precision.fp == Precision.FP32:
         return False
 
     if directml_device:
@@ -953,7 +879,7 @@ def should_use_fp16(device=None, model_params=0, prioritize_performance=True, ma
 
 
 def should_use_bf16(device=None, model_params=0, prioritize_performance=True, manual_cast=False):
-    if FORCE_BF16:
+    if config.precision.fp == Precision.BF16:
         return True
 
     if device is not None:
@@ -964,7 +890,7 @@ def should_use_bf16(device=None, model_params=0, prioritize_performance=True, ma
         if is_device_mps(device):
             return False
 
-    if FORCE_FP32:
+    if config.precision.fp == Precision.FP32:
         return False
 
     if directml_device:

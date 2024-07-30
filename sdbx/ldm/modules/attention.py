@@ -14,7 +14,7 @@ if model_management.xformers_enabled():
     import xformers  # pylint: disable=import-error
     import xformers.ops # pylint: disable=import-error
 
-from ...cli_args import args
+from ...args import args
 from ... import ops
 ops = ops.disable_weight_init
 

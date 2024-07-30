@@ -123,7 +123,7 @@ async def main():
     # are not making any HTTP requests, you are not running a server, you are not connecting to anything, you are not
     # executing the main.py from the sdbx git repository, you don't even need that Git repository located anywhere.
 
-    from sdbx.cli_args_types import Configuration
+    from sdbx.config import Configuration
 
     # Let's specify some settings. Suppose this is the structure of your directories:
     #   C:/Users/sdbxanonymous/Documents/models

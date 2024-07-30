@@ -33,7 +33,7 @@ warnings.filterwarnings("ignore", message="torch.utils._pytree._register_pytree_
 warnings.filterwarnings("ignore", message="Torch was not compiled with flash attention.")
 warnings.filterwarnings("ignore", message=".*Torch was not compiled with flash attention.*")
 
-from ..cli_args import args
+from ..args import args
 
 if args.cuda_device is not None:
     os.environ['CUDA_VISIBLE_DEVICES'] = str(args.cuda_device)

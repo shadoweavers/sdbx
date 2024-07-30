@@ -3,8 +3,9 @@ from __future__ import annotations
 import torch
 from PIL import Image
 import numpy as np
-from ..cli_args import args
-from ..cli_args_types import LatentPreviewMethod
+
+from sdbx.config import config, LatentPreviewMethod
+
 from ..model_downloader import get_or_download, KNOWN_APPROX_VAES
 from ..taesd.taesd import TAESD
 from ..cmd import folder_paths
@@ -53,8 +54,8 @@ class Latent2RGBPreviewer(LatentPreviewer):
 
 def get_previewer(device, latent_format):
     previewer = None
-    method = args.preview_method
-    if method != LatentPreviewMethod.NoPreviews:
+    method = config.web.preview_method
+    if method != LatentPreviewMethod.NONE:
         # TODO previewer methods
         taesd_decoder_path = None
         if latent_format.taesd_decoder_name is not None:
@@ -65,8 +66,9 @@ def get_previewer(device, latent_format):
             )
             taesd_decoder_path = get_or_download("vae_approx", taesd_decoder_path, KNOWN_APPROX_VAES)
 
-        if method == LatentPreviewMethod.Auto:
-            method = LatentPreviewMethod.Latent2RGB
+        # TODO: CHOICE IS AN ILLUSION
+        if method == LatentPreviewMethod.AUTO:
+            method = LatentPreviewMethod.LATENT2RGB
 
         if method == LatentPreviewMethod.TAESD:
             if taesd_decoder_path:

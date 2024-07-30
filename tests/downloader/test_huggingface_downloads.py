@@ -3,7 +3,7 @@ import shutil
 
 import pytest
 
-from sdbx.cli_args import args
+from sdbx.args import args
 from sdbx.cmd import folder_paths
 from sdbx.cmd.folder_paths import FolderPathsTuple
 from sdbx.model_downloader import KNOWN_HUGGINGFACE_MODEL_REPOS, get_huggingface_repo_list, \

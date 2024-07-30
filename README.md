@@ -395,10 +395,10 @@ setup(
     name="mypackage",
     ...
 entry_points = {
-    'sdbxui.custom_nodes': [
+    'shadowbox.custom_nodes': [
         'mypackage = mypackage_custom_nodes',
     ],
-    'sdbxui.custom_config': [
+    'shadowbox.custom_config': [
         'mypackage = mypackage_custom_config:add_configuration',
     ]
 },

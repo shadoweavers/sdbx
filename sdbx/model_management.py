@@ -12,6 +12,7 @@ import psutil
 import torch
 
 from sdbx.config import config, VRAM, Precision
+
 from . import interruption
 from .model_management_types import ModelManageable
 

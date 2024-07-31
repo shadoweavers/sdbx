@@ -110,7 +110,7 @@ async def main():
 
     loop = asyncio.get_event_loop()
     server = server_module.PromptServer(loop)
-    if config.web.external_address is not "localhost":
+    if config.web.external_address != "localhost":
         server.external_address = config.web.external_address
 
     # at this stage, it's safe to import nodes
@@ -139,7 +139,7 @@ async def main():
 
     # in a distributed setting, the default prompt worker will not be able to send execution events via the websocket
     worker_thread_server = server if not distributed else ServerStub()
-    if not distributed or config.distributed.role is "worker":
+    if not distributed or config.distributed.role == "worker":
         if distributed:
             logging.warning(f"Distributed workers started in the default thread loop cannot notify clients of progress updates. Instead of sdbx or main.py, use sdbx-worker.")
         threading.Thread(target=prompt_worker, daemon=True, args=(q, worker_thread_server,)).start()

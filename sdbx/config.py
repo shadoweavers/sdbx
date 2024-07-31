@@ -17,13 +17,14 @@ def get_config_location():
     if os.name == "nt":
         return os.path.join(os.environ['LOCALAPPDATA'], 'Shadowbox')
     else:
-        return os.path.join(os.expanduser('~'), '.config', 'shadowbox')
+        return os.path.join(os.path.expanduser('~'), '.config', 'shadowbox')
     
 @dataclass
 class FolderPathsTuple:
+    folder_name: str
+
     _last_update_time: int = 0
 
-    folder_name: str
     paths: List[str] = field(default_factory=list)
     supported_extensions: Set[str] = field(default_factory=lambda: set(supported_pt_extensions))
 
@@ -386,7 +387,7 @@ class Config:
 
 
 def parse() -> Config:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(add_help=False)
 
     parser.add_argument('-c', '--config', type=str, default=get_config_location(), help='Location of the config.toml.')
     parser.add_argument('-v', '--verbose', action='store_true', help='Enable verbose output.')

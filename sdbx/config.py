@@ -53,10 +53,12 @@ class FolderPathsTuple:
     @lru_cache(maxsize=None)
     def filename_list(self):
         if self._needs_filename_list_update():
-            # Invalidate the cache
-            self.__class__.my_cached_property.fget.cache_clear()
-            self._last_update_time = os.path.getmtime(self) # possibly time.time()
+            self.invalidate_cache()
         return self._get_filename_list()
+
+    def invalidate_cache(self):
+        self.__class__.filename_list.fget.cache_clear()
+        self._last_update_time = os.path.getmtime(self) # possibly time.time()
     
     def _needs_filename_list_update(self):
         return os.path.getmtime(self) != self._last_update_time

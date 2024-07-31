@@ -17,7 +17,7 @@ from safetensors import safe_open
 from safetensors.torch import save_file
 
 from sdbx import config
-from .cmd import folder_paths
+
 from .component_model.deprecation import _deprecate_method
 from .interruption import InterruptProcessingException
 from .model_downloader_types import CivitFile, HuggingFile, CivitModelsGetResponse, CivitFile_
@@ -28,18 +28,18 @@ _hf_fs = HfFileSystem()
 
 
 def get_filename_list_with_downloadable(folder_name: str, known_files: List[Any]) -> List[str]:
-    existing = frozenset(folder_paths.get_filename_list(folder_name))
+    existing = frozenset(config.folder_names[folder_name].filename_list)
     downloadable = frozenset(str(f) for f in known_files) if config.known_models else frozenset()
     return sorted(list(existing | downloadable))
 
 
 def get_or_download(folder_name: str, filename: str, known_files: List[HuggingFile | CivitFile]) -> Optional[str]:
-    path = folder_paths.get_full_path(folder_name, filename)
+    path = config.folder_names[folder_name].get_path_from_filename(filename)
 
     if path is None and config.known_models:
         try:
             # todo: should this be the first or last path?
-            this_model_directory = folder_paths.get_folder_paths(folder_name)[0]
+            this_model_directory = config.folder_names[folder_name].folder_paths[0]
             known_file: Optional[HuggingFile | CivitFile] = None
             for candidate in known_files:
                 if str(candidate) == filename or candidate.filename == filename or filename in candidate.alternate_filenames or filename == candidate.save_with_filename:
@@ -140,7 +140,7 @@ def get_or_download(folder_name: str, filename: str, known_files: List[HuggingFi
                         except InterruptProcessingException:
                             os.remove(destination_with_filename)
 
-                        path = folder_paths.get_full_path(folder_name, filename)
+                        path = config.folder_names[folder_name].get_path_from_filename(filename)
                         assert path is not None
         except StopIteration:
             pass
@@ -155,7 +155,7 @@ Visit the repository, accept the terms, and then do one of the following:
         finally:
             # a path was found for any reason, so we should invalidate the cache
             if path is not None:
-                folder_paths.invalidate_cache(folder_name)
+                config.folder_names[folder_name].invalidate_cache()
     return path
 
 
@@ -366,7 +366,7 @@ def add_known_models(folder_name: str, known_models: List[Union[CivitFile, Huggi
 
     pre_existing = frozenset(known_models)
     known_models += [model for model in models if model not in pre_existing]
-    folder_paths.invalidate_cache(folder_name)
+    config.folder_names[folder_name].invalidate_cache()
     return known_models
 
 
@@ -377,7 +377,7 @@ def huggingface_repos() -> List[str]:
 
 def get_huggingface_repo_list(*extra_cache_dirs: str) -> List[str]:
     if len(extra_cache_dirs) == 0:
-        extra_cache_dirs = folder_paths.get_folder_paths("huggingface_cache")
+        extra_cache_dirs = config.folder_names["huggingface_cache"]
 
     # all in cache directories
     existing_repo_ids = frozenset(
@@ -389,7 +389,7 @@ def get_huggingface_repo_list(*extra_cache_dirs: str) -> List[str]:
 
     # also check local-dir style directories
     existing_local_dir_repos = set()
-    local_dirs = folder_paths.get_folder_paths("huggingface")
+    local_dirs = config.folder_names["huggingface"]
     for local_dir_root in local_dirs:
         # enumerate all the two-directory paths
         if not os.path.isdir(local_dir_root):
@@ -411,8 +411,8 @@ def get_huggingface_repo_list(*extra_cache_dirs: str) -> List[str]:
 
 
 def get_or_download_huggingface_repo(repo_id: str) -> Optional[str]:
-    cache_dirs = folder_paths.get_folder_paths("huggingface_cache")
-    local_dirs = folder_paths.get_folder_paths("huggingface")
+    cache_dirs = config.folder_names["huggingface_cache"]
+    local_dirs = config.folder_names["huggingface"]
     cache_dirs_snapshots, local_dirs_snapshots = _get_cache_hits(cache_dirs, local_dirs, repo_id)
 
     local_dirs_cache_hit = len(local_dirs_snapshots) > 0

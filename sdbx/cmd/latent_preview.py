@@ -8,7 +8,6 @@ from sdbx.config import config, LatentPreviewMethod
 
 from ..model_downloader import get_or_download, KNOWN_APPROX_VAES
 from ..taesd.taesd import TAESD
-from ..cmd import folder_paths
 from .. import model_management
 from .. import utils
 import logging
@@ -60,7 +59,7 @@ def get_previewer(device, latent_format):
         taesd_decoder_path = None
         if latent_format.taesd_decoder_name is not None:
             taesd_decoder_path = next(
-                (fn for fn in folder_paths.get_filename_list("vae_approx")
+                (fn for fn in config.folder_names["vae_approx"].filename_list
                     if fn.startswith(latent_format.taesd_decoder_name)),
                 ""
             )

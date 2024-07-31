@@ -6,7 +6,9 @@ import glob
 import shutil
 from aiohttp import web
 from ..args import args
-from ..cmd.folder_paths import user_directory
+
+from sdbx import config
+
 from .app_settings import AppSettings
 
 

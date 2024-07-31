@@ -24,7 +24,7 @@ from .. import utils
 from .. import clip_vision as clip_vision_module
 from .. import model_management
 
-from ..cmd import folder_paths, latent_preview
+from ..cmd import latent_preview
 from ..execution_context import current_execution_context
 from ..images import open_image
 from ..model_downloader import get_filename_list_with_downloadable, get_or_download, KNOWN_CHECKPOINTS, KNOWN_CLIP_VISION_MODELS, KNOWN_GLIGEN_MODELS, KNOWN_UNCLIP_CHECKPOINTS, KNOWN_LORAS, KNOWN_CONTROLNETS, KNOWN_DIFF_CONTROLNETS, KNOWN_VAES, KNOWN_APPROX_VAES, get_huggingface_repo_list, KNOWN_CLIP_MODELS, KNOWN_UNET_MODELS

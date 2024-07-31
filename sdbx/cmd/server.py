@@ -35,7 +35,6 @@ from .. import utils
 from ..app.user_manager import UserManager
 from ..client.client_types import FileOutput
 from ..cmd import execution
-from ..cmd import folder_paths
 from ..component_model.abstract_prompt_queue import AbstractPromptQueue, AsyncAbstractPromptQueue
 from ..component_model.executor_types import ExecutorToClientProgress, StatusMessage, QueueInfo, ExecInfo
 from ..component_model.file_output_path import file_output_path
@@ -160,7 +159,7 @@ class PromptServer(ExecutorToClientProgress):
 
         @routes.get("/embeddings")
         def get_embeddings(self):
-            embeddings = folder_paths.get_filename_list("embeddings")
+            embeddings = config.folder_names["embeddings"].filename_list
             return web.json_response(list(map(lambda a: os.path.splitext(a)[0], embeddings)))
 
         @routes.get("/extensions")
@@ -175,20 +174,6 @@ class PromptServer(ExecutorToClientProgress):
                     name) + "/" + os.path.relpath(f, dir).replace("\\", "/"), files)))
 
             return web.json_response(extensions)
-
-        def get_dir_by_type(dir_type=None):
-            type_dir = ""
-            if dir_type is None:
-                dir_type = "input"
-
-            if dir_type == "input":
-                type_dir = folder_paths.get_input_directory()
-            elif dir_type == "temp":
-                type_dir = folder_paths.get_temp_directory()
-            elif dir_type == "output":
-                type_dir = folder_paths.get_output_directory()
-
-            return type_dir, dir_type
 
         def compare_image_hash(filepath, image):
             # function to compare hashes of two images to see if it already exists, fix to #3465
@@ -208,8 +193,8 @@ class PromptServer(ExecutorToClientProgress):
             overwrite = post.get("overwrite")
             image_is_duplicate = False
 
-            image_upload_type = post.get("type")
-            upload_dir, image_upload_type = get_dir_by_type(image_upload_type)
+            image_upload_type = post.get("type") or "input"
+            upload_dir = config.get_path(image_upload_type)
 
             if image and image.file:
                 filename = image.filename
@@ -262,7 +247,8 @@ class PromptServer(ExecutorToClientProgress):
 
             def image_save_function(image, post, filepath):
                 original_ref = json.loads(post.get("original_ref"))
-                filename, output_dir = folder_paths.annotated_filepath(original_ref['filename'])
+                dirname, filename = original_ref.split('/')
+                output_dir = config.get_path(dirname)
 
                 # validation for security: prevent accessing arbitrary path
                 if filename[0] == '/' or '..' in filename:
@@ -270,7 +256,7 @@ class PromptServer(ExecutorToClientProgress):
 
                 if output_dir is None:
                     type = original_ref.get("type", "output")
-                    output_dir = folder_paths.get_directory_by_type(type)
+                    output_dir = config.get_path(type)
 
                 if output_dir is None:
                     return web.Response(status=400)
@@ -389,7 +375,7 @@ class PromptServer(ExecutorToClientProgress):
             if not filename.endswith(".safetensors"):
                 return web.Response(status=404)
 
-            safetensors_path = folder_paths.get_full_path(folder_name, filename)
+            safetensors_path = config.folder_names[folder_name].get_path_from_filename(filename)
             if safetensors_path is None:
                 return web.Response(status=404)
             out = utils.safetensors_header(safetensors_path, max_size=1024 * 1024)

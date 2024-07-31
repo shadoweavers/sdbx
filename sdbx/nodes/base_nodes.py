@@ -392,9 +392,6 @@ class InpaintModelConditioning:
 
 
 class SaveLatent:
-    def __init__(self):
-        self.output_dir = folder_paths.get_output_directory()
-
     @classmethod
     def INPUT_TYPES(s):
         return {"required": { "samples": ("LATENT", ),
@@ -409,7 +406,7 @@ class SaveLatent:
     CATEGORY = "_for_testing"
 
     def save(self, samples, filename_prefix="sdbx", prompt=None, extra_pnginfo=None):
-        full_output_folder, filename, counter, subfolder, filename_prefix = folder_paths.get_save_image_path(filename_prefix, self.output_dir)
+        full_output_folder, filename, counter, subfolder, filename_prefix = config.get_image_save_path(filename_prefix, config.get_path("output"))
 
         # support save metadata for latent sharing
         prompt_info = ""
@@ -443,7 +440,7 @@ class SaveLatent:
 class LoadLatent:
     @classmethod
     def INPUT_TYPES(s):
-        input_dir = folder_paths.get_input_directory()
+        input_dir = config.get_path("inputs")
         files = [f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f)) and f.endswith(".latent")]
         return {"required": {"latent": [sorted(files), ]}, }
 
@@ -479,7 +476,7 @@ class LoadLatent:
 class CheckpointLoader:
     @classmethod
     def INPUT_TYPES(s):
-        return {"required": { "config_name": (folder_paths.get_filename_list("configs"),),
+        return {"required": { "config_name": (config.folder_names["configs"].filename_list,),
                               "ckpt_name": (get_filename_list_with_downloadable("checkpoints", KNOWN_CHECKPOINTS),)}}
     RETURN_TYPES = ("MODEL", "CLIP", "VAE")
     FUNCTION = "load_checkpoint"
@@ -487,9 +484,9 @@ class CheckpointLoader:
     CATEGORY = "advanced/loaders"
 
     def load_checkpoint(self, config_name, ckpt_name):
-        config_path = folder_paths.get_full_path("configs", config_name)
+        config_path = config.folder_names["configs"].get_path_from_filename(config_name)
         ckpt_path = get_or_download("checkpoints", ckpt_name, KNOWN_CHECKPOINTS)
-        return sd.load_checkpoint(config_path, ckpt_path, output_vae=True, output_clip=True, embedding_directory=folder_paths.get_folder_paths("embeddings"))
+        return sd.load_checkpoint(config_path, ckpt_path, output_vae=True, output_clip=True, embedding_directory=config.folder_names["embeddings"].folder_paths)
 
 class CheckpointLoaderSimple:
     @classmethod
@@ -503,14 +500,14 @@ class CheckpointLoaderSimple:
 
     def load_checkpoint(self, ckpt_name):
         ckpt_path = get_or_download("checkpoints", ckpt_name, KNOWN_CHECKPOINTS)
-        out = sd.load_checkpoint_guess_config(ckpt_path, output_vae=True, output_clip=True, embedding_directory=folder_paths.get_folder_paths("embeddings"))
+        out = sd.load_checkpoint_guess_config(ckpt_path, output_vae=True, output_clip=True, embedding_directory=config.folder_names["embeddings"].folder_paths)
         return out[:3]
 
 class DiffusersLoader:
     @classmethod
     def INPUT_TYPES(cls):
         paths = []
-        for search_path in folder_paths.get_folder_paths("diffusers"):
+        for search_path in config.folder_names["diffusers"].folder_paths:
             if os.path.exists(search_path):
                 for root, subdir, files in os.walk(search_path, followlinks=True):
                     if "model_index.json" in files:
@@ -526,7 +523,7 @@ class DiffusersLoader:
     CATEGORY = "advanced/loaders"
 
     def load_checkpoint(self, model_path, output_vae=True, output_clip=True):
-        for search_path in folder_paths.get_folder_paths("diffusers"):
+        for search_path in config.folder_names["diffusers"].folder_paths:
             if os.path.exists(search_path):
                 path = os.path.join(search_path, model_path)
                 if os.path.exists(path):
@@ -536,7 +533,7 @@ class DiffusersLoader:
             with sdbx_tqdm():
                 model_path = snapshot_download(model_path)
 
-        return diffusers_load.load_diffusers(model_path, output_vae=output_vae, output_clip=output_clip, embedding_directory=folder_paths.get_folder_paths("embeddings"))
+        return diffusers_load.load_diffusers(model_path, output_vae=output_vae, output_clip=output_clip, embedding_directory=config.folder_names["embeddings"].folder_paths)
 
 
 class unCLIPCheckpointLoader:
@@ -551,7 +548,7 @@ class unCLIPCheckpointLoader:
 
     def load_checkpoint(self, ckpt_name, output_vae=True, output_clip=True):
         ckpt_path = get_or_download("checkpoints", ckpt_name, KNOWN_UNCLIP_CHECKPOINTS)
-        out = sd.load_checkpoint_guess_config(ckpt_path, output_vae=True, output_clip=True, output_clipvision=True, embedding_directory=folder_paths.get_folder_paths("embeddings"))
+        out = sd.load_checkpoint_guess_config(ckpt_path, output_vae=True, output_clip=True, output_clipvision=True, embedding_directory=config.folder_names["embeddings"].folder_paths)
         return out
 
 class CLIPSetLastLayer:
@@ -612,7 +609,7 @@ class LoraLoaderModelOnly(LoraLoader):
     @classmethod
     def INPUT_TYPES(s):
         return {"required": { "model": ("MODEL",),
-                              "lora_name": (folder_paths.get_filename_list("loras"), ),
+                              "lora_name": (config.folder_names["loras"].filename_list, ),
                               "strength_model": ("FLOAT", {"default": 1.0, "min": -100.0, "max": 100.0, "step": 0.01}),
                               }}
     RETURN_TYPES = ("MODEL",)
@@ -657,16 +654,16 @@ class VAELoader:
     @staticmethod
     def load_taesd(name):
         sd_ = {}
-        approx_vaes = folder_paths.get_filename_list("vae_approx")
+        approx_vaes = config.folder_names["vae_approx"].filename_list
 
         encoder = next(filter(lambda a: a.startswith("{}_encoder.".format(name)), approx_vaes))
         decoder = next(filter(lambda a: a.startswith("{}_decoder.".format(name)), approx_vaes))
 
-        enc = utils.load_torch_file(folder_paths.get_full_path("vae_approx", encoder))
+        enc = utils.load_torch_file(config.folder_names["vae_approx"].get_path_from_filename(encoder))
         for k in enc:
             sd_["taesd_encoder.{}".format(k)] = enc[k]
 
-        dec = utils.load_torch_file(folder_paths.get_full_path("vae_approx", decoder))
+        dec = utils.load_torch_file(config.folder_names["vae_approx"].get_path_from_filename(decoder))
         for k in dec:
             sd_["taesd_decoder.{}".format(k)] = dec[k]
 
@@ -846,14 +843,14 @@ class CLIPLoader:
             logging.warning(f"Unknown clip type argument passed: {type} for model {clip_name}")
 
         clip_path = get_or_download("clip", clip_name, KNOWN_CLIP_MODELS)
-        clip = sd.load_clip(ckpt_paths=[clip_path], embedding_directory=folder_paths.get_folder_paths("embeddings"), clip_type=clip_type)
+        clip = sd.load_clip(ckpt_paths=[clip_path], embedding_directory=config.folder_names["embeddings"].folder_paths, clip_type=clip_type)
         return (clip,)
 
 class DualCLIPLoader:
     @classmethod
     def INPUT_TYPES(s):
-        return {"required": { "clip_name1": (folder_paths.get_filename_list("clip"),), "clip_name2": (
-        folder_paths.get_filename_list("clip"),),
+        return {"required": { "clip_name1": (config.folder_names["clip"].filename_list,), "clip_name2": (
+        config.folder_names["clip"].filename_list,),
                               "type": (["sdxl", "sd3"], ),
                              }}
     RETURN_TYPES = ("CLIP",)
@@ -862,8 +859,8 @@ class DualCLIPLoader:
     CATEGORY = "advanced/loaders"
 
     def load_clip(self, clip_name1, clip_name2, type):
-        clip_path1 = folder_paths.get_full_path("clip", clip_name1)
-        clip_path2 = folder_paths.get_full_path("clip", clip_name2)
+        clip_path1 = config.folder_paths["clip"].get_path_from_filename(clip_name1)
+        clip_path2 = config.folder_paths["clip"].get_path_from_filename(clip_name2)
         if type == "sdxl":
             clip_type = sd.CLIPType.STABLE_DIFFUSION
         elif type == "sd3":
@@ -871,7 +868,7 @@ class DualCLIPLoader:
         else:
             raise ValueError(f"Unknown clip type argument passed: {type} for model {clip_name1} and {clip_name2}")
 
-        clip = sd.load_clip(ckpt_paths=[clip_path1, clip_path2], embedding_directory=folder_paths.get_folder_paths("embeddings"), clip_type=clip_type)
+        clip = sd.load_clip(ckpt_paths=[clip_path1, clip_path2], embedding_directory=config.folder_names["embeddings"].folder_paths, clip_type=clip_type)
         return (clip,)
 
 class CLIPVisionLoader:
@@ -907,7 +904,7 @@ class CLIPVisionEncode:
 class StyleModelLoader:
     @classmethod
     def INPUT_TYPES(s):
-        return {"required": { "style_model_name": (folder_paths.get_filename_list("style_models"),)}}
+        return {"required": { "style_model_name": (config.folder_names["style_models"].filename_list,)}}
 
     RETURN_TYPES = ("STYLE_MODEL",)
     FUNCTION = "load_style_model"
@@ -915,7 +912,7 @@ class StyleModelLoader:
     CATEGORY = "loaders"
 
     def load_style_model(self, style_model_name):
-        style_model_path = folder_paths.get_full_path("style_models", style_model_name)
+        style_model_path = config.folder_names["style_models"].get_path_from_filename(style_model_name)
         style_model = sd.load_style_model(style_model_path)
         return (style_model,)
 
@@ -1405,7 +1402,6 @@ class KSamplerAdvanced:
 
 class SaveImage:
     def __init__(self):
-        self.output_dir = folder_paths.get_output_directory()
         self.type = "output"
         self.prefix_append = ""
         self.compress_level = 4
@@ -1427,7 +1423,7 @@ class SaveImage:
 
     def save_images(self, images, filename_prefix="sdbx", prompt=None, extra_pnginfo=None):
         filename_prefix += self.prefix_append
-        full_output_folder, filename, counter, subfolder, filename_prefix = folder_paths.get_save_image_path(filename_prefix, self.output_dir, images[0].shape[1], images[0].shape[0])
+        full_output_folder, filename, counter, subfolder, filename_prefix = config.get_image_save_path(filename_prefix, config.get_path("output"), images[0].shape[1], images[0].shape[0])
         results = list()
         for (batch_number, image) in enumerate(images):
             i = 255. * image.cpu().numpy()
@@ -1455,7 +1451,6 @@ class SaveImage:
 
 class PreviewImage(SaveImage):
     def __init__(self):
-        self.output_dir = folder_paths.get_temp_directory()
         self.type = "temp"
         self.prefix_append = "_temp_" + ''.join(random.choice("abcdefghijklmnopqrstupvxyz") for x in range(5))
         self.compress_level = 1
@@ -1471,7 +1466,7 @@ class PreviewImage(SaveImage):
 class LoadImage:
     @classmethod
     def INPUT_TYPES(s):
-        input_dir = folder_paths.get_input_directory()
+        input_dir = config.get_path("input")
         files = [f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))]
         return {
             "required": {
@@ -1554,7 +1549,7 @@ class LoadImageMask:
     _color_channels = ["alpha", "red", "green", "blue"]
     @classmethod
     def INPUT_TYPES(s):
-        input_dir = folder_paths.get_input_directory()
+        input_dir = config.get_path("input")
         files = [f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))]
         return {"required":
                     {"image": (sorted(files), {"image_upload": True}),

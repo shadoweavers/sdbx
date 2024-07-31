@@ -56,25 +56,25 @@ def _vanilla_load_importing_execute_prestartup_script(node_paths: Iterable[str])
         print()
 
 
-@contextmanager
-def _exec_mitigations(module: types.ModuleType, module_path: str) -> ExportedNodes:
-    if module.__name__ == "ComfyUI-Manager":
-        from ..cmd import folder_paths
-        old_file = folder_paths.__file__
+# @contextmanager
+# def _exec_mitigations(module: types.ModuleType, module_path: str) -> ExportedNodes:
+#     if module.__name__ == "ComfyUI-Manager":
+#         from ..cmd import folder_paths
+#         old_file = folder_paths.__file__
 
-        try:
-            # mitigate path
-            new_path = join(abspath(join(dirname(old_file), "..", "..")), basename(old_file))
-            folder_paths.__file__ = new_path
-            # mitigate JS copy
-            sys.modules['nodes'].EXTENSION_WEB_DIRS = {}
-            yield ExportedNodes()
-        finally:
-            folder_paths.__file__ = old_file
-            # todo: mitigate "/manager/reboot"
-            # todo: mitigate process_wrap
-    else:
-        yield ExportedNodes()
+#         try:
+#             # mitigate path
+#             new_path = join(abspath(join(dirname(old_file), "..", "..")), basename(old_file))
+#             folder_paths.__file__ = new_path
+#             # mitigate JS copy
+#             sys.modules['nodes'].EXTENSION_WEB_DIRS = {}
+#             yield ExportedNodes()
+#         finally:
+#             folder_paths.__file__ = old_file
+#             # todo: mitigate "/manager/reboot"
+#             # todo: mitigate process_wrap
+#     else:
+#         yield ExportedNodes()
 
 
 def _vanilla_load_custom_nodes_1(module_path, ignore=set()) -> ExportedNodes:

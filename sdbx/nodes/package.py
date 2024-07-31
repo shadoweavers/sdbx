@@ -9,6 +9,8 @@ import types
 from functools import reduce
 from importlib.metadata import entry_points
 
+from sdbx import config
+
 from opentelemetry.trace import Span, Status, StatusCode
 
 from .package_typing import ExportedNodes
@@ -103,7 +105,6 @@ def _import_and_enumerate_nodes_in_module(module: types.ModuleType,
 def import_all_nodes_in_workspace(vanilla_custom_nodes=True, raise_on_failure=False) -> ExportedNodes:
     # now actually import the nodes, to improve control of node loading order
     from sdbx_extras import nodes as sdbx_extras_nodes
-    from ..args import args
     from . import base_nodes
     from .vanilla_node_importing import mitigated_import_of_vanilla_custom_nodes
     # only load these nodes once
@@ -117,8 +118,8 @@ def import_all_nodes_in_workspace(vanilla_custom_nodes=True, raise_on_failure=Fa
                                 ExportedNodes())
         custom_nodes_mappings = ExportedNodes()
 
-        if args.disable_all_custom_nodes:
-            logging.info("Loading custom nodes was disabled, only base and extra nodes were loaded")
+        if config.extensions.disable in (True, "nodes"):
+            logging.info("Loading custom nodes was disabled, only base nodes were loaded.")
             _sdbx_nodes.update(base_and_extra)
             return _sdbx_nodes
 

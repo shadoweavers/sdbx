@@ -1,10 +1,6 @@
 """
 This should be imported before entrypoints to correctly configure global options prior to importing packages like torch and cv2.
 
-Use this instead of cli_args to import the args:
-
->>> from sdbx.cmd.main_pre import args
-
 It will enable command line argument parsing. If this isn't desired, you must author your own implementation of these fixes.
 """
 import logging

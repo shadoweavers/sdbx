@@ -6,6 +6,8 @@ from einops import rearrange, repeat
 from typing import Optional
 import logging
 
+from sdbx import config
+
 from .diffusionmodules.util import AlphaBlender, timestep_embedding
 from .sub_quadratic_attention import efficient_dot_product_attention
 from ... import model_management
@@ -14,14 +16,13 @@ if model_management.xformers_enabled():
     import xformers  # pylint: disable=import-error
     import xformers.ops # pylint: disable=import-error
 
-from ...args import args
 from ... import ops
 ops = ops.disable_weight_init
 
 FORCE_UPCAST_ATTENTION_DTYPE = model_management.force_upcast_attention_dtype()
 
 def get_attn_precision(attn_precision):
-    if args.dont_upcast_attention:
+    if not config.computational.upcast_attention:
         return None
     if FORCE_UPCAST_ATTENTION_DTYPE is not None:
         return FORCE_UPCAST_ATTENTION_DTYPE
@@ -417,12 +418,14 @@ elif model_management.pytorch_attention_enabled():
     logging.info("Using pytorch cross attention")
     optimized_attention = attention_pytorch
 else:
-    if args.use_split_cross_attention:
+    if config.computational.cross_attention == "split":
         logging.info("Using split optimization for cross attention")
         optimized_attention = attention_split
-    else:
-        logging.info("Using sub quadratic optimization for cross attention, if you have memory or speed issues try using: --use-split-cross-attention")
+    elif config.computational.cross_attention == "quad":
+        logging.info("Using sub quadratic optimization for cross attention, if you have memory or speed issues try setting cross-attention to 'split'.")
         optimized_attention = attention_sub_quad
+    else:
+        logging.error(f"{config.computational.cross_attention} is not a valid cross attention algorithm.")
 
 optimized_attention_masked = optimized_attention
 

@@ -14,6 +14,8 @@ from natsort import natsorted
 import numpy as np
 import safetensors.torch
 
+from sdbx import config
+
 from .. import diffusers_load
 from .. import samplers
 from .. import sample
@@ -21,7 +23,6 @@ from .. import sd
 from .. import utils
 from .. import clip_vision as clip_vision_module
 from .. import model_management
-from ..args import args
 
 from ..cmd import folder_paths, latent_preview
 from ..execution_context import current_execution_context
@@ -415,12 +416,10 @@ class SaveLatent:
         if prompt is not None:
             prompt_info = json.dumps(prompt)
 
-        metadata = None
-        if not args.disable_metadata:
-            metadata = {"prompt": prompt_info}
-            if extra_pnginfo is not None:
-                for x in extra_pnginfo:
-                    metadata[x] = json.dumps(extra_pnginfo[x])
+        metadata = {"prompt": prompt_info}
+        if extra_pnginfo is not None:
+            for x in extra_pnginfo:
+                metadata[x] = json.dumps(extra_pnginfo[x])
 
         file = f"{filename}_{counter:05}_.latent"
 
@@ -1433,14 +1432,12 @@ class SaveImage:
         for (batch_number, image) in enumerate(images):
             i = 255. * image.cpu().numpy()
             img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
-            metadata = None
-            if not args.disable_metadata:
-                metadata = PngInfo()
-                if prompt is not None:
-                    metadata.add_text("prompt", json.dumps(prompt))
-                if extra_pnginfo is not None:
-                    for x in extra_pnginfo:
-                        metadata.add_text(x, json.dumps(extra_pnginfo[x]))
+            metadata = PngInfo()
+            if prompt is not None:
+                metadata.add_text("prompt", json.dumps(prompt))
+            if extra_pnginfo is not None:
+                for x in extra_pnginfo:
+                    metadata.add_text(x, json.dumps(extra_pnginfo[x]))
 
             filename_with_batch_num = filename.replace("%batch_num%", str(batch_number))
             file = f"{filename_with_batch_num}_{counter:05}_.png"

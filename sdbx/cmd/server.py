@@ -26,12 +26,13 @@ from aiohttp import web
 from can_ada import URL, parse as urlparse  # pylint: disable=no-name-in-module
 from typing_extensions import NamedTuple
 
+from sdbx import config
+
 from .latent_preview_image_encoding import encode_preview_image
 from .. import interruption
 from .. import model_management
 from .. import utils
 from ..app.user_manager import UserManager
-from ..args import args
 from ..client.client_types import FileOutput
 from ..cmd import execution
 from ..cmd import folder_paths
@@ -106,10 +107,10 @@ class PromptServer(ExecutorToClientProgress):
         self.receive_all_progress_notifications = True
 
         middlewares = [cache_control]
-        if args.enable_cors_header:
-            middlewares.append(create_cors_middleware(args.enable_cors_header))
+        if config.web.enable_cors_header:
+            middlewares.append(create_cors_middleware(config.web.enable_cors_header))
 
-        max_upload_size = round(args.max_upload_size * 1024 * 1024)
+        max_upload_size = round(config.web.max_upload_size * 1024 * 1024)
         self.app: web.Application = web.Application(client_max_size=max_upload_size,
                                                     handler_args={'max_field_size': 16380},
                                                     middlewares=middlewares)
@@ -860,4 +861,4 @@ class PromptServer(ExecutorToClientProgress):
 
     @classmethod
     def get_too_busy_queue_size(cls):
-        return args.max_queue_size
+        return config.web.max_queue_size

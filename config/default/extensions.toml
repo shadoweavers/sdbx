@@ -1,0 +1,5 @@
+[clients]
+singularity = "https://github.com/darkshapes/singularity.git"
+
+[nodes]
+comfynodes = "https://github.com/darkshapes/comfynodes.git"

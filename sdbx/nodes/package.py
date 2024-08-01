@@ -102,14 +102,14 @@ def _import_and_enumerate_nodes_in_module(module: types.ModuleType,
 def import_all_nodes_in_workspace(vanilla_custom_nodes=True, raise_on_failure=False) -> ExportedNodes:
     # now actually import the nodes, to improve control of node loading order
     from sdbx_extras import nodes as sdbx_extras_nodes
-    from . import base_nodes
+    from . import base
     from .vanilla_node_importing import mitigated_import_of_vanilla_custom_nodes
     # only load these nodes once
     if len(_sdbx_nodes) == 0:
         base_and_extra = reduce(lambda x, y: x.update(y),
                                 map(lambda module_inner: _import_and_enumerate_nodes_in_module(module_inner, raise_on_failure=raise_on_failure), [
                                     # this is the list of default nodes to import
-                                    base_nodes,
+                                    base,
                                     sdbx_extras_nodes
                                 ]),
                                 ExportedNodes())

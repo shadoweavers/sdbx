@@ -11,7 +11,7 @@ from dataclasses import asdict, dataclass, field, fields
 from watchdog.events import FileSystemEventHandler
 
 from sdbx.component_model.files import get_package_as_path
-from sdbx.nodes import NodeManager
+from sdbx.nodes.manager import NodeManager
 from sdbx.utils import recursive_search
 
 supported_pt_extensions = frozenset(['.ckpt', '.pt', '.bin', '.pth', '.safetensors', '.pkl'])
@@ -263,7 +263,7 @@ class Config:
     organization: OrganizationConfig = field(default_factory=OrganizationConfig)
 
     def __post_init__(self):
-        self.node_manager = NodeManager(self.get_path("nodes"))
+        self.node_manager = NodeManager(self.path, nodes_path=self.get_path("nodes"))
 
     @classmethod
     def load(cls, filepath: str, loglevel=logging.INFO):
@@ -298,9 +298,7 @@ class Config:
         for subdir in config._path_dict.values():
             os.makedirs(subdir, exist_ok=True)
         
-        shutil.copyfile(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../config.default.toml"), os.path.join(path, "config.toml"))
-        open(os.path.join(path, "clients.toml"), 'a').close()
-        open(os.path.join(path, "nodes.toml"), 'a').close()
+        shutil.copytree(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../config/default"), path, dirs_exist_ok=True)
         
         return config
 

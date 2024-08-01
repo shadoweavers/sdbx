@@ -15,7 +15,6 @@ import torch
 from opentelemetry.trace import get_current_span, StatusCode, Status
 from typing_extensions import TypedDict
 
-from .main_pre import tracer
 from .. import interruption
 from .. import model_management
 from ..component_model.abstract_prompt_queue import AbstractPromptQueue

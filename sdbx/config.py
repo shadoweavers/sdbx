@@ -11,6 +11,7 @@ from dataclasses import asdict, dataclass, field, fields
 from watchdog.events import FileSystemEventHandler
 
 from sdbx.component_model.files import get_package_as_path
+from sdbx.nodes import NodeManager
 from sdbx.utils import recursive_search
 
 supported_pt_extensions = frozenset(['.ckpt', '.pt', '.bin', '.pth', '.safetensors', '.pkl'])
@@ -261,6 +262,9 @@ class Config:
     distributed: DistributedConfig = field(default_factory=DistributedConfig)
     organization: OrganizationConfig = field(default_factory=OrganizationConfig)
 
+    def __post_init__(self):
+        self.node_manager = NodeManager(self.get_path("nodes"))
+
     @classmethod
     def load(cls, filepath: str, loglevel=logging.INFO):
         path = os.path.dirname(filepath)
@@ -269,7 +273,7 @@ class Config:
             with open(filepath, 'rb') as file:
                 data = tomllib.load(file)
 
-            config = cls.from_dict(
+            config = Config.from_dict(
                 data,
                 path=path,
                 loglevel=loglevel
@@ -280,7 +284,7 @@ class Config:
             logging.debug(f"Configuration file '{path}' not found. Generating config directory.")
             return Config.generate_new_config(path, loglevel)
         except tomllib.TOMLDecodeError as e:
-            logging.error(f"Error parsing TOML file: {e}")
+            raise Exception(f"Error parsing TOML file: {e}")
         
     @classmethod
     def generate_new_config(cls, path: str, loglevel=logging.INFO):

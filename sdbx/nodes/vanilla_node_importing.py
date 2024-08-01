@@ -11,7 +11,7 @@ from contextlib import contextmanager
 from typing import Dict, List, Iterable
 from os.path import join, basename, dirname, isdir, isfile, exists, abspath, split, splitext, realpath
 
-from . import base_nodes
+from . import base
 from .package_typing import ExportedNodes
 
 
@@ -122,7 +122,7 @@ def _vanilla_load_custom_nodes_1(module_path, ignore=set()) -> ExportedNodes:
 
 
 def _vanilla_load_custom_nodes_2(node_paths: Iterable[str]) -> ExportedNodes:
-    base_node_names = set(base_nodes.NODE_CLASS_MAPPINGS.keys())
+    base_node_names = set(base.NODE_CLASS_MAPPINGS.keys())
     node_import_times = []
     exported_nodes = ExportedNodes()
     for custom_node_path in node_paths:
@@ -166,7 +166,7 @@ def mitigated_import_of_vanilla_custom_nodes() -> ExportedNodes:
     for module in (cuda_malloc, folder_paths, latent_preview, node_helpers):
         module_short_name = module.__name__.split(".")[-1]
         sys.modules[module_short_name] = module
-    sys.modules['nodes'] = base_nodes
+    sys.modules['nodes'] = base
     from ..cmd import execution, server
     for module in (execution, server):
         module_short_name = module.__name__.split(".")[-1]

@@ -16,10 +16,9 @@ from ..api.components.schema.prompt import PromptDict
 from ..api.components.schema.prompt_request import PromptRequest
 from ..api.paths.history.get.responses.response_200.content.application_json.schema import Schema as GetHistoryDict
 from ..api.schemas import immutabledict
-from ..component_model.file_output_path import file_output_path
 
 
-class AsyncRemotesdbxClient:
+class AsyncRemoteShadowboxClient:
     """
     An asynchronous client for remote servers
     """

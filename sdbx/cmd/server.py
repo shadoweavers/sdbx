@@ -36,7 +36,6 @@ from ..client.client_types import FileOutput
 from ..cmd import execution
 from ..component_model.abstract_prompt_queue import AbstractPromptQueue, AsyncAbstractPromptQueue
 from ..component_model.executor_types import ExecutorToClientProgress, StatusMessage, QueueInfo, ExecInfo
-from ..component_model.file_output_path import file_output_path
 from ..component_model.files import get_package_as_path
 from ..component_model.queue_types import QueueItem, HistoryEntry, BinaryEventTypes, TaskInvocation, ExecutionError, \
     ExecutionStatus

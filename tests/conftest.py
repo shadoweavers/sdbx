@@ -191,7 +191,7 @@ def pytest_collection_modifyitems(items):
 
 @pytest.fixture(scope="module")
 def vae():
-    from sdbx.nodes.base_nodes import VAELoader
+    from sdbx.nodes.base import VAELoader
 
     vae_file = "vae-ft-mse-840000-ema-pruned.safetensors"
     try:
@@ -203,7 +203,7 @@ def vae():
 
 @pytest.fixture(scope="module")
 def clip():
-    from sdbx.nodes.base_nodes import CheckpointLoaderSimple
+    from sdbx.nodes.base import CheckpointLoaderSimple
 
     checkpoint = "v1-5-pruned-emaonly.safetensors"
     try:
@@ -214,7 +214,7 @@ def clip():
 
 @pytest.fixture(scope="module")
 def model(clip):
-    from sdbx.nodes.base_nodes import CheckpointLoaderSimple
+    from sdbx.nodes.base import CheckpointLoaderSimple
     checkpoint = "v1-5-pruned-emaonly.safetensors"
     try:
         return CheckpointLoaderSimple().load_checkpoint(checkpoint)[0]

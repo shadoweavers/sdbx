@@ -11,8 +11,6 @@ from importlib.metadata import entry_points
 
 from sdbx import config
 
-from opentelemetry.trace import Span, Status, StatusCode
-
 from .package_typing import ExportedNodes
 from ..component_model.files import get_package_as_path
 

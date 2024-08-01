@@ -1,18 +1,20 @@
 import os
+import ast
 import enum
 import shutil
 import logging
 import tomllib
 import argparse
 from functools import total_ordering, cached_property, lru_cache
-from typing import Optional, List, Callable, Any, Set, Iterator, Sequence, Dict, Union, Literal
-from dataclasses import dataclass, field, fields
+from typing import List, Callable, Mapping, Any, Set, Iterator, Sequence, Dict, Union, Literal
+from dataclasses import asdict, dataclass, field, fields
 from watchdog.events import FileSystemEventHandler
 
 from sdbx.component_model.files import get_package_as_path
 from sdbx.utils import recursive_search
 
 supported_pt_extensions = frozenset(['.ckpt', '.pt', '.bin', '.pth', '.safetensors', '.pkl'])
+
 
 def get_config_location():
     filename = "config.toml"
@@ -22,6 +24,7 @@ def get_config_location():
     else:
         return os.path.join(os.path.expanduser('~'), '.config', 'shadowbox', filename)
     
+
 @dataclass
 class FolderPathsTuple:
     folder_name: str
@@ -174,71 +177,71 @@ EncoderPrecision = Literal[Precision.FP32, Precision.FP16, Precision.BF16, Preci
 
 @dataclass
 class ExtensionsConfig:
-    disable: Optional[Union[bool, Literal['clients', 'nodes']]] = False
+    disable: Union[bool, Literal['clients', 'nodes']] = False
 
 
 @dataclass
 class LocationConfig:
-    clients: Optional[str] = "clients"
-    nodes: Optional[str] = "nodes"
-    input: Optional[str] = "input"
-    output: Optional[str] = "output"
-    models: Optional[str] = "models"
-    workflows: Optional[str] = "workflows"
+    clients: str = "clients"
+    nodes: str = "nodes"
+    input: str = "input"
+    output: str = "output"
+    models: str = "models"
+    workflows: str = "workflows"
 
 
 @dataclass
 class WebConfig:
-    listen: Optional[str] = "127.0.0.1"
-    port: Optional[str] = "8188"
-    external_address: Optional[str] = field(default="localhost", metadata={"alias": "external-address"})
-    enable_cors_header: Optional[Union[bool, str]] = field(default=False, metadata={"alias": "enable-cors-header"})
-    max_upload_size: Optional[int] = field(default=100, metadata={"alias": "max-upload-size"})
-    max_queue_size: Optional[int] = field(default=65536, metadata={"alias": "max-queue-size"})
-    auto_launch: Optional[bool] = field(default=True, metadata={"alias": "auto-launch"})
-    known_models: Optional[bool] = field(default=True, metadata={"alias": "known-models"})
-    preview_mode: Optional[LatentPreviewMethod] = field(default=LatentPreviewMethod.AUTO, metadata={"alias": "preview-mode"})
+    listen: str = "127.0.0.1"
+    port: str = "8188"
+    external_address: str = field(default="localhost")
+    enable_cors_header: Union[bool, str] = field(default=False)
+    max_upload_size: int = field(default=100)
+    max_queue_size: int = field(default=65536)
+    auto_launch: bool = field(default=True)
+    known_models: bool = field(default=True)
+    preview_mode: LatentPreviewMethod = field(default=LatentPreviewMethod.AUTO)
 
 
 @dataclass
 class ComputationalConfig:
-    gpu_only: Optional[bool] = field(default=False, metadata={"alias": "gpu-only"})
-    cuda_device: Optional[int] = field(default=0, metadata={"alias": "cuda-device"})
-    cuda_malloc: Optional[bool] = field(default=True, metadata={"alias": "cuda-malloc"})
-    cpu_only: Optional[bool] = field(default=False, metadata={"alias": "cpu-only"})
-    cpu_vae: Optional[bool] = field(default=True, metadata={"alias": "cpu-vae"})
-    directml: Optional[Union[bool, int]] = field(default=False)
-    ipex_optimize: Optional[bool] = field(default=False, metadata={"alias": "ibex-optimize"})
-    xformers: Optional[bool] = field(default=True)
-    cross_attention: Optional[Literal['split', 'quad', 'torch']] = field(default="torch", metadata={"alias": "cross-attention"})
-    upcast_attention: Optional[Union[bool, Literal['force']]] = field(default=True, metadata={"alias": "upcast-attention"})
-    deterministic: Optional[bool] = field(default=False)
+    gpu_only: bool = field(default=False)
+    cuda_device: int = field(default=0)
+    cuda_malloc: bool = field(default=True)
+    cpu_only: bool = field(default=False)
+    cpu_vae: bool = field(default=True)
+    directml: Union[bool, int] = field(default=False)
+    ipex_optimize: bool = field(default=False)
+    xformers: bool = field(default=True)
+    cross_attention: Literal['split', 'quad', 'torch'] = field(default="torch")
+    upcast_attention: Union[bool, Literal['force']] = field(default=True)
+    deterministic: bool = field(default=False)
 
 
 @dataclass
 class MemoryConfig:
-    vram: Optional[VRAM] = VRAM.NORMAL
-    smart_memory: Optional[bool] = field(default=True, metadata={"alias": "smart-memory"})
+    vram: VRAM = field(default=VRAM.NORMAL)
+    smart_memory: bool = field(default=True)
 
 
 @dataclass
 class PrecisionConfig:
-    fp: Optional[MixedPrecision] = Precision.MIXED
-    unet: Optional[EncoderPrecision] = Precision.FP32
-    vae: Optional[MixedPrecision] = Precision.MIXED
-    text_encoder: Optional[EncoderPrecision] = field(default=Precision.FP16, metadata={"alias": "text-encoder"})
+    fp: MixedPrecision = field(default=Precision.MIXED)
+    unet: EncoderPrecision = field(default=Precision.FP32)
+    vae: MixedPrecision = field(default=Precision.MIXED)
+    text_encoder: EncoderPrecision = field(default=Precision.FP16)
 
 
 @dataclass
 class DistributedConfig:
-    role: Optional[Literal[False, Literal['worker', 'frontend']]] = False
-    name: Optional[str] = "shadowbox"
-    connection_uri: Optional[str] = field(default="amqp://guest:guest@127.0.0.1", metadata={"alias": "connection-uri"})
+    role: Literal[False, Literal['worker', 'frontend']] = field(default=False)
+    name: str = field(default="shadowbox")
+    connection_uri: str = field(default="amqp://guest:guest@127.0.0.1")
 
 
 @dataclass
 class OrganizationConfig:
-    channels_first: Optional[bool] = False
+    channels_first: bool = False
 
 
 @dataclass
@@ -249,27 +252,27 @@ class Config:
     path: str = get_config_location()
     loglevel: Any = logging.INFO
 
-    extensions: Optional[ExtensionsConfig] = field(default_factory=ExtensionsConfig)
-    location: Optional[LocationConfig] = field(default_factory=LocationConfig)
-    web: Optional[WebConfig] = field(default_factory=WebConfig)
-    computational: Optional[ComputationalConfig] = field(default_factory=ComputationalConfig)
-    memory: Optional[MemoryConfig] = field(default_factory=MemoryConfig)
-    precision: Optional[PrecisionConfig] = field(default_factory=PrecisionConfig)
-    distributed: Optional[DistributedConfig] = field(default_factory=DistributedConfig)
-    organization: Optional[OrganizationConfig] = field(default_factory=OrganizationConfig)
+    extensions: ExtensionsConfig = field(default_factory=ExtensionsConfig)
+    location: LocationConfig = field(default_factory=LocationConfig)
+    web: WebConfig = field(default_factory=WebConfig)
+    computational: ComputationalConfig = field(default_factory=ComputationalConfig)
+    memory: MemoryConfig = field(default_factory=MemoryConfig)
+    precision: PrecisionConfig = field(default_factory=PrecisionConfig)
+    distributed: DistributedConfig = field(default_factory=DistributedConfig)
+    organization: OrganizationConfig = field(default_factory=OrganizationConfig)
 
     @classmethod
     def load(cls, filepath: str, loglevel=logging.INFO):
         path = os.path.dirname(filepath)
 
         try:
-            with open(filepath, 'r') as file:
+            with open(filepath, 'rb') as file:
                 data = tomllib.load(file)
 
-            config = cls(
-                path=path, 
-                loglevel=loglevel, 
-                **data
+            config = cls.from_dict(
+                data,
+                path=path,
+                loglevel=loglevel
             )
             
             return config
@@ -291,11 +294,25 @@ class Config:
         for subdir in config._path_dict.values():
             os.makedirs(subdir, exist_ok=True)
         
-        shutil.copyfile(os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.default.toml"), os.path.join(path, "config.toml"))
+        shutil.copyfile(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../config.default.toml"), os.path.join(path, "config.toml"))
         open(os.path.join(path, "clients.toml"), 'a').close()
         open(os.path.join(path, "nodes.toml"), 'a').close()
         
         return config
+
+    @classmethod
+    def from_dict(cls, src, **kwargs):
+        return cls._from_dict(cls, {**src, **kwargs})
+
+    @staticmethod
+    def _from_dict(cls: type, src: Mapping[str, Any]) -> Any:
+        try:
+            fieldtypes = {f.name: f.type for f in fields(cls)}
+            src = { k.replace("-", "_"): v for k, v in src.items() }
+            return cls(**{f: Config._from_dict(fieldtypes[f.replace("-", "_")], src[f]) for f in src})
+        except TypeError as e:
+            # logging.debug(type(e), e)
+            return src # Not a dataclass field
 
     def rewrite(self, key, value):
         # rewrites the config.toml key to value
@@ -316,11 +333,11 @@ class Config:
         # }
 
         root = {
-            [f.name]: os.path.join(self.path, self.location[f.name]) for f in fields(self.location)
+            f.name: os.path.join(self.path, getattr(self.location, f.name)) for f in fields(self.location)
         }
 
         for f in fields(self.location):
-            if ".." in f:
+            if ".." in getattr(self.location, f.name):
                 logging.error("Cannot set location outside of config path.")
                 raise Exception()
 

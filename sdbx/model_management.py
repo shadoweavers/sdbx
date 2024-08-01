@@ -217,7 +217,7 @@ if config.precision.fp != Precision.MIXED:
 
 config.memory.vram = min(config.memory.vram, VRAM.NORMAL)
 
-logging.info(f"Set vram state to: {vram_state.name}. CPU state is {cpu_state}")
+logging.info(f"Set vram state to: {config.memory.vram}. CPU state is {cpu_state}")
 
 if not config.memory.smart_memory:
     logging.info("Disabling smart memory management")

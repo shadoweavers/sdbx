@@ -1,5 +1,6 @@
 import os
 import enum
+import shutil
 import logging
 import tomllib
 import argparse
@@ -14,10 +15,12 @@ from sdbx.utils import recursive_search
 supported_pt_extensions = frozenset(['.ckpt', '.pt', '.bin', '.pth', '.safetensors', '.pkl'])
 
 def get_config_location():
+    filename = "config.toml"
+
     if os.name == "nt":
-        return os.path.join(os.environ['LOCALAPPDATA'], 'Shadowbox')
+        return os.path.join(os.environ['LOCALAPPDATA'], 'Shadowbox', filename)
     else:
-        return os.path.join(os.path.expanduser('~'), '.config', 'shadowbox')
+        return os.path.join(os.path.expanduser('~'), '.config', 'shadowbox', filename)
     
 @dataclass
 class FolderPathsTuple:
@@ -181,6 +184,7 @@ class LocationConfig:
     input: Optional[str] = "input"
     output: Optional[str] = "output"
     models: Optional[str] = "models"
+    workflows: Optional[str] = "workflows"
 
 
 @dataclass
@@ -255,9 +259,11 @@ class Config:
     organization: Optional[OrganizationConfig] = field(default_factory=OrganizationConfig)
 
     @classmethod
-    def load(cls, path: str, loglevel=logging.INFO):
+    def load(cls, filepath: str, loglevel=logging.INFO):
+        path = os.path.dirname(filepath)
+
         try:
-            with open(path, 'r') as file:
+            with open(filepath, 'r') as file:
                 data = tomllib.load(file)
 
             config = cls(
@@ -268,21 +274,45 @@ class Config:
             
             return config
         except FileNotFoundError:
-            print(f"Configuration file '{path}' not found.")
+            logging.debug(f"Configuration file '{path}' not found. Generating config directory.")
+            return Config.generate_new_config(path, loglevel)
         except tomllib.TOMLDecodeError as e:
-            print(f"Error parsing TOML file: {e}")
+            logging.error(f"Error parsing TOML file: {e}")
+        
+    @classmethod
+    def generate_new_config(cls, path: str, loglevel=logging.INFO):
+        os.makedirs(path, exist_ok=True)
+
+        config = cls(
+            path=path, 
+            loglevel=loglevel,
+        )
+
+        for subdir in config._path_dict.values():
+            os.makedirs(subdir, exist_ok=True)
+        
+        shutil.copyfile(os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.default.toml"), os.path.join(path, "config.toml"))
+        open(os.path.join(path, "clients.toml"), 'a').close()
+        open(os.path.join(path, "nodes.toml"), 'a').close()
+        
+        return config
 
     def rewrite(self, key, value):
         # rewrites the config.toml key to value
         pass
 
     def get_path(self, name):
+        return self._path_dict[name]
+
+    @cached_property
+    def _path_dict(self):
         # root = {
         #     "clients": os.path.join(self.path, self.location.clients),
         #     "nodes": os.path.join(self.path, self.location.nodes),
         #     "input": os.path.join(self.path, self.location.input),
         #     "output": os.path.join(self.path, self.location.output),
         #     "models": os.path.join(self.path, self.location.models),
+        #     "workflows": os.path.join(self.path, self.location.workflows)
         # }
 
         root = {
@@ -317,7 +347,7 @@ class Config:
             "models.vae_approx": os.path.join(models, "vae_approx"),
         }
 
-        return {**root, **models}[name]
+        return {**root, **models}
 
     @cached_property
     def folder_names(self):
@@ -389,7 +419,7 @@ class Config:
 def parse() -> Config:
     parser = argparse.ArgumentParser(add_help=False)
 
-    parser.add_argument('-c', '--config', type=str, default=get_config_location(), help='Location of the config.toml.')
+    parser.add_argument('-c', '--config', type=str, default=get_config_location(), help='Location of the config file.')
     parser.add_argument('-v', '--verbose', action='store_true', help='Enable verbose output.')
     parser.add_argument('-s', '--silent', action='store_true', help='Silence all print to stdout.')
     parser.add_argument('-d', '--daemon', action='store_true', help='Run in daemon mode (not associated with tty).')

@@ -11,7 +11,6 @@ from sdbx import config
 
 from .extra_model_paths import load_extra_path_config
 from .. import model_management
-from ..analytics.analytics import initialize_event_tracking
 from ..cmd import cuda_malloc
 from ..cmd import server as server_module
 from ..component_model.abstract_prompt_queue import AbstractPromptQueue
@@ -143,9 +142,6 @@ async def main():
         if distributed:
             logging.warning(f"Distributed workers started in the default thread loop cannot notify clients of progress updates. Instead of sdbx or main.py, use sdbx-worker.")
         threading.Thread(target=prompt_worker, daemon=True, args=(q, worker_thread_server,)).start()
-
-    # server has been imported and things should be looking good
-    initialize_event_tracking(loop)
 
     # These are the default folders that checkpoints, clip and vae models will be saved to when using CheckpointSave, etc.. nodes
     config.folder_names["checkpoints"].paths.append(os.path.join(config.get_path("output"), "checkpoints"))

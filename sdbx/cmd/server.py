@@ -32,7 +32,6 @@ from .latent_preview_image_encoding import encode_preview_image
 from .. import interruption
 from .. import model_management
 from .. import utils
-from ..app.user_manager import UserManager
 from ..client.client_types import FileOutput
 from ..cmd import execution
 from ..component_model.abstract_prompt_queue import AbstractPromptQueue, AsyncAbstractPromptQueue
@@ -94,7 +93,6 @@ class PromptServer(ExecutorToClientProgress):
         mimetypes.types_map['.js'] = 'application/javascript; charset=utf-8'
 
         self.address: str = "0.0.0.0"
-        self.user_manager = UserManager()
         # todo: this is probably read by custom nodes elsewhere
         self.supports: List[str] = ["custom_nodes_from_web"]
         self.prompt_queue: AbstractPromptQueue | AsyncAbstractPromptQueue | None = None
@@ -708,8 +706,6 @@ class PromptServer(ExecutorToClientProgress):
     def external_address(self, value):
         self._external_address = value
     def add_routes(self):
-        self.user_manager.add_routes(self.routes)
-
         # Prefix every route with /api for easier matching for delegation.
         # This is very useful for frontend dev server, which need to forward
         # everything except serving of static files.

@@ -11,7 +11,7 @@ from importlib.metadata import entry_points
 
 from sdbx import config
 
-from .package_typing import ExportedNodes
+from .types import ExportedNodes
 from ..component_model.files import get_package_as_path
 
 _sdbx_nodes: ExportedNodes = ExportedNodes()

@@ -10,9 +10,7 @@ import traceback
 import typing
 from typing import List, Optional, Tuple, Union
 
-import lazy_object_proxy
 import torch
-from opentelemetry.trace import get_current_span, StatusCode, Status
 from typing_extensions import TypedDict
 
 from .. import interruption
@@ -22,11 +20,7 @@ from ..component_model.executor_types import ExecutorToClientProgress
 from ..component_model.queue_types import QueueTuple, HistoryEntry, QueueItem, MAXIMUM_HISTORY_SIZE, ExecutionStatus
 from ..execution_context import new_execution_context, ExecutionContext
 from ..nodes.package import import_all_nodes_in_workspace
-from ..nodes.package_typing import ExportedNodes
-
-# ideally this would be passed in from main, but the way this is authored, we can't easily pass nodes down to the
-# various functions that are declared here. It should have been a context in the first place.
-nodes: ExportedNodes = lazy_object_proxy.Proxy(import_all_nodes_in_workspace)
+from ..nodes.types import ExportedNodes
 
 
 def get_input_data(inputs, class_def, unique_id, outputs=None, prompt=None, extra_data=None):
@@ -65,35 +59,7 @@ def get_input_data(inputs, class_def, unique_id, outputs=None, prompt=None, extr
     return input_data_all
 
 
-@tracer.start_as_current_span("Execute Node")
 def map_node_over_list(obj, input_data_all: typing.Dict[str, typing.Any], func: str, allow_interrupt=False):
-    span = get_current_span()
-    class_type = obj.__class__.__name__
-    span.set_attribute("class_type", class_type)
-    if input_data_all is not None:
-        for kwarg_name, kwarg_value in input_data_all.items():
-            if isinstance(kwarg_value, str) or isinstance(kwarg_value, bool) or isinstance(kwarg_value, int) or isinstance(kwarg_value, float):
-                span.set_attribute(f"input_data_all.{kwarg_name}", kwarg_value)
-            else:
-                try:
-                    items_to_display = []
-                    if hasattr(kwarg_value, "shape"):
-                        # if the object has a shape attribute (likely a NumPy array or similar), get up to the first ten elements
-                        flat_values = kwarg_value.flatten() if hasattr(kwarg_value, "flatten") else kwarg_value
-                        items_to_display = [flat_values[i] for i in range(min(10, flat_values.size))]
-                    elif hasattr(kwarg_value, "__getitem__") and hasattr(kwarg_value, "__len__"):
-                        # If the object is indexable and has a length, get the first ten items
-                        items_to_display = [kwarg_value[i] for i in range(min(10, len(kwarg_value)))]
-
-                    filtered_items = [
-                        item for item in items_to_display if isinstance(item, (str, bool, int, float))
-                    ]
-
-                    if filtered_items:
-                        span.set_attribute(f"input_data_all.{kwarg_name}", filtered_items)
-                except TypeError:
-                    pass
-
     # check if node wants the lists
     input_is_list = False
     if hasattr(obj, "INPUT_IS_LIST"):
@@ -171,7 +137,6 @@ def format_value(x):
         return str(x)
 
 
-@tracer.start_as_current_span("Recursive Execute")
 def recursive_execute(server: ExecutorToClientProgress,
                       prompt,
                       outputs,
@@ -181,11 +146,9 @@ def recursive_execute(server: ExecutorToClientProgress,
                       prompt_id,
                       outputs_ui,
                       object_storage):
-    span = get_current_span()
     unique_id = current_item
     inputs = prompt[unique_id]['inputs']
     class_type = prompt[unique_id]['class_type']
-    span.set_attribute("class_type", class_type)
     class_def = nodes.NODE_CLASS_MAPPINGS[class_type]
     if unique_id in outputs:
         return (True, None, None)
@@ -360,10 +323,6 @@ class PromptExecutor:
             self.server.send_sync(event, data, self.server.client_id)
 
     def handle_execution_error(self, prompt_id, prompt, current_outputs, executed, error, ex):
-        current_span = get_current_span()
-        current_span.set_status(Status(StatusCode.ERROR))
-        current_span.record_exception(ex)
-
         node_id = error["node_id"]
         class_type = prompt[node_id]["class_type"]
 
@@ -734,8 +693,6 @@ class ValidationErrorDict(TypedDict):
 
 ValidationTuple = typing.Tuple[bool, Optional[ValidationErrorDict], typing.List[str], Union[dict, list]]
 
-
-@tracer.start_as_current_span("Validate Prompt")
 def validate_prompt(prompt: typing.Mapping[str, typing.Any]) -> ValidationTuple:
     outputs = set()
     for x in prompt:

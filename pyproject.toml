@@ -68,21 +68,21 @@ core = [
     "certifi",
     "pyjwt[crypto]",
     
-    # Optimization and Performance
-    "frozendict>=2.3.6",
-    "lazy-object-proxy",
-    "wrapt>=1.16.0",
-    "spandrel",
+    # # Optimization and Performance
+    # "frozendict>=2.3.6",
+    # "lazy-object-proxy",
+    # "wrapt>=1.16.0",
+    # "spandrel",
     
-    # Telemetry
-    "opentelemetry-distro",
-    "opentelemetry-exporter-otlp",
-    "opentelemetry-propagator-jaeger",
-    "opentelemetry-instrumentation",
-    "opentelemetry-util-http",
-    "opentelemetry-instrumentation-aio-pika",
-    "opentelemetry-instrumentation-requests",
-    "opentelemetry-semantic-conventions",
+    # # Telemetry
+    # "opentelemetry-distro",
+    # "opentelemetry-exporter-otlp",
+    # "opentelemetry-propagator-jaeger",
+    # "opentelemetry-instrumentation",
+    # "opentelemetry-util-http",
+    # "opentelemetry-instrumentation-aio-pika",
+    # "opentelemetry-instrumentation-requests",
+    # "opentelemetry-semantic-conventions",
     
     # Message Queue
     "aio-pika",

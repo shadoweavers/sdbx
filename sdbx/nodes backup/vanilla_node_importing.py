@@ -12,7 +12,7 @@ from typing import Dict, List, Iterable
 from os.path import join, basename, dirname, isdir, isfile, exists, abspath, split, splitext, realpath
 
 from . import base
-from .package_typing import ExportedNodes
+from .types import ExportedNodes
 
 
 def _vanilla_load_importing_execute_prestartup_script(node_paths: Iterable[str]) -> None:

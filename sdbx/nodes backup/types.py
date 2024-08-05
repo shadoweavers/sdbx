@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing_extensions import TypedDict, NotRequired, Generic
-from typing import Union, Optional, Sequence, Dict, ClassVar, Protocol, Tuple, TypeVar, Any, Literal, \
-    Callable, List, Type
+from typing import Union, Optional, Sequence, Dict, Type, Protocol, Tuple, TypeVar, Any, Literal, \
+    Callable, List
 
 T = TypeVar('T')
 
@@ -71,7 +71,7 @@ class InputTypes(TypedDict, total=True):
 
 ValidateInputsMethod = Optional[Callable[..., Union[bool, str]]]
 
-IsChangedMethod = Callable[[Type[Any], ...], str]
+IsChangedMethod = Callable[[Type[Any], Any], str]
 
 class FunctionReturnsUIVariables(TypedDict):
     ui: dict
@@ -111,17 +111,17 @@ class CustomNode(Protocol):
     def INPUT_TYPES(cls) -> InputTypes: ...
 
     # Optional method signature for VALIDATE_INPUTS
-    VALIDATE_INPUTS: Optional[ClassVar[ValidateInputsMethod]]
+    VALIDATE_INPUTS: Optional[Type[ValidateInputsMethod]]
 
-    RETURN_TYPES: ClassVar[Tuple[CommonReturnTypes, ...]]
-    RETURN_NAMES: Optional[ClassVar[Tuple[str, ...]]]
-    OUTPUT_IS_LIST: Optional[ClassVar[Tuple[bool, ...]]]
-    INPUT_IS_LIST: Optional[ClassVar[bool]]
-    FUNCTION: ClassVar[str]
-    CATEGORY: ClassVar[str]
-    OUTPUT_NODE: Optional[ClassVar[bool]]
+    RETURN_TYPES: Type[Tuple[CommonReturnTypes, ...]]
+    RETURN_NAMES: Optional[Type[Tuple[str, ...]]]
+    OUTPUT_IS_LIST: Optional[Type[Tuple[bool, ...]]]
+    INPUT_IS_LIST: Optional[Type[bool]]
+    FUNCTION: Type[str]
+    CATEGORY: Type[str]
+    OUTPUT_NODE: Optional[Type[bool]]
 
-    IS_CHANGED: Optional[ClassVar[IsChangedMethod]]
+    IS_CHANGED: Optional[Type[IsChangedMethod]]
 
 
 @dataclass

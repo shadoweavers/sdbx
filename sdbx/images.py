@@ -5,7 +5,7 @@ from typing import Iterator
 import cv2
 from PIL import Image
 
-from . import node_helpers
+from sdbx.nodes import helpers
 
 
 def _open_exr(exr_path) -> Image.Image:
@@ -18,5 +18,5 @@ def open_image(file_path: str) -> Iterator[Image.Image]:
     if ext == ".exr":
         yield _open_exr(file_path)
     else:
-        with node_helpers.pillow(Image.open, file_path) as image:
+        with helpers.pillow(Image.open, file_path) as image:
             yield image

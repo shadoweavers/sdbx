@@ -12,7 +12,6 @@ from opentelemetry.trace import Span, Status, StatusCode
 
 from ..api.components.schema.prompt import PromptDict
 from ..config import Configuration
-from ..cmd.main_pre import tracer
 from ..component_model.executor_types import ExecutorToClientProgress
 from ..component_model.make_mutable import make_mutable
 from ..distributed.server_stub import ServerStub

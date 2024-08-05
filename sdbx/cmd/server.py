@@ -41,7 +41,7 @@ from ..component_model.queue_types import QueueItem, HistoryEntry, BinaryEventTy
     ExecutionStatus
 from ..digest import digest
 from ..images import open_image
-from ..nodes.package_typing import ExportedNodes
+from ..nodes.types import ExportedNodes
 
 
 class HeuristicPath(NamedTuple):

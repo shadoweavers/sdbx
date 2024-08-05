@@ -62,7 +62,7 @@ class ConditioningCombine:
     def combine(self, conditioning_1, conditioning_2):
         return (conditioning_1 + conditioning_2, )
 
-class ConditioningAverage :
+class ConditioningAverage:
     @classmethod
     def INPUT_TYPES(s):
         return {"required": {"conditioning_to": ("CONDITIONING", ), "conditioning_from": ("CONDITIONING", ),

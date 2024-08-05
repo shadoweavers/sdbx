@@ -7,8 +7,6 @@ import subprocess
 
 from dulwich import porcelain
 
-from sdbx.nodes.base import register_base_nodes
-
 class NodeManager:
     def __init__(self, path, nodes_path, env_name=".node_env"):
         self.path = path
@@ -20,7 +18,7 @@ class NodeManager:
         self.initialize_environment(env_name)
         self.validate_nodes_installed()
 
-        # self.nodes = self.import_nodes()
+        self.nodes = self.import_nodes()
     
     def initialize_environment(self, env_name=".node_env"):
         self.env_path = os.path.join(self.path, env_name)
@@ -62,6 +60,5 @@ class NodeManager:
             if node_module not in self.env_packages: # check all downloaded nodes installed
                 subprocess.check_call([self.env_pip, "install", "-e", node_path])
     
-    # def import_nodes(self):
-        # for node_module in self.node_modules.keys():
-            # 
+    def import_nodes(self):
+        for node_module in self.node_modules.keys()

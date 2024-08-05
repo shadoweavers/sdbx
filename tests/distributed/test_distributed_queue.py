@@ -9,7 +9,7 @@ from testcontainers.rabbitmq import RabbitMqContainer
 
 from sdbx.client.aio_client import AsyncRemoteComfyClient
 from sdbx.client.embedded_sdbx_client import EmbeddedComfyClient
-from sdbx.client.sdxl_with_refiner_workflow import sdxl_workflow_with_refiner
+from ..mocks.sdxl_with_refiner_workflow import sdxl_workflow_with_refiner
 from sdbx.component_model.make_mutable import make_mutable
 from sdbx.component_model.queue_types import QueueItem, QueueTuple, TaskInvocation, NamedQueueTuple, ExecutionStatus
 from sdbx.distributed.distributed_prompt_worker import DistributedPromptWorker

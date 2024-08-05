@@ -5,7 +5,7 @@ import torch
 
 from sdbx.config import Configuration
 from sdbx.client.embedded_sdbx_client import EmbeddedComfyClient
-from sdbx.client.sdxl_with_refiner_workflow import sdxl_workflow_with_refiner
+from ..mocks.sdxl_with_refiner_workflow import sdxl_workflow_with_refiner
 
 
 @pytest.mark.asyncio

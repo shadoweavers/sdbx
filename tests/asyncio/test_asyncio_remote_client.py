@@ -6,7 +6,7 @@ import pytest
 from can_ada import URL, parse
 
 from sdbx.client.aio_client import AsyncRemoteComfyClient
-from sdbx.client.sdxl_with_refiner_workflow import sdxl_workflow_with_refiner
+from ..mocks.sdxl_with_refiner_workflow import sdxl_workflow_with_refiner
 
 
 @pytest.mark.asyncio

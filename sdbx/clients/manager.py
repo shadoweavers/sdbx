@@ -22,18 +22,25 @@ class ClientManager:
             return
 
         self.validate_clients_installed()
-
-        self.selected_path = os.path.join(self.clients_path, os.path.normpath(self.selected))
     
     def validate_clients_installed(self):
+        self.first_viable = None
+        
         for client_signature, url in self.client_signatures.items():
             client_path = os.path.join(self.clients_path, os.path.normpath(client_signature))
 
             if not os.path.exists(client_path):
-                os.makedirs(client_path, exist_ok=True)
+                # os.makedirs(client_path, exist_ok=True)
                 namespace, project, service = parse_service(url, client_signature)
                 asset_url, _ = get_asset_url(namespace, project, service=service)
                 download_asset(asset_url, client_path)
+            
+            index_path = os.path.join(client_path, "index.html")
+
+            if os.path.exists(index_path) and self.first_viable == None:
+                self.first_viable = client_path
+            
+        self.selected_path = self.first_viable
     
     def update_clients(self):
         for client_signature, url in self.client_signatures.items():

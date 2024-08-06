@@ -47,26 +47,29 @@ async def get_asset_url(session, namespace, project, service=None):
     
     return None
 
-async def download_asset(session, url, extract_path):
-    # Wipe the directory first
-    if os.path.exists(extract_path):
-        shutil.rmtree(extract_path)
-    os.makedirs(extract_path, exist_ok=True)
-    
+async def download_asset(session, url, extract_path):    
     try:
         async with session.get(url) as response:
             if response.status == 200:
                 content = await response.read()
                 
                # Use a temporary file to save the zip content
-                with tempfile.NamedTemporaryFile() as zip:
-                    zippath = zip.name
-                    async with aiofiles.open(zippath, 'wb') as f:
+                with tempfile.NamedTemporaryFile(delete=False) as zip:
+                    async with aiofiles.open(zip.name, 'wb') as f:
                         await f.write(content)
+
+                    # Wipe the directory first
+                    if os.path.exists(extract_path):
+                        shutil.rmtree(extract_path)
+                    os.makedirs(extract_path, exist_ok=True)
                 
                     # Extract the zip file into the directory
-                    with zipfile.ZipFile(zippath, 'r') as zipref:
-                        zipref.extractall(extract_path) 
+                    with zipfile.ZipFile(zip.name, 'r') as ref:
+                        ref.extractall(extract_path)
+                
+                # Clean up the temporary zip file
+                os.unlink(zip.name)
+                
                 logging.debug(f"Downloaded and extracted asset from {url} to {extract_path}")
             else:
                 logging.error(f"Failed to download asset from {url}, status code: {response.status}")

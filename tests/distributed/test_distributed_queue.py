@@ -7,8 +7,7 @@ import pytest
 from aiohttp import ClientSession, ClientConnectorError
 from testcontainers.rabbitmq import RabbitMqContainer
 
-from sdbx.client.aio_client import AsyncRemoteComfyClient
-from sdbx.client.embedded_sdbx_client import EmbeddedComfyClient
+from sdbx.clients.embedded import AsyncRemoteShadowboxClient, EmbeddedShadowboxClient
 from ..mocks.sdxl_with_refiner_workflow import sdxl_workflow_with_refiner
 from sdbx.component_model.make_mutable import make_mutable
 from sdbx.component_model.queue_types import QueueItem, QueueTuple, TaskInvocation, NamedQueueTuple, ExecutionStatus
@@ -77,7 +76,7 @@ async def test_distributed_prompt_queues_same_process():
                     assert incoming is not None
                     incoming_named = NamedQueueTuple(incoming)
                     assert incoming_named.prompt_id == incoming_prompt_id
-                    async with EmbeddedComfyClient() as embedded_sdbx_client:
+                    async with EmbeddedShadowboxClient() as embedded_sdbx_client:
                         outputs = await embedded_sdbx_client.queue_prompt(incoming_named.prompt,
                                                                            incoming_named.prompt_id)
                     worker.task_done(incoming_named.prompt_id, outputs, ExecutionStatus("success", True, []))
@@ -94,7 +93,7 @@ async def test_distributed_prompt_queues_same_process():
 
 @pytest.mark.asyncio
 async def test_frontend_backend_workers(frontend_backend_worker_with_rabbitmq):
-    client = AsyncRemoteComfyClient(server_address=frontend_backend_worker_with_rabbitmq)
+    client = AsyncRemoteShadowboxClient(server_address=frontend_backend_worker_with_rabbitmq)
     prompt = sdxl_workflow_with_refiner("test", inference_steps=1, refiner_steps=1)
     png_image_bytes = await client.queue_prompt(prompt)
     len_queue_after = await client.len_queue()
@@ -104,7 +103,7 @@ async def test_frontend_backend_workers(frontend_backend_worker_with_rabbitmq):
 
 @pytest.mark.asyncio
 async def test_frontend_backend_workers_validation_error_raises(frontend_backend_worker_with_rabbitmq):
-    client = AsyncRemoteComfyClient(server_address=frontend_backend_worker_with_rabbitmq)
+    client = AsyncRemoteShadowboxClient(server_address=frontend_backend_worker_with_rabbitmq)
 
     prompt = sdxl_workflow_with_refiner("test", inference_steps=1, refiner_steps=1, sdxl_refiner_checkpoint_name="unknown.safetensors")
     with pytest.raises(Exception):

@@ -32,7 +32,7 @@ from .latent_preview_image_encoding import encode_preview_image
 from .. import interruption
 from .. import model_management
 from .. import utils
-from ..client.client_types import FileOutput
+from ..clients.embedded import FileOutput
 from ..cmd import execution
 from ..component_model.abstract_prompt_queue import AbstractPromptQueue, AsyncAbstractPromptQueue
 from ..component_model.executor_types import ExecutorToClientProgress, StatusMessage, QueueInfo, ExecInfo

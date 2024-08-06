@@ -746,9 +746,9 @@ There are multiple ways to use this ComfyUI package to run workflows programmati
 Start ComfyUI by creating an ordinary Python object. This does not create a web server. It runs ComfyUI as a library, like any other package you are familiar with:
 
 ```python
-from sdbx.client.embedded_sdbx_client import EmbeddedComfyClient
+from sdbx.client.embedded import EmbeddedShadowboxClient
 
-async with EmbeddedComfyClient() as client:
+async with EmbeddedShadowboxClient() as client:
     # This will run your prompt
     outputs = await client.queue_prompt(prompt)
     # At this point, your prompt is finished and all the outputs, like saving images, have been completed.

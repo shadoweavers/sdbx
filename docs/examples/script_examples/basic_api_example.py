@@ -136,8 +136,8 @@ async def main():
     #   configuration.cwd = os.path.dirname(__file__)
     configuration = Configuration()
 
-    from sdbx.client.embedded_sdbx_client import EmbeddedComfyClient
-    async with EmbeddedComfyClient(configuration=configuration) as client:
+    from sdbx.clients.embedded import EmbeddedShadowboxClient
+    async with EmbeddedShadowboxClient(configuration=configuration) as client:
         # This will run your prompt
         outputs = await client.queue_prompt(prompt)
 

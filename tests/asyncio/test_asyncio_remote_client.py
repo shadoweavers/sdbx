@@ -5,13 +5,13 @@ import aiohttp
 import pytest
 from can_ada import URL, parse
 
-from sdbx.client.aio_client import AsyncRemoteComfyClient
+from sdbx.clients.embedded import AsyncRemoteShadowboxClient
 from ..mocks.sdxl_with_refiner_workflow import sdxl_workflow_with_refiner
 
 
 @pytest.mark.asyncio
 async def test_completes_prompt(sdbx_background_server):
-    client = AsyncRemoteComfyClient()
+    client = AsyncRemoteShadowboxClient()
     random_seed = random.randint(1, 4294967295)
     prompt = sdxl_workflow_with_refiner("test", inference_steps=1, seed=random_seed, refiner_steps=1)
     png_image_bytes = await client.queue_prompt(prompt)
@@ -20,7 +20,7 @@ async def test_completes_prompt(sdbx_background_server):
 
 @pytest.mark.asyncio
 async def test_completes_prompt_with_ui(sdbx_background_server):
-    client = AsyncRemoteComfyClient()
+    client = AsyncRemoteShadowboxClient()
     random_seed = random.randint(1, 4294967295)
     prompt = sdxl_workflow_with_refiner("test", inference_steps=1, seed=random_seed, refiner_steps=1)
     result_dict = await client.queue_prompt_ui(prompt)
@@ -30,7 +30,7 @@ async def test_completes_prompt_with_ui(sdbx_background_server):
 
 @pytest.mark.asyncio
 async def test_completes_prompt_with_image_urls(sdbx_background_server):
-    client = AsyncRemoteComfyClient()
+    client = AsyncRemoteShadowboxClient()
     random_seed = random.randint(1, 4294967295)
     prompt = sdxl_workflow_with_refiner("test", inference_steps=1, seed=random_seed, refiner_steps=1, filename_prefix="subdirtest/sdxl")
     result = await client.queue_prompt_api(prompt)

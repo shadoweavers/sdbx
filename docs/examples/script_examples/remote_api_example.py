@@ -125,8 +125,8 @@ async def main():
     # Then, as the README specifies, `cd` into the directory that contains your `models/` folder and run:
     #   sdbx --listen
     # Let's create the client we will use to access it:
-    from sdbx.client.aio_client import AsyncRemoteComfyClient
-    client = AsyncRemoteComfyClient(server_address="http://localhost:8188")
+    from sdbx.clients.embedded import AsyncRemoteShadowboxClient
+    client = AsyncRemoteShadowboxClient(server_address="http://localhost:8188")
 
     # Now let's get the bytes of the PNG image saved by the SaveImage node:
     png_image_bytes = await client.queue_prompt(prompt)

@@ -2,7 +2,7 @@ import pytest
 
 from sdbx.api.components.schema.prompt import Prompt
 from sdbx.config import Configuration
-from sdbx.client.embedded_sdbx_client import EmbeddedComfyClient
+from sdbx.clients.embedded import EmbeddedShadowboxClient
 from sdbx.model_downloader import add_known_models, KNOWN_LORAS
 from sdbx.model_downloader_types import CivitFile
 
@@ -138,16 +138,16 @@ _workflows = {
 
 @pytest.fixture(scope="module", autouse=False)
 @pytest.mark.asyncio
-async def client(tmp_path_factory) -> EmbeddedComfyClient:
+async def client(tmp_path_factory) -> EmbeddedShadowboxClient:
     config = Configuration()
     config.cwd = str(tmp_path_factory.mktemp("sdbx_test_cwd"))
-    async with EmbeddedComfyClient(config) as client:
+    async with EmbeddedShadowboxClient(config) as client:
         yield client
 
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("workflow_name, workflow", _workflows.items())
-async def test_workflow(workflow_name: str, workflow: dict, has_gpu: bool, client: EmbeddedComfyClient):
+async def test_workflow(workflow_name: str, workflow: dict, has_gpu: bool, client: EmbeddedShadowboxClient):
     if not has_gpu:
         pytest.skip("requires gpu")
 

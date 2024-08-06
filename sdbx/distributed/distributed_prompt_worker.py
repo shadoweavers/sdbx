@@ -10,9 +10,10 @@ from aio_pika.patterns import JsonRPC
 from aiohttp import web
 from aiormq import AMQPConnectionError
 
+from sdbx.clients.embedded import EmbeddedShadowboxClient
+
 from .distributed_progress import DistributedExecutorToClientProgress
 from .distributed_types import RpcRequest, RpcReply
-from ..client.embedded_sdbx_client import EmbeddedsdbxClient
 from ..cmd.main_pre import tracer
 from ..component_model.queue_types import ExecutionStatus
 
@@ -22,7 +23,7 @@ class DistributedPromptWorker:
     A distributed prompt worker.
     """
 
-    def __init__(self, embedded_sdbx_client: Optional[EmbeddedsdbxClient] = None,
+    def __init__(self, embedded_sdbx_client: Optional[EmbeddedShadowboxClient] = None,
                  connection_uri: str = "amqp://localhost:5672/",
                  queue_name: str = "sdbx",
                  health_check_port: int = 9090,
@@ -94,7 +95,7 @@ class DistributedPromptWorker:
         self._rpc = await JsonRPC.create(channel=self._channel, auto_delete=True, durable=False)
 
         if self._embedded_sdbx_client is None:
-            self._embedded_sdbx_client = EmbeddedsdbxClient(progress_handler=DistributedExecutorToClientProgress(self._rpc, self._queue_name, self._loop))
+            self._embedded_sdbx_client = EmbeddedShadowboxClient(progress_handler=DistributedExecutorToClientProgress(self._rpc, self._queue_name, self._loop))
         if not self._embedded_sdbx_client.is_running:
             await self._exit_stack.enter_async_context(self._embedded_sdbx_client)
 

@@ -7,11 +7,7 @@ from asyncio import get_event_loop
 from concurrent.futures import ThreadPoolExecutor
 from typing import Optional
 
-from opentelemetry import context
-from opentelemetry.trace import Span, Status, StatusCode
-
 from ..api.components.schema.prompt import PromptDict
-from ..config import Configuration
 from ..component_model.executor_types import ExecutorToClientProgress
 from ..component_model.make_mutable import make_mutable
 from ..distributed.server_stub import ServerStub
@@ -28,7 +24,8 @@ import aiohttp
 from aiohttp import WSMessage, ClientResponse
 from typing_extensions import Dict
 
-from .client_types import V1QueuePromptResponse
+from sdbx.config import config, Config
+
 from ..api.api_client import JSONEncoder
 from ..api.components.schema.prompt import PromptDict
 from ..api.components.schema.prompt_request import PromptRequest
@@ -218,7 +215,7 @@ class EmbeddedShadowboxClient:
     In order to use this in blocking methods, learn more about asyncio online.
     """
 
-    def __init__(self, configuration: Optional[Configuration] = None, progress_handler: Optional[ExecutorToClientProgress] = None, max_workers: int = 1):
+    def __init__(self, configuration: Optional[Config] = None, progress_handler: Optional[ExecutorToClientProgress] = None, max_workers: int = 1):
         self._progress_handler = progress_handler or ServerStub()
         self._executor = ThreadPoolExecutor(max_workers=max_workers)
         self._configuration = configuration
@@ -273,39 +270,30 @@ class EmbeddedShadowboxClient:
 
         await get_event_loop().run_in_executor(self._executor, create_executor_in_thread)
 
-    @tracer.start_as_current_span("Queue Prompt")
     async def queue_prompt(self,
                            prompt: PromptDict | dict,
                            prompt_id: Optional[str] = None,
                            client_id: Optional[str] = None) -> dict:
         prompt_id = prompt_id or str(uuid.uuid4())
         client_id = client_id or self._progress_handler.client_id or None
-        span_context = context.get_current()
 
         def execute_prompt() -> dict:
-            spam: Span
-            with tracer.start_as_current_span("Execute Prompt", context=span_context) as span:
-                from ..cmd import PromptExecutor, validate_prompt
-                try:
-                    prompt_mut = make_mutable(prompt)
-                    validation_tuple = validate_prompt(prompt_mut)
-                    if not validation_tuple[0]:
-                        validation_error_dict = validation_tuple[1] or {"message": "Unknown", "details": ""}
-                        raise ValueError("\n".join([validation_error_dict["message"], validation_error_dict["details"]]))
+            from ..cmd import PromptExecutor, validate_prompt
+            prompt_mut = make_mutable(prompt)
+            validation_tuple = validate_prompt(prompt_mut)
+            if not validation_tuple[0]:
+                validation_error_dict = validation_tuple[1] or {"message": "Unknown", "details": ""}
+                raise ValueError("\n".join([validation_error_dict["message"], validation_error_dict["details"]]))
 
-                    prompt_executor: PromptExecutor = self._prompt_executor
+            prompt_executor: PromptExecutor = self._prompt_executor
 
-                    if client_id is None:
-                        prompt_executor.server = _server_stub_instance
-                    else:
-                        prompt_executor.server = self._progress_handler
+            if client_id is None:
+                prompt_executor.server = _server_stub_instance
+            else:
+                prompt_executor.server = self._progress_handler
 
-                    prompt_executor.execute(prompt_mut, prompt_id, {"client_id": client_id},
-                                            execute_outputs=validation_tuple[2])
-                    return prompt_executor.outputs_ui
-                except Exception as exc_info:
-                    span.set_status(Status(StatusCode.ERROR))
-                    span.record_exception(exc_info)
-                    raise exc_info
+            prompt_executor.execute(prompt_mut, prompt_id, {"client_id": client_id},
+                                    execute_outputs=validation_tuple[2])
+            return prompt_executor.outputs_ui
 
         return await get_event_loop().run_in_executor(self._executor, execute_prompt)

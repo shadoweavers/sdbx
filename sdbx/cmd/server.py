@@ -33,7 +33,6 @@ from .. import interruption
 from .. import model_management
 from .. import utils
 from ..clients.embedded import FileOutput
-from ..cmd import execution
 from ..component_model.abstract_prompt_queue import AbstractPromptQueue, AsyncAbstractPromptQueue
 from ..component_model.executor_types import ExecutorToClientProgress, StatusMessage, QueueInfo, ExecInfo
 from ..component_model.files import get_package_as_path
@@ -492,7 +491,7 @@ class PromptServer(ExecutorToClientProgress):
 
             if "prompt" in json_data:
                 prompt = json_data["prompt"]
-                valid = execution.validate_prompt(prompt)
+                # valid = execution.validate_prompt(prompt)
                 extra_data = {}
                 if "extra_data" in json_data:
                     extra_data = json_data["extra_data"]
@@ -562,10 +561,9 @@ class PromptServer(ExecutorToClientProgress):
             accept = request.headers.get("accept", "application/json")
             content_type = request.headers.get("content-type", "application/json")
             queue_size = self.prompt_queue.size()
-            queue_too_busy_size = PromptServer.get_too_busy_queue_size()
-            if queue_size > queue_too_busy_size:
+            if queue_size > config.web.max_queue_size:
                 return web.Response(status=429,
-                                    reason=f"the queue has {queue_size} elements and {queue_too_busy_size} is the limit for this worker")
+                                    reason=f"the queue has {queue_size} elements and {config.web.max_queue_size} is the limit for this worker")
             # read the request
             prompt_dict: dict = {}
             if content_type == 'application/json':
@@ -598,7 +596,7 @@ class PromptServer(ExecutorToClientProgress):
 
             content_digest = digest(prompt_dict)
 
-            valid = execution.validate_prompt(prompt_dict)
+            # valid = execution.validate_prompt(prompt_dict)
             if not valid[0]:
                 return web.Response(status=400, content_type="application/json", body=json.dumps(valid[1]))
 
@@ -839,7 +837,3 @@ class PromptServer(ExecutorToClientProgress):
         if not os.path.exists(upload_dir):
             os.makedirs(upload_dir)
         return upload_dir
-
-    @classmethod
-    def get_too_busy_queue_size(cls):
-        return config.web.max_queue_size

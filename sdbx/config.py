@@ -10,7 +10,6 @@ from dataclasses import asdict, dataclass, field, fields
 from watchdog.events import FileSystemEventHandler
 
 from sdbx.component_model.files import get_package_as_path
-from sdbx.nodes.manager import NodeManager
 from sdbx.utils import recursive_search
 
 supported_pt_extensions = frozenset(['.ckpt', '.pt', '.bin', '.pth', '.safetensors', '.pkl'])
@@ -261,8 +260,9 @@ class Config:
     distributed: DistributedConfig = field(default_factory=DistributedConfig)
     organization: OrganizationConfig = field(default_factory=OrganizationConfig)
 
-    def __post_init__(self):
-        self.node_manager = NodeManager(self.path, nodes_path=self.get_path("nodes"))
+    # def __post_init__(self):
+    #     from sdbx.nodes.manager import NodeManager
+    #     self.node_manager = NodeManager(self.path, nodes_path=self.get_path("nodes"))
 
     @classmethod
     def load(cls, filepath: str, loglevel=logging.INFO):
@@ -393,6 +393,11 @@ class Config:
         mfn["nodes"] = FolderPathsTuple("nodes", [os.path.join(self.path, "nodes")], set())
 
         return mfn
+
+    @cached_property
+    def node_manager(self):
+        from sdbx.nodes.manager import NodeManager # we must import this here lest we spawn the dreaded ouroboros
+        return NodeManager(self.path, nodes_path=self.get_path("nodes"))
 
     def get_image_save_path(filename_prefix, output_dir, image_width=0, image_height=0):
         def map_filename(filename):

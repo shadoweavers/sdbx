@@ -172,7 +172,3 @@ async def main():
 
 def entrypoint():
     asyncio.run(main())
-
-
-if __name__ == "__main__":
-    entrypoint()

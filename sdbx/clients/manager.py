@@ -1,11 +1,5 @@
 import os
-import sys
-import site
-import venv
 import tomllib
-import subprocess
-
-from dulwich import porcelain
 
 from sdbx.clients.releases import download_asset, get_asset_url, parse_service
 

@@ -22,7 +22,6 @@ from tqdm import tqdm
 from . import checkpoint_pickle, interruption
 from .component_model.executor_types import ExecutorToClientProgress, ProgressMessage
 from .component_model.queue_types import BinaryEventTypes
-from .execution_context import current_execution_context
 
 
 # deprecate PROGRESS_BAR_ENABLED

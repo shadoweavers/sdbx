@@ -166,3 +166,6 @@ class Executor:
             self.server.last_node_id = None
             if model_management.DISABLE_SMART_MEMORY:
                 model_management.unload_all_models()
+
+    def _execute(self, prompt):
+        

@@ -58,6 +58,7 @@ def vae_encode_tiled(
     t = vae.encode_tiled(pixels[:, :, :, :3], tile_x=tile_size, tile_y=tile_size)
     return {"samples": t}
 
+@nodepath("inpaint/")
 def vae_encode_for_inpaint(
     vae: VAE, 
     pixels: Image, 

@@ -130,6 +130,7 @@ def conditioning_set_mask(
     })
     return c
 
+@nodepath("advanced/")
 def conditioning_zero_out(conditioning: Conditioning) -> Conditioning:
     c = []
     for t in conditioning:
@@ -140,6 +141,7 @@ def conditioning_zero_out(conditioning: Conditioning) -> Conditioning:
         c.append(n)
     return c
 
+@nodepath("advanced/")
 def conditioning_set_timestep_range(
     conditioning: Conditioning,
     start: Annotated[float, Slider(min=0.0, max=1.0, step=0.001)] = 0.0,
@@ -151,6 +153,7 @@ def conditioning_set_timestep_range(
     })
     return c
 
+@nodepath("inpaint/")
 def inpaint_model_conditioning(
     positive: Conditioning, 
     negative: Conditioning,

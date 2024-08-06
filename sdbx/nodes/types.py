@@ -48,8 +48,18 @@ class Text:
     dynamic_prompts: bool = False
 
     def __repr__(self):
-        return f"Text(min={self.min}, max={self.max}, step={self.step})"
+        return f"Text(multiline={self.multiline}, dynamic_prompts={self.dynamic_prompts})"
 
 class DependentInput:
     input_must_equal: Any
     new_inputs: dict[str, type]
+
+class Name:
+    name: str = ""
+
+# Path decorator
+def nodepath(path):
+    def decorator(func):
+        func.path = path
+        return func
+    return decorator

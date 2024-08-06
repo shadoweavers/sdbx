@@ -34,7 +34,7 @@ from .. import controlnet
 # from ..sd import VAE
 # from ..utils import sdbx_tqdm
 
-
+@nodepath("advanced/")
 def checkpoint_loader(
     config_name: Annotated[str, Literal[config.folder_names["configs"].filename_list]],
     ckpt_name: Annotated[str, Literal[get_filename_list_with_downloadable("checkpoints", KNOWN_CHECKPOINTS)]]
@@ -50,6 +50,7 @@ def checkpoint_loader_simple(
     out = sd.load_checkpoint_guess_config(ckpt_path, output_vae=True, output_clip=True, embedding_directory=config.folder_names["embeddings"].folder_paths)
     return out[:3]
 
+@nodepath("advanced/")
 def diffusers_loader(
     model_path: Literal[
         tuple(frozenset(

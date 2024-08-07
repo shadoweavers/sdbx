@@ -40,7 +40,6 @@ from ..component_model.queue_types import QueueItem, HistoryEntry, BinaryEventTy
     ExecutionStatus
 from ..digest import digest
 from ..images import open_image
-from ..nodes.types import ExportedNodes
 
 
 class HeuristicPath(NamedTuple):
@@ -121,7 +120,6 @@ class PromptServer(ExecutorToClientProgress):
         self.client_id = None
 
         self.on_prompt_handlers = []
-        self.nodes: ExportedNodes = ExportedNodes()
 
         @routes.get('/ws')
         async def websocket_handler(request):

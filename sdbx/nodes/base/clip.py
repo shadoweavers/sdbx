@@ -35,7 +35,7 @@ from .. import model_management
 # from ..sd import VAE
 # from ..utils import sdbx_tqdm
 
-
+@node
 def clip_text_encode(
     clip: CLIP, 
     text: A[str, Text(multiline=True, dynamic_prompts=True)]
@@ -44,6 +44,7 @@ def clip_text_encode(
     cond, pooled = clip.encode_from_tokens(tokens, return_pooled=True)
     return [[cond, {"pooled_output": pooled}]]
 
+@node
 def clip_set_last_layer(
     clip: CLIP,
     stop_at_clip_layer: Annotated[int, Numerical(min=-24, max=-1, step=1)] = -1

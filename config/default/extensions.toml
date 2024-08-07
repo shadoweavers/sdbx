@@ -2,4 +2,4 @@
 "darkshapes/singularity" = "https://github.com/darkshapes/singularity.git"
 
 [nodes]
-"darkshapes/comfynodes" = "https://github.com/darkshapes/comfynodes.git"
+"darkshapes/comfyextras" = "https://github.com/darkshapes/comfyextras.git"

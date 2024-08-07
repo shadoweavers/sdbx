@@ -36,10 +36,11 @@ from .. import helpers
 # from ..sd import VAE
 # from ..utils import sdbx_tqdm
 
-
+@node
 def conditioning_combine(a: Conditioning, b: Conditioning) -> Conditioning:
     return a + b
 
+@node
 def conditioning_average(to: Conditioning, from_: Conditioning, to_strength: A[float, Slider(min=0, max=1, step=0.01)] = 1.0) -> Conditioning: 
     out: Conditioning = []
 
@@ -67,6 +68,7 @@ def conditioning_average(to: Conditioning, from_: Conditioning, to_strength: A[f
         out.append(n)
     return out
 
+@node
 def conditioning_concat(to: Conditioning, from_: Conditioning) -> Conditioning:
     out = []
 
@@ -83,6 +85,7 @@ def conditioning_concat(to: Conditioning, from_: Conditioning) -> Conditioning:
 
     return out
 
+@node
 def conditioning_set_area(
     conditioning: Conditioning, 
     width: A[int, Numerical(min=64, max=MAX_RESOLUTION, step=8)] = 64,
@@ -96,6 +99,7 @@ def conditioning_set_area(
                                                                 "set_area_to_bounds": False})
     return c
 
+@node
 def conditioning_set_area_percentage(
     conditioning: Conditioning, 
     width: A[float, Numerical(min=0.0, max=1.0, step=0.01)] = 1.0,
@@ -109,10 +113,12 @@ def conditioning_set_area_percentage(
                                                                 "set_area_to_bounds": False})
     return c
 
+@node
 def conditioning_set_area_strength(conditioning: Conditioning, strength: A[float, Numerical(min=0.0, max=10.0, step=0.01)] = 1.0) -> Conditioning:
     c = helpers.conditioning_set_values(conditioning, {"strength": strength})
     return c
 
+@node
 def conditioning_set_mask(
     conditioning: Conditioning, 
     mask: Mask,
@@ -130,7 +136,7 @@ def conditioning_set_mask(
     })
     return c
 
-@nodepath("advanced/")
+@node(path="advanced/")
 def conditioning_zero_out(conditioning: Conditioning) -> Conditioning:
     c = []
     for t in conditioning:
@@ -141,7 +147,7 @@ def conditioning_zero_out(conditioning: Conditioning) -> Conditioning:
         c.append(n)
     return c
 
-@nodepath("advanced/")
+@node(path="advanced/")
 def conditioning_set_timestep_range(
     conditioning: Conditioning,
     start: Annotated[float, Slider(min=0.0, max=1.0, step=0.001)] = 0.0,
@@ -153,7 +159,7 @@ def conditioning_set_timestep_range(
     })
     return c
 
-@nodepath("inpaint/")
+@node(path="inpaint/")
 def inpaint_model_conditioning(
     positive: Conditioning, 
     negative: Conditioning,
@@ -197,6 +203,7 @@ def inpaint_model_conditioning(
 
 ## Controlnet
 
+@node
 def controlnet_apply(
     conditioning: Conditioning,
     control_net: Any,
@@ -218,6 +225,7 @@ def controlnet_apply(
         c.append(n)
     return c
 
+@node
 def controlnet_apply_advanced(
     positive: Conditioning,
     negative: Conditioning,

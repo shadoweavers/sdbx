@@ -36,6 +36,7 @@ from .. import model_management
 # from ..utils import sdbx_tqdm
 
 
+@node
 def save_latent(
     samples: Latent, 
     filename_prefix: Annotated[str, Text()] = "sdbx", 
@@ -72,6 +73,7 @@ def save_latent(
     utils.save_torch_file(output, file, metadata=metadata)
     return {"ui": {"latents": results}}
 
+@node
 def load_latent(
     latent: Annotated[str, Literal[sorted(
         [f for f in os.listdir(config.get_path("inputs")) if os.path.isfile(os.path.join(config.get_path("inputs"), f)) and f.endswith(".latent")]

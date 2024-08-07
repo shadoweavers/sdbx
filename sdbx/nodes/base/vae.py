@@ -36,9 +36,11 @@ from .. import model_management
 # from ..utils import sdbx_tqdm
 
 
+@node
 def vae_decode(vae: VAE, samples: Latent) -> Image:
     return vae.decode(samples["samples"])
 
+@node
 def vae_decode_tiled(
     vae: VAE, 
     samples: Latent, 
@@ -46,10 +48,12 @@ def vae_decode_tiled(
 ) -> Image:
     return vae.decode_tiled(samples["samples"], tile_x=tile_size // 8, tile_y=tile_size // 8)
 
+@node
 def vae_encode(vae: VAE, pixels: Image) -> Latent:
     t = vae.encode(pixels[:, :, :, :3])
     return {"samples": t}
 
+@node
 def vae_encode_tiled(
     vae: VAE, 
     pixels: Image, 
@@ -58,7 +62,7 @@ def vae_encode_tiled(
     t = vae.encode_tiled(pixels[:, :, :, :3], tile_x=tile_size, tile_y=tile_size)
     return {"samples": t}
 
-@nodepath("inpaint/")
+@node(path="inpaint/")
 def vae_encode_for_inpaint(
     vae: VAE, 
     pixels: Image, 

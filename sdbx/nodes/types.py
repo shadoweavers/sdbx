@@ -58,8 +58,11 @@ class Name:
     name: str = ""
 
 # Path decorator
-def nodepath(path):
+def node(path=None):
     def decorator(func):
-        func.path = path
+        if path:
+            func.path = path
+        # func.register = True 
+        # TODO: register func here
         return func
     return decorator

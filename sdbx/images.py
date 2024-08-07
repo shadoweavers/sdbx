@@ -5,7 +5,7 @@ from typing import Iterator
 import cv2
 from PIL import Image
 
-from sdbx.nodes import helpers
+from sdbx.nodes import helpers # hark! wretched half-lemniscate!
 
 
 def _open_exr(exr_path) -> Image.Image:

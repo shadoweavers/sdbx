@@ -34,7 +34,7 @@ from .. import controlnet
 # from ..sd import VAE
 # from ..utils import sdbx_tqdm
 
-@nodepath("advanced/")
+@node(path="advanced/")
 def checkpoint_loader(
     config_name: Annotated[str, Literal[config.folder_names["configs"].filename_list]],
     ckpt_name: Annotated[str, Literal[get_filename_list_with_downloadable("checkpoints", KNOWN_CHECKPOINTS)]]
@@ -43,6 +43,7 @@ def checkpoint_loader(
     ckpt_path = get_or_download("checkpoints", ckpt_name, KNOWN_CHECKPOINTS)
     return sd.load_checkpoint(config_path, ckpt_path, output_vae=True, output_clip=True, embedding_directory=config.folder_names["embeddings"].folder_paths)
 
+@node
 def checkpoint_loader_simple(
     ckpt_name: Annotated[str, Literal[get_filename_list_with_downloadable("checkpoints", KNOWN_CHECKPOINTS)]]
 ) -> Tuple[Model, CLIP, VAE]:
@@ -50,7 +51,7 @@ def checkpoint_loader_simple(
     out = sd.load_checkpoint_guess_config(ckpt_path, output_vae=True, output_clip=True, embedding_directory=config.folder_names["embeddings"].folder_paths)
     return out[:3]
 
-@nodepath("advanced/")
+@node(path="advanced/")
 def diffusers_loader(
     model_path: Literal[
         tuple(frozenset(
@@ -69,6 +70,7 @@ def diffusers_loader(
             model_path = snapshot_download(model_path)
     return diffusers_load.load_diffusers(model_path, output_vae=True, output_clip=True, embedding_directory=config.folder_names["embeddings"].folder_paths)
 
+@node
 def unclip_checkpoint_loader(
     ckpt_name: Annotated[str, Literal[get_filename_list_with_downloadable("checkpoints", KNOWN_UNCLIP_CHECKPOINTS)]]
 ) -> Tuple[Model, CLIP, VAE, CLIP_VISION]:
@@ -76,6 +78,7 @@ def unclip_checkpoint_loader(
     out = sd.load_checkpoint_guess_config(ckpt_path, output_vae=True, output_clip=True, output_clipvision=True, embedding_directory=config.folder_names["embeddings"].folder_paths)
     return out
 
+@node
 def load_lora(
     self,
     model: Model,
@@ -104,6 +107,7 @@ def load_lora(
     model_lora, clip_lora = sd.load_lora_for_models(model, clip, lora, strength_model, strength_clip)
     return model_lora, clip_lora
 
+@node
 def lora_loader_model_only(
     model: Model,
     lora_name: Annotated[str, Literal[config.folder_names["loras"].filename_list]],
@@ -112,6 +116,7 @@ def lora_loader_model_only(
     loader = LoraLoader()
     return loader.load_lora(model, None, lora_name, strength_model, 0)[0]
 
+@node
 def vae_loader(
     vae_name: Annotated[str, Literal[VAELoader.vae_list()]]
 ) -> VAE:
@@ -123,6 +128,7 @@ def vae_loader(
     vae = sd.VAE(sd=sd_)
     return vae
 
+@node
 def controlnet_loader(
     control_net_name: Annotated[str, Literal[get_filename_list_with_downloadable("controlnet", KNOWN_CONTROLNETS)]]
 ) -> CONTROL_NET:
@@ -130,6 +136,7 @@ def controlnet_loader(
     controlnet_ = controlnet.load_controlnet(controlnet_path)
     return controlnet_
 
+@node
 def diff_controlnet_loader(
     model: Model,
     control_net_name: Annotated[str, Literal[get_filename_list_with_downloadable("controlnet", KNOWN_DIFF_CONTROLNETS)]]
@@ -138,11 +145,13 @@ def diff_controlnet_loader(
     controlnet_ = controlnet.load_controlnet(controlnet_path, model)
     return controlnet_
 
+@node
 def gligen_loader(gligen_name: str) -> Any:
     gligen_path = get_or_download("gligen", gligen_name, KNOWN_GLIGEN_MODELS)
     gligen = sd.load_gligen(gligen_path)
     return gligen
 
+@node
 def unet_loader(unet_name: str) -> Any:
     unet_path = get_or_download("unet", unet_name, KNOWN_UNET_MODELS)
     model = sd.load_unet(unet_path)

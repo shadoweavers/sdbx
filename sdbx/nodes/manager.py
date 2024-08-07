@@ -2,14 +2,21 @@ import os
 import sys
 import site
 import venv
+import logging
 import tomllib
 import subprocess
+from importlib.metadata import distribution
 
 from dulwich import porcelain
 
+from sdbx.nodes.adapters import ComfyAdapter
 from sdbx.nodes.base import register_base_nodes
 
+PYPY_URL = "https://github.com/pypy/pypy.git"
+
 class NodeManager:
+    registry = {}
+
     def __init__(self, path, nodes_path, env_name=".node_env"):
         self.path = path
         self.nodes_path = nodes_path
@@ -18,15 +25,20 @@ class NodeManager:
             self.node_modules = tomllib.load(file)["nodes"]
         
         self.initialize_environment(env_name)
-        self.validate_nodes_installed()
 
-        # self.nodes = self.import_nodes()
+        self.nodes = [self.validate_nodes_installed(n, u) for n, u in self.node_modules.items()]
     
     def initialize_environment(self, env_name=".node_env"):
+        logging.info("Creating node environment...")
+
         self.env_path = os.path.join(self.path, env_name)
 
         if not os.path.exists(self.env_path):
             venv.create(self.env_path, with_pip=True)
+        
+        # Grab interpreter + sandbox
+        pypy_path = os.path.join(self.env_path, "pypy")
+        porcelain.clone(PYPY_URL, pypy_path)
         
         self.env_python = os.path.join(self.env_path, "bin", "python")
         self.env_package_path = self.get_environment_package_path()
@@ -37,7 +49,8 @@ class NodeManager:
         parent_link_path = os.path.join(self.env_package_path, "parent.pth")
         if not os.path.exists(parent_link_path):
             with open(parent_link_path, 'w') as f:
-                f.write(parent_package_path)
+                f.write(parent_package_path + "\n")
+                f.write(pypy_path)
 
         self.env_pip = os.path.join(self.env_path, "bin", "pip")
         self.env_packages = self.get_environment_packages()
@@ -52,16 +65,40 @@ class NodeManager:
         lines = raw.splitlines()[2:]
         return [line.split()[0] for line in lines]
     
-    def validate_nodes_installed(self):
-        for node_module, url in self.node_modules.items():
-            node_path = os.path.join(self.nodes_path, node_module)
+    def validate_node_installed(self, node_module, url):
+        node_path = os.path.join(self.nodes_path, node_module)
 
-            if not os.path.exists(node_path): # check all manifest nodes downloaded
-                porcelain.clone(url, node_path)
-            
-            if node_module not in self.env_packages: # check all downloaded nodes installed
-                subprocess.check_call([self.env_pip, "install", "-e", node_path])
+        if not os.path.exists(node_path): # check all manifest nodes downloaded
+            porcelain.clone(url, node_path)
+        
+        if node_module not in self.env_packages: # check all downloaded nodes installed
+            subprocess.check_call([self.env_pip, "install", "-e", node_path])
+        
+        return os.path.basename(node_path)
     
-    # def import_nodes(self):
-        # for node_module in self.node_modules.keys():
-            # 
+    def register_module(self, module):
+        # Look for an entrypoint named "register"
+        pyproject = os.path.abspath(next((f for f in distribution(module).files if "pyproject.toml" in str(f)), None))
+
+        if not os.path.exists(pyproject):
+            # No information about which functions to use, so we have to register all of them
+            return self.register_all_functions_in_module(module)
+
+        with open(pyproject, 'r') as f:
+            data = tomllib.load(f)
+        
+        tools = data.get("tool", {})
+
+        sdbx = tools.get("sdbx", {})
+        comfy = tools.get("comfy", {})
+
+        if not sdbx and not comfy:
+            return self.register_all_functions_in_module(module)
+        if not sdbx and comfy:
+            return self.register_module_with_adapter(module, ComfyAdapter)
+        
+        register = sdbx.get("register",  None)
+
+        if not register or not callable(register):
+            # No register function
+            return self.register_all_functions_in_module(module)

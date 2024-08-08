@@ -18,7 +18,6 @@ from .. import model_management
 from ..component_model.abstract_prompt_queue import AbstractPromptQueue
 from ..component_model.executor_types import ExecutorToClientProgress
 from ..component_model.queue_types import QueueTuple, HistoryEntry, QueueItem, MAXIMUM_HISTORY_SIZE, ExecutionStatus
-from ..nodes.types import ExportedNodes
 
 
 def get_input_data(inputs, class_def, unique_id, outputs=None, prompt=None, extra_data=None):

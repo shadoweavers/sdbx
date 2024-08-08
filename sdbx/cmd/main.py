@@ -8,19 +8,18 @@ import threading
 import time
 
 from sdbx import config
+from sdbx.cmd.server import PromptServer
 
 from .extra_model_paths import load_extra_path_config
 from .. import model_management
 from ..cmd import cuda_malloc
-from ..cmd import server as server_module
 from ..component_model.abstract_prompt_queue import AbstractPromptQueue
 from ..component_model.queue_types import ExecutionStatus
 from ..distributed.distributed_prompt_queue import DistributedPromptQueue
 from ..distributed.server_stub import ServerStub
-from ..nodes.package import import_all_nodes_in_workspace
 
 
-def prompt_worker(q: AbstractPromptQueue, _server: server_module.PromptServer):
+def prompt_worker(q: AbstractPromptQueue, _server: PromptServer):
     from ..cmd.execution import PromptExecutor
 
     e = PromptExecutor(_server)
@@ -108,13 +107,9 @@ async def main():
     #         load_extra_path_config(config_path)
 
     loop = asyncio.get_event_loop()
-    server = server_module.PromptServer(loop)
+    server = await PromptServer(loop)
     if config.web.external_address != "localhost":
         server.external_address = config.web.external_address
-
-    # at this stage, it's safe to import nodes
-    server.nodes = import_all_nodes_in_workspace()
-    # as a side effect, this also populates the nodes for execution
 
     if config.distributed.role is not False:
         distributed = True

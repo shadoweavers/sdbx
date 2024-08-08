@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from typing import Tuple, Literal, List
 
 from ..api.components.schema.prompt import PromptDict, Prompt
-from ..auth.permissions import sdbxJwt, jwt_decode
 from ..component_model.queue_types import NamedQueueTuple, TaskInvocation, ExecutionStatus
 
 

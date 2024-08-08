@@ -27,6 +27,7 @@ from can_ada import URL, parse as urlparse  # pylint: disable=no-name-in-module
 from typing_extensions import NamedTuple
 
 from sdbx import config
+from sdbx.utils import aobject
 
 from .latent_preview_image_encoding import encode_preview_image
 from .. import interruption
@@ -73,17 +74,19 @@ def create_cors_middleware(allowed_origin: str):
 
         response.headers['Access-Control-Allow-Origin'] = allowed_origin
         response.headers['Access-Control-Allow-Methods'] = 'POST, GET, DELETE, PUT, OPTIONS'
-        response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
         response.headers['Access-Control-Allow-Credentials'] = 'true'
         return response
 
     return cors_middleware
 
 
-class PromptServer(ExecutorToClientProgress):
+class PromptServer(ExecutorToClientProgress, aobject):
     instance: 'PromptServer'
 
-    def __init__(self, loop):
+    async def __init__(self, loop):
+        super().__init__()
+
         PromptServer.instance = self
 
         mimetypes.init()
@@ -109,10 +112,8 @@ class PromptServer(ExecutorToClientProgress):
                                                     handler_args={'max_field_size': 16380},
                                                     middlewares=middlewares)
         self.sockets = dict()
-        web_root_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../web")
-        if not os.path.exists(web_root_path):
-            web_root_path = get_package_as_path('sdbx', 'web/')
-        self.web_root = web_root_path
+        client_manager = await config.client_manager
+        self.web_root = client_manager.selected_path
         routes = web.RouteTableDef()
         self.routes: web.RouteTableDef = routes
         self.last_node_id = None
@@ -715,10 +716,10 @@ class PromptServer(ExecutorToClientProgress):
         self.app.add_routes(api_routes)
         self.app.add_routes(self.routes)
 
-        for name, dir in self.nodes.EXTENSION_WEB_DIRS.items():
-            self.app.add_routes([
-                web.static('/extensions/' + quote(name), dir),
-            ])
+        # for name, dir in self.nodes.EXTENSION_WEB_DIRS.items():
+        #     self.app.add_routes([
+        #         web.static('/extensions/' + quote(name), dir),
+        #     ])
 
         self.app.add_routes([
             web.static('/', self.web_root),

@@ -30,17 +30,17 @@ async def get_asset_url(session, namespace, project, service=None):
         for asset in ASSETS_TO_CHECK:
             url = s(namespace, project, asset)
             try:
-                async with session.head(url) as response:
+                async with session.head(url, allow_redirects=True) as response:
                     if response.status == 404:
                         logging.debug(f"404 Not Found: {url}")
                         continue
-
+                    
                     lastmodified = response.headers.get('last-modified', None)
 
                     if not lastmodified:
                         logging.error(f"No last-modified header found for {url}")
 
-                    return url, parsedate_to_datetime(lastmodified)
+                    return response.url, parsedate_to_datetime(lastmodified)
             except Exception as e:
                 logging.debug(f"Error fetching {url}: {e}")
                 continue
@@ -54,7 +54,7 @@ async def download_asset(session, url, extract_path):
                 content = await response.read()
                 
                # Use a temporary file to save the zip content
-                with tempfile.NamedTemporaryFile(delete=False) as zip:
+                with tempfile.NamedTemporaryFile() as zip:
                     async with aiofiles.open(zip.name, 'wb') as f:
                         await f.write(content)
 
@@ -66,12 +66,17 @@ async def download_asset(session, url, extract_path):
                     # Extract the zip file into the directory
                     with zipfile.ZipFile(zip.name, 'r') as ref:
                         ref.extractall(extract_path)
-                
-                # Clean up the temporary zip file
-                os.unlink(zip.name)
+                    
+                    # Search for index.html recursively within the client directory
+                    for root, dirs, files in os.walk(extract_path):
+                        if "index.html" in files:
+                            with tempfile.TemporaryDirectory() as copydir:
+                                temproot = shutil.copytree(root, os.path.join(copydir, os.path.basename(root)))
+                                shutil.rmtree(extract_path)
+                                shutil.move(temproot, extract_path) # Overwrite old directory with true root
                 
                 logging.debug(f"Downloaded and extracted asset from {url} to {extract_path}")
             else:
-                logging.error(f"Failed to download asset from {url}, status code: {response.status}")
+                raise Exception(f"Failed to download asset from {url}, status code: {response.status}")
     except Exception as e:
-        logging.error(f"Error downloading {url}: {e}")
+        raise Exception(f"Error downloading {url}: {e}")

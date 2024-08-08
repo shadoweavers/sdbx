@@ -17,8 +17,6 @@ from .distributed_progress import ProgressHandlers
 from .distributed_types import RpcRequest, RpcReply
 from .history import History
 from .server_stub import ServerStub
-from ..auth.permissions import jwt_decode
-from ..cmd.main_pre import tracer
 from ..cmd.server import PromptServer
 from ..component_model.abstract_prompt_queue import AsyncAbstractPromptQueue, AbstractPromptQueue
 from ..component_model.executor_types import ExecutorToClientProgress, SendSyncEvent, SendSyncData
@@ -41,7 +39,6 @@ class DistributedPromptQueue(AbstractPromptQueue, AsyncAbstractPromptQueue):
     async def progress(self, event: SendSyncEvent, data: SendSyncData, sid: Optional[str]) -> None:
         self._caller_server.send_sync(event, data, sid=sid)
 
-    @tracer.start_as_current_span("Put Async")
     async def put_async(self, queue_item: QueueItem) -> TaskInvocation | None:
         assert self._is_caller
         assert self._rpc is not None
@@ -52,26 +49,19 @@ class DistributedPromptQueue(AbstractPromptQueue, AsyncAbstractPromptQueue):
         if self._caller_server is not None:
             self._caller_server.queue_updated(self.get_tasks_remaining())
         try:
-            if "token" in queue_item.extra_data:
-                user_token = queue_item.extra_data["token"]
-                user_id = jwt_decode(user_token)["sub"]
+            if "client_id" in queue_item.extra_data:
+                user_id = queue_item.extra_data["client_id"]
+            elif self._caller_server.client_id is not None:
+                user_id = self._caller_server.client_id
             else:
-                if "client_id" in queue_item.extra_data:
-                    user_id = queue_item.extra_data["client_id"]
-                elif self._caller_server.client_id is not None:
-                    user_id = self._caller_server.client_id
-                else:
-                    user_id = str(uuid.uuid4())
-                    # todo: should we really do this?
-                    self._caller_server.client_id = user_id
-
-                # create a stub token
-                user_token = jwt.encode({"sub": user_id}, key="", algorithm="none")
+                user_id = str(uuid.uuid4())
+                # todo: should we really do this?
+                self._caller_server.client_id = user_id
 
             # register callbacks for progress
             assert self._caller_progress_handlers is not None
             await self._caller_progress_handlers.register_progress(user_id)
-            request = RpcRequest(prompt_id=queue_item.prompt_id, user_token=user_token, prompt=queue_item.prompt)
+            request = RpcRequest(prompt_id=queue_item.prompt_id, prompt=queue_item.prompt)
             reply = RpcReply(**(await self._rpc.call(self._queue_name, {"request": asdict(request)}))).as_task_invocation()
             self._caller_history.put(queue_item, reply.outputs, reply.status)
             if self._caller_server is not None:

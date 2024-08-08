@@ -771,3 +771,17 @@ def recursive_search(directory, excluded_dir_names=None):
                 logging.warning(f"Warning: Unable to access {path}. Skipping this path.")
                 continue
     return result, dirs
+
+# https://stackoverflow.com/a/45364670/13584955
+class aobject(object):
+    """Inheriting this class allows you to define an async __init__.
+
+    So you can create objects by doing something like `await MyClass(params)`
+    """
+    async def __new__(cls, *a, **kw):
+        instance = super().__new__(cls)
+        await instance.__init__(*a, **kw)
+        return instance
+
+    async def __init__(self):
+        pass

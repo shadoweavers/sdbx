@@ -1,10 +1,14 @@
 import os
 import tomllib
+import logging
+
+import aiohttp
 
 from sdbx.clients.releases import download_asset, get_asset_url, parse_service
+from sdbx.utils import aobject
 
-class ClientManager:
-    def __init__(self, path, clients_path):
+class ClientManager(aobject):
+    async def __init__(self, path, clients_path):
         self.path = path
         self.clients_path = clients_path
         
@@ -15,28 +19,31 @@ class ClientManager:
             # trigger remote/embedded client or something lol
             return
 
-        self.validate_clients_installed()
+        self.selected_path = await self.validate_clients_installed()
     
-    def validate_clients_installed(self):
-        self.first_viable = None
-        
-        for client_signature, url in self.client_signatures.items():
-            client_path = os.path.join(self.clients_path, os.path.normpath(client_signature))
+    async def validate_clients_installed(self):
+        first_viable = None
 
-            if not os.path.exists(client_path):
-                # os.makedirs(client_path, exist_ok=True)
-                namespace, project, service = parse_service(url, client_signature)
-                asset_url, _ = get_asset_url(namespace, project, service=service)
-                download_asset(asset_url, client_path)
-            
-            index_path = os.path.join(client_path, "index.html")
+        async with aiohttp.ClientSession() as session:
+            for client_signature, url in self.client_signatures.items():
+                client_path = os.path.join(self.clients_path, os.path.normpath(client_signature))
 
-            if os.path.exists(index_path) and self.first_viable == None:
-                self.first_viable = client_path
+                if not os.path.exists(client_path):
+                    # os.makedirs(client_path, exist_ok=True)
+                    logging.info(f"Client {client_signature} not installed, downloading...")
+                    namespace, project, service = parse_service(url, client_signature)
+                    asset_url, _ = await get_asset_url(session, namespace, project, service=service)
+                    await download_asset(session, asset_url, client_path)
+
+                if os.path.exists(os.path.join(client_path, "index.html")) and first_viable is None:
+                    first_viable = client_path
             
-        self.selected_path = self.first_viable
+        if first_viable == None:
+            raise Exception("No viable clients could be found. Check your installations.")
+
+        return first_viable
     
-    def update_clients(self):
+    async def update_clients(self):
         for client_signature, url in self.client_signatures.items():
             client_path = os.path.join(self.clients_path, os.path.normpath(client_signature))
 

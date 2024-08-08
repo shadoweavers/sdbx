@@ -28,10 +28,10 @@ def get_config_location():
 class FolderPathsTuple:
     folder_name: str
 
-    _last_update_time: int = 0
-
     paths: List[str] = field(default_factory=list)
     supported_extensions: Set[str] = field(default_factory=lambda: set(supported_pt_extensions))
+
+    _last_update_time: int = 0
 
     def __getitem__(self, item: Any):
         if item == 0:
@@ -39,7 +39,7 @@ class FolderPathsTuple:
         if item == 1:
             return self.supported_extensions
         else:
-            raise RuntimeError("unsupported tuple index")
+            raise RuntimeError("Unsupported tuple index")
 
     def __add__(self, other: "FolderPathsTuple"):
         assert self.folder_name == other.folder_name
@@ -91,7 +91,7 @@ class FolderPathsTuple:
             if os.path.commonpath([abs_file_path, abs_folder_path]) == abs_folder_path:
                 trusted_paths.append(abs_file_path)
             else:
-                logging.error(f"attempted to access untrusted path {abs_file_path} in {self.folder_name} for filename {filename}")
+                logging.error(f"Attempted to access untrusted path {abs_file_path} in {self.folder_name} for filename {filename}")
 
         for trusted_path in trusted_paths:
             if os.path.isfile(trusted_path):
@@ -107,7 +107,7 @@ class FolderNames:
 
     def __getitem__(self, item) -> FolderPathsTuple:
         if not isinstance(item, str):
-            raise RuntimeError("expected folder path")
+            raise RuntimeError("Expected folder path")
         if item not in self.contents:
             default_path = os.path.join(self.default_new_folder_path, item)
             os.makedirs(default_path, exist_ok=True)
@@ -346,12 +346,14 @@ class Config:
 
         models = {
             "models.checkpoints": os.path.join(models, "checkpoints"),
+            "models.classifiers": os.path.join(models, "classifiers"),
             "models.clip": os.path.join(models, "clip"),
             "models.clip_vision": os.path.join(models, "clip_vision"),
-            "models.configs": os.path.join(models, "configs"),
+            # "models.configs": os.path.join(models, "configs"),
             "models.controlnet": os.path.join(models, "controlnet"),
             "models.diffusers": os.path.join(models, "diffusers"),
             "models.embeddings": os.path.join(models, "embeddings"),
+            "models.gligen": os.path.join(models, "gligen"),
             "models.hypernetworks": os.path.join(models, "hypernetworks"),
             "models.huggingface": os.path.join(models, "huggingface"),
             "models.huggingface_cache": os.path.join(models, "huggingface_cache"),
@@ -369,13 +371,13 @@ class Config:
 
     @cached_property
     def folder_names(self):
-        mfn = FolderNames() # Model Folder Names
+        mfn = FolderNames(self.path) # Model Folder Names
 
         mfn["checkpoints"] = FolderPathsTuple("checkpoints", [self.get_path("models.checkpoints")], set(supported_pt_extensions))
         mfn["classifiers"] = FolderPathsTuple("classifiers", [self.get_path("models.classifiers")], {""})
         mfn["clip"] = FolderPathsTuple("clip", [self.get_path("models.clip")], set(supported_pt_extensions))
         mfn["clip_vision"] = FolderPathsTuple("clip_vision", [self.get_path("models.clip_vision")], set(supported_pt_extensions))
-        mfn["configs"] = FolderPathsTuple("configs", [self.get_path("models.configs"), get_package_as_path("sdbx.configs")], {".yaml"})
+        # mfn["configs"] = FolderPathsTuple("configs", [self.get_path("models.configs"), get_package_as_path("sdbx.configs")], {".yaml"})
         mfn["controlnet"] = FolderPathsTuple("controlnet", [self.get_path("models.controlnet"), self.get_path("models.t2i_adapter")], set(supported_pt_extensions))
         mfn["diffusers"] = FolderPathsTuple("diffusers", [self.get_path("models.diffusers")], {"folder"})
         mfn["embeddings"] = FolderPathsTuple("embeddings", [self.get_path("models.embeddings")], set(supported_pt_extensions))
@@ -396,8 +398,13 @@ class Config:
 
     @cached_property
     def node_manager(self):
-        from sdbx.nodes.manager import NodeManager # we must import this here lest we spawn the dreaded ouroboros
+        from sdbx.nodes.manager import NodeManager # we must import this here lest we summon the dreaded ouroboros
         return NodeManager(self.path, nodes_path=self.get_path("nodes"))
+
+    @cached_property
+    async def client_manager(self):
+        from sdbx.clients.manager import ClientManager
+        return await ClientManager(self.path, clients_path=self.get_path("clients"))
 
     def get_image_save_path(filename_prefix, output_dir, image_width=0, image_height=0):
         def map_filename(filename):
